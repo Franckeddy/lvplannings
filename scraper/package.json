@@ -1,0 +1,16 @@
+{
+  "name": "pokeratlas-scraper",
+  "version": "1.0.0",
+  "description": "Scraper pour récupérer les tournois PokerAtlas",
+  "type": "module",
+  "main": "scraper.js",
+  "scripts": {
+    "start": "node scraper.js",
+    "test": "node scraper.js --test"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
+  }
+}

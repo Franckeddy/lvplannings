@@ -1,0 +1,1444 @@
+[
+  {
+    "casino": "Las Vegas Tournois à venir",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 0,
+    "source": "div",
+    "raw": {
+      "casino": "Las Vegas Tournois à venir",
+      "time": "10:00am",
+      "buyIn": "$0",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "aujourd’hui — 24 mai",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "aujourd’hui — 24 mai",
+      "time": "10:00am",
+      "buyIn": "$100",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Caesars Palace",
+      "time": "10:00am",
+      "buyIn": "$100",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "10:00am",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "10:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "10:10am",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "10:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "10:10am",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "source": "div",
+    "raw": {
+      "casino": "South Point Casino",
+      "time": "10:10am",
+      "buyIn": "$120",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "11:00am",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "11:00am",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-04",
+    "time": "11:00:00",
+    "buyIn": 300,
+    "source": "div",
+    "raw": {
+      "casino": "The Orleans Casino",
+      "time": "11:00am",
+      "buyIn": "$300",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-04",
+    "time": "11:05:00",
+    "buyIn": 150,
+    "source": "div",
+    "raw": {
+      "casino": "Red Rock Casino",
+      "time": "11:05am",
+      "buyIn": "$150",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "11:05:00",
+    "buyIn": 150,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "11:05am",
+      "buyIn": "$150",
+      "date": "NLH\n        \n      \n    \n\n    \n          25",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-04",
+    "time": "11:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "MGM Grand",
+      "time": "11:10am",
+      "buyIn": "$100",
+      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "11:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "11:10am",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          25",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 1,
+    "source": "div",
+    "raw": {
+      "casino": "Wynn Las Vegas",
+      "time": "12:00pm",
+      "buyIn": "$1",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 1,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "12:00pm",
+      "buyIn": "$1",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "12:00pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Bellagio Casino",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 200,
+    "source": "div",
+    "raw": {
+      "casino": "Bellagio Casino",
+      "time": "12:00pm",
+      "buyIn": "$200",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Westgate Las Vegas Resort & Casino",
+    "date": "2026-06-04",
+    "time": "12:05:00",
+    "buyIn": 55,
+    "source": "div",
+    "raw": {
+      "casino": "Westgate Las Vegas Resort & Casino",
+      "time": "12:05pm",
+      "buyIn": "$55",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "12:05:00",
+    "buyIn": 55,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "12:05pm",
+      "buyIn": "$55",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Wynn Las Vegas",
+      "time": "1:00pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          1",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "1:00pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          1",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 200,
+    "source": "div",
+    "raw": {
+      "casino": "Aria Casino",
+      "time": "1:00pm",
+      "buyIn": "$200",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          1",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "source": "div",
+    "raw": {
+      "casino": "Mandalay Bay",
+      "time": "1:00pm",
+      "buyIn": "$60",
+      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          1",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "2:00pm",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "2:00pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Caesars Palace",
+      "time": "2:00pm",
+      "buyIn": "$100",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "source": "div",
+    "raw": {
+      "casino": "South Point Casino",
+      "time": "2:10pm",
+      "buyIn": "$120",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "2:10pm",
+      "buyIn": "$120",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-04",
+    "time": "14:45:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Mandalay Bay",
+      "time": "2:45pm",
+      "buyIn": "$160",
+      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "14:45:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "2:45pm",
+      "buyIn": "$160",
+      "date": "NLH\n        \n      \n    \n\n    \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Westgate Las Vegas Resort & Casino",
+    "date": "2026-06-04",
+    "time": "15:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Westgate Las Vegas Resort & Casino",
+      "time": "3:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "15:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "3:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-04",
+    "time": "15:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "MGM Grand",
+      "time": "3:10pm",
+      "buyIn": "$100",
+      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "15:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "3:10pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          25",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "5:00pm",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          5",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "5:00pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Bellagio Casino",
+    "date": "2026-06-04",
+    "time": "17:00:00",
+    "buyIn": 200,
+    "source": "div",
+    "raw": {
+      "casino": "Bellagio Casino",
+      "time": "5:00pm",
+      "buyIn": "$200",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          5",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Westgate Las Vegas Resort & Casino",
+    "date": "2026-06-04",
+    "time": "17:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Westgate Las Vegas Resort & Casino",
+      "time": "5:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          5",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "17:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "5:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          5",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 1,
+    "source": "div",
+    "raw": {
+      "casino": "Wynn Las Vegas",
+      "time": "6:00pm",
+      "buyIn": "$1",
+      "date": "direct\n      \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 1,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "6:00pm",
+      "buyIn": "$1",
+      "date": "direct\n      \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "aujourd’hui — 24 mai",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "aujourd’hui — 24 mai",
+      "time": "6:00pm",
+      "buyIn": "$240",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "The Orleans Casino",
+      "time": "6:00pm",
+      "buyIn": "$240",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Caesars Palace",
+      "time": "6:00pm",
+      "buyIn": "$100",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "18:10:00",
+    "buyIn": 250,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "6:10pm",
+      "buyIn": "$250",
+      "date": "direct\n      \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "18:10:00",
+    "buyIn": 250,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "6:10pm",
+      "buyIn": "$250",
+      "date": "direct\n      \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "18:10:00",
+    "buyIn": 180,
+    "source": "div",
+    "raw": {
+      "casino": "South Point Casino",
+      "time": "6:10pm",
+      "buyIn": "$180",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Westgate Las Vegas Resort & Casino",
+    "date": "2026-06-04",
+    "time": "19:05:00",
+    "buyIn": 55,
+    "source": "div",
+    "raw": {
+      "casino": "Westgate Las Vegas Resort & Casino",
+      "time": "7:05pm",
+      "buyIn": "$55",
+      "date": "direct\n      \n\n    \n      \n        \n          7",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "19:05:00",
+    "buyIn": 55,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "7:05pm",
+      "buyIn": "$55",
+      "date": "direct\n      \n\n    \n      \n        \n          7",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-04",
+    "time": "19:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "MGM Grand",
+      "time": "7:10pm",
+      "buyIn": "$100",
+      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          7",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "19:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "7:10pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          25",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "8:00pm",
+      "buyIn": "$160",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          8",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "8:00pm",
+      "buyIn": "$160",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "source": "div",
+    "raw": {
+      "casino": "Mandalay Bay",
+      "time": "8:00pm",
+      "buyIn": "$60",
+      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          8",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Caesars Palace",
+      "time": "9:00pm",
+      "buyIn": "$160",
+      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "9:00pm",
+      "buyIn": "$160",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Westgate Las Vegas Resort & Casino",
+    "date": "2026-06-04",
+    "time": "21:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Westgate Las Vegas Resort & Casino",
+      "time": "9:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "21:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "9:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "source": "div",
+    "raw": {
+      "casino": "South Point Casino",
+      "time": "10:10pm",
+      "buyIn": "$120",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "10:10pm",
+      "buyIn": "$120",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "11:00pm",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "11:00pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-04",
+    "time": "23:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "MGM Grand",
+      "time": "11:10pm",
+      "buyIn": "$100",
+      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "23:10:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "11:10pm",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          25",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "demain — 25 mai",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "demain — 25 mai",
+      "time": "9:00am",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Horseshoe Las Vegas",
+      "time": "9:00am",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "9:00am",
+      "buyIn": "$100",
+      "date": "NLH\n        \n      \n    \n\n    \n          20",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "demain — 25 mai",
+    "date": "2026-06-04",
+    "time": "12:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "demain — 25 mai",
+      "time": "12:10pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "12:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "12:10pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "12:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "12:10pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-04",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "The Orleans Casino",
+      "time": "4:00pm",
+      "buyIn": "$240",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          4",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "4:00pm",
+      "buyIn": "$240",
+      "date": "HORSE\n        \n      \n    \n\n    \n          30",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-04",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "source": "div",
+    "raw": {
+      "casino": "Red Rock Casino",
+      "time": "6:05pm",
+      "buyIn": "$85",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "6:05pm",
+      "buyIn": "$85",
+      "date": "NLH\n        \n      \n    \n\n    \n          15",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "demain — 25 mai",
+    "date": "2026-06-04",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "demain — 25 mai",
+      "time": "11:00pm",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "mardi — 26 mai",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "mardi — 26 mai",
+      "time": "9:00am",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "10:00am",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "11:10:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "11:10am",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "12:00pm",
+      "buyIn": "$70",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "The Orleans Casino",
+      "time": "12:00pm",
+      "buyIn": "$600",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          12",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "1:00pm",
+      "buyIn": "$250",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          1",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 600,
+    "source": "div",
+    "raw": {
+      "casino": "Venetian Las Vegas",
+      "time": "2:00pm",
+      "buyIn": "$600",
+      "date": "direct\n      \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 5,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "2:00pm",
+      "buyIn": "$5",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          2",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "3:00pm",
+      "buyIn": "$240",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "3:00pm",
+      "buyIn": "$240",
+      "date": "NLH\n        \n      \n    \n\n    \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "mardi — 26 mai",
+    "date": "2026-06-04",
+    "time": "15:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "mardi — 26 mai",
+      "time": "3:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "4:00pm",
+      "buyIn": "$400",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          4",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-04",
+    "time": "17:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Aria Casino",
+      "time": "5:00pm",
+      "buyIn": "$160",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          5",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "7:00pm",
+      "buyIn": "$585",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          7",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "7:00pm",
+      "buyIn": "$585",
+      "date": "NLH\n        \n      \n    \n\n    \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "8:00pm",
+      "buyIn": "$200",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          8",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "10:00pm",
+      "buyIn": "$135",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Unknown",
+    "date": "2026-06-04",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "source": "div",
+    "raw": {
+      "casino": "Unknown",
+      "time": "10:00pm",
+      "buyIn": "$135",
+      "date": "NLH\n        \n      \n    \n\n    \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "mercredi — 27 mai",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "source": "div",
+    "raw": {
+      "casino": "mercredi — 27 mai",
+      "time": "9:00am",
+      "buyIn": "$100",
+      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "mercredi — 27 mai",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "mercredi — 27 mai",
+      "time": "10:00am",
+      "buyIn": "$160",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 160,
+    "source": "div",
+    "raw": {
+      "casino": "Aria Casino",
+      "time": "10:00am",
+      "buyIn": "$160",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "10:00:00",
+    "buyIn": 550,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "10:00am",
+      "buyIn": "$550",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          10",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "11:00:00",
+    "buyIn": 1,
+    "source": "div",
+    "raw": {
+      "casino": "Wynn Las Vegas",
+      "time": "11:00am",
+      "buyIn": "$1",
+      "date": "direct\n      \n\n    \n      \n        \n          11",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "mercredi — 27 mai",
+    "date": "2026-06-04",
+    "time": "15:05:00",
+    "buyIn": 70,
+    "source": "div",
+    "raw": {
+      "casino": "mercredi — 27 mai",
+      "time": "3:05pm",
+      "buyIn": "$70",
+      "date": "direct\n      \n\n    \n      \n        \n          3",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-04",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "source": "div",
+    "raw": {
+      "casino": "Aria Casino",
+      "time": "7:00pm",
+      "buyIn": "$300",
+      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          7",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "jeudi — 28 mai",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 250,
+    "source": "div",
+    "raw": {
+      "casino": "jeudi — 28 mai",
+      "time": "9:00am",
+      "buyIn": "$250",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "09:00:00",
+    "buyIn": 250,
+    "source": "div",
+    "raw": {
+      "casino": "World Series of Poker",
+      "time": "9:00am",
+      "buyIn": "$250",
+      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          9",
+      "source": "div"
+    }
+  }
+]

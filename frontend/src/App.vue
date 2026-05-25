@@ -1,0 +1,507 @@
+<template>
+  <div class="app-container dark-mode">
+    <!-- Sidebar Latérale Gauche -->
+    <aside class="sidebar" :class="{ 'collapsed': sidebarCollapsed }">
+      <div class="sidebar-header">
+        <Button
+          icon="pi pi-bars"
+          @click="toggleSidebar"
+          rounded
+          text
+          class="sidebar-toggle"
+          aria-label="Toggle sidebar"
+        />
+      </div>
+
+      <div class="sidebar-content" v-show="!sidebarCollapsed">
+        <div class="app-title">
+          <div class="title-text">
+            <h1>Las Vegas 2026</h1>
+            <p class="subtitle">Programme Poker</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <UserSelector
+          :users="users"
+          :selected-user="selectedUser"
+          @user-selected="handleUserSelected"
+          @user-created="handleUserCreated"
+        />
+
+        <div class="divider"></div>
+
+        <nav class="sidebar-nav">
+          <Button
+            v-if="selectedUser"
+            :label="`Planning de ${selectedUser.name}`"
+            @click="currentView = 'planning'"
+            text
+            class="planning-button"
+          />
+          <Button
+            label="Timeline des Tournois"
+            @click="currentView = 'timeline'"
+            text
+            class="timeline-button"
+          />
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Planning View -->
+      <TournamentList
+        v-if="selectedUser && currentView === 'planning'"
+        :user="selectedUser"
+        :tournaments="tournaments"
+        :summary="summary"
+        :loading="loading"
+        @refresh="loadUserData"
+        @import-tournaments="handleImportTournaments"
+        @delete-tournament="handleDeleteTournament"
+      />
+
+      <!-- Timeline View -->
+      <TournamentTimeline
+        v-else-if="currentView === 'timeline'"
+        @tournament-added="handleTournamentAddedFromTimeline"
+      />
+
+      <!-- Welcome Message -->
+      <div class="welcome" v-else-if="!selectedUser && currentView === 'planning'">
+        <i class="pi pi-users" style="font-size: 4rem; color: #94a3b8;"></i>
+        <p>Sélectionnez un utilisateur pour voir son programme</p>
+      </div>
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { userService } from './services/api';
+import UserSelector from './components/UserSelector.vue';
+import TournamentList from './components/TournamentList.vue';
+import TournamentTimeline from './components/TournamentTimeline.vue';
+import Button from 'primevue/button';
+
+const users = ref([]);
+const sidebarCollapsed = ref(false);
+const selectedUser = ref(null);
+const tournaments = ref([]);
+const summary = ref(null);
+const loading = ref(false);
+const currentView = ref('planning');
+
+const loadUsers = async () => {
+  try {
+    const response = await userService.getAll();
+    users.value = response.data;
+  } catch (error) {
+    console.error('Erreur lors du chargement des utilisateurs:', error);
+  }
+};
+
+const loadUserData = async (userId) => {
+  if (!userId) return;
+
+  loading.value = true;
+  try {
+    const [tournamentsResponse, summaryResponse] = await Promise.all([
+      userService.getTournaments(userId),
+      userService.getSummary(userId)
+    ]);
+
+    tournaments.value = tournamentsResponse.data;
+    summary.value = summaryResponse.data;
+  } catch (error) {
+    console.error('Erreur lors du chargement des données:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleUserSelected = (user) => {
+  selectedUser.value = user;
+  loadUserData(user.id);
+};
+
+const handleUserCreated = async (userName) => {
+  try {
+    const response = await userService.create(userName);
+    await loadUsers();
+    handleUserSelected(response.data);
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'utilisateur:', error);
+  }
+};
+
+const handleTournamentAddedFromTimeline = async () => {
+  if (selectedUser.value) {
+    await loadUserData(selectedUser.value.id);
+  }
+};
+
+const handleImportTournaments = async (tournamentsArray) => {
+  if (!selectedUser.value) return;
+
+  try {
+    loading.value = true;
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const tournamentData of tournamentsArray) {
+      try {
+        await userService.addTournament(selectedUser.value.id, tournamentData);
+        successCount++;
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout d\'un tournoi:', error);
+        errorCount++;
+      }
+    }
+
+    console.log(`Import terminé: ${successCount} réussis, ${errorCount} échecs`);
+    await loadUserData(selectedUser.value.id);
+
+    if (errorCount > 0) {
+      alert(`Import terminé avec des erreurs: ${successCount} tournois importés, ${errorCount} échecs`);
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'import des tournois:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleDeleteTournament = async (tournamentId) => {
+  if (!selectedUser.value) return;
+
+  // Recharger les données pour mettre à jour l'affichage
+  await loadUserData(selectedUser.value.id);
+};
+
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value;
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString());
+};
+
+onMounted(() => {
+  loadUsers();
+
+  // Charger l'état de la sidebar depuis localStorage
+  const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+  if (savedSidebarState !== null) {
+    sidebarCollapsed.value = savedSidebarState === 'true';
+  }
+});
+</script>
+
+<style>
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --sidebar-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+  --gradient-start: #667eea;
+  --gradient-end: #764ba2;
+  --accent-color: #6366f1;
+  --sidebar-width: 320px;
+  --sidebar-collapsed-width: 80px;
+}
+
+.dark-mode {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --sidebar-bg: #1e293b;
+  --sidebar-hover: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --sidebar-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+  --gradient-start: #4338ca;
+  --gradient-end: #5b21b6;
+  --accent-color: #818cf8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease;
+  overflow-x: hidden;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  transition: background-color 0.3s ease;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--sidebar-shadow);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sidebar-toggle {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  transform: scale(1.1);
+  background: var(--sidebar-hover);
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.app-icon {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.title-text h1 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0 0;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.planning-button {
+  width: 100%;
+  justify-content: center;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid var(--border-color);
+}
+
+.planning-button:hover {
+  background: var(--sidebar-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.timeline-button {
+  width: 100%;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  transition: all 0.3s ease;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.timeline-button:hover {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Main Content */
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: 2rem;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.sidebar.collapsed ~ .main-content {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.main-tabs {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.welcome {
+  max-width: 600px;
+  margin: 100px auto;
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.welcome i {
+  color: var(--text-secondary) !important;
+}
+
+.welcome p {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 280px;
+  }
+
+  .sidebar.collapsed {
+    width: 0;
+    border: none;
+  }
+
+  .main-content {
+    margin-left: 280px;
+  }
+
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    transform: translateX(-100%);
+  }
+
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .sidebar-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--sidebar-bg);
+    z-index: 1001;
+  }
+}
+
+/* Dark mode pour les composants PrimeVue */
+.dark-mode :deep(.p-tabview-nav) {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.dark-mode :deep(.p-tabview-title) {
+  color: var(--text-primary);
+}
+
+.dark-mode :deep(.p-tabview-panels) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+</style>

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: lvplannings-backend
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    disk:
+      name: database
+      mountPath: /opt/render/project/src/backend
+      sizeGB: 1
