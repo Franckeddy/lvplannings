@@ -58,6 +58,20 @@
                   <span class="buyin">${{ formatBuyIn(tournament.buyIn) }}</span>
                   <span v-if="tournament.levels" class="levels-badge">{{ tournament.levels }}</span>
                 </div>
+                <div v-if="hasStructureInfo(tournament)" class="tournament-structure">
+                  <span v-if="tournament.structureChips" class="structure-item">
+                    <i class="pi pi-circle-fill"></i>
+                    {{ tournament.structureChips }}
+                  </span>
+                  <span v-if="tournament.structureLevels" class="structure-item">
+                    <i class="pi pi-clock"></i>
+                    {{ tournament.structureLevels }}
+                  </span>
+                  <span v-if="tournament.structureGuarantee" class="structure-item guarantee">
+                    <i class="pi pi-star-fill"></i>
+                    {{ tournament.structureGuarantee }}
+                  </span>
+                </div>
               </div>
             </div>
             <Button
@@ -99,6 +113,24 @@
           <div v-if="selectedTournament.levels" class="info-row">
             <span class="label">Niveaux:</span>
             <span class="value">{{ selectedTournament.levels }}</span>
+          </div>
+        </div>
+
+        <div v-if="hasStructureInfo(selectedTournament)" class="structure-section">
+          <h4>Structure du tournoi</h4>
+          <div class="structure-info">
+            <div v-if="selectedTournament.structureChips" class="structure-detail">
+              <i class="pi pi-circle-fill"></i>
+              <span>{{ selectedTournament.structureChips }}</span>
+            </div>
+            <div v-if="selectedTournament.structureLevels" class="structure-detail">
+              <i class="pi pi-clock"></i>
+              <span>{{ selectedTournament.structureLevels }}</span>
+            </div>
+            <div v-if="selectedTournament.structureGuarantee" class="structure-detail guarantee">
+              <i class="pi pi-star-fill"></i>
+              <span>{{ selectedTournament.structureGuarantee }}</span>
+            </div>
           </div>
         </div>
 
@@ -266,6 +298,10 @@ const formatDateForDb = (dateStr) => {
 const formatBuyIn = (amount) => {
   if (!amount) return '0';
   return amount.toLocaleString('en-US');
+};
+
+const hasStructureInfo = (tournament) => {
+  return tournament.structureChips || tournament.structureLevels || tournament.structureGuarantee;
 };
 
 // Lifecycle
@@ -511,5 +547,85 @@ onMounted(() => {
   font-weight: 700;
   font-size: 0.875rem;
   border-radius: 6px;
+}
+
+.tournament-structure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.structure-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: #64748b;
+  padding: 4px 10px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.structure-item i {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.structure-item.guarantee {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.structure-item.guarantee i {
+  color: #f59e0b;
+}
+
+.structure-section {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.structure-section h4 {
+  margin: 0 0 12px 0;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.structure-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.structure-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+  color: #64748b;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.structure-detail i {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.structure-detail.guarantee {
+  color: #d97706;
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.structure-detail.guarantee i {
+  color: #f59e0b;
 }
 </style>

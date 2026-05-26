@@ -263,7 +263,10 @@ app.get('/api/scraped-tournaments/suggestions', async (req, res) => {
         time,
         buyin as "buyIn",
         levels,
-        SUBSTRING(time FROM 1 FOR 5) as "displayTime"
+        SUBSTRING(time FROM 1 FOR 5) as "displayTime",
+        structure_chips as "structureChips",
+        structure_levels as "structureLevels",
+        structure_guarantee as "structureGuarantee"
       FROM scraped_tournaments
       WHERE date = $1
       ORDER BY time, casino
@@ -288,7 +291,10 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
         time,
         buyin as "buyIn",
         levels,
-        SUBSTRING(time FROM 1 FOR 5) as "displayTime"
+        SUBSTRING(time FROM 1 FOR 5) as "displayTime",
+        structure_chips as "structureChips",
+        structure_levels as "structureLevels",
+        structure_guarantee as "structureGuarantee"
       FROM scraped_tournaments
       WHERE 1=1
     `;
