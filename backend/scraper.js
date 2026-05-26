@@ -272,6 +272,8 @@ async function scrapePokerAtlas() {
           // Extraire le buy-in
           let buyIn = '';
           const buyInSelectors = [
+            '.detail.buy-in',
+            'li.buy-in',
             '.buy-in',
             '.buyin',
             '[data-buyin]',
