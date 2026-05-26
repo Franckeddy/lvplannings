@@ -104,6 +104,17 @@
                 </span>
               </div>
             </div>
+
+            <!-- Notes du jour -->
+            <div
+              v-if="getDayNotes(dayData.tournaments).length > 0"
+              class="day-notes-indicator"
+              v-tooltip.top="formatDayNotes(dayData.tournaments)"
+            >
+              <i class="pi pi-comment"></i>
+              <span class="notes-count">{{ getDayNotes(dayData.tournaments).length }}</span>
+            </div>
+
             <div class="day-total">
               {{ formatBuyIn(dayData.totalBuyin) }}
             </div>
@@ -116,6 +127,15 @@
               :key="tournament.id"
               class="tournament-row"
             >
+              <!-- Note indicator in top right -->
+              <div
+                v-if="tournament.user_note"
+                class="note-indicator-corner"
+                v-tooltip.top="tournament.user_note"
+              >
+                <i class="pi pi-comment"></i>
+              </div>
+
               <div class="tournament-time-slot">
                 <i class="pi pi-clock"></i>
                 <span>{{ tournament.time }}</span>
@@ -149,14 +169,14 @@
 
               <div class="tournament-actions">
                 <Button
-                  :icon="tournament.user_note ? 'pi pi-file-edit' : 'pi pi-file'"
+                  icon="pi pi-pencil"
                   @click="openNoteDialog(tournament)"
-                  :severity="tournament.user_note ? 'info' : 'secondary'"
+                  severity="secondary"
                   text
                   rounded
                   size="small"
-                  class="note-btn"
-                  v-tooltip.top="tournament.user_note ? tournament.user_note : 'Ajouter une note'"
+                  class="edit-note-btn"
+                  v-tooltip.top="'Modifier la note'"
                 />
                 <Button
                   icon="pi pi-user-plus"
@@ -598,6 +618,19 @@ const formatBuyIn = (amount) => {
   return '$' + amount.toLocaleString('en-US');
 };
 
+// Obtenir les notes d'un jour
+const getDayNotes = (tournaments) => {
+  return tournaments.filter(t => t.user_note);
+};
+
+// Formatter les notes du jour pour le tooltip
+const formatDayNotes = (tournaments) => {
+  const notesWithInfo = tournaments
+    .filter(t => t.user_note)
+    .map(t => `${t.time} - ${t.casino}: ${t.user_note}`);
+  return notesWithInfo.join('\n');
+};
+
 const extractDay = (dateStr) => {
   if (!dateStr) return '-';
   const match = dateStr.match(/^(\d+)/);
@@ -1022,6 +1055,34 @@ const deleteTournament = async () => {
   font-weight: 700;
 }
 
+/* Notes indicator in day header */
+.day-notes-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-notes-indicator i {
+  font-size: 0.875rem;
+  color: #6366f1;
+}
+
+.day-notes-indicator .notes-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.day-notes-indicator:hover {
+  background: rgba(99, 102, 241, 0.25);
+  transform: scale(1.05);
+}
+
 /* Day Tournaments */
 .day-tournaments {
   padding: 8px 0;
@@ -1033,6 +1094,7 @@ const deleteTournament = async () => {
   gap: 16px;
   padding: 12px 20px;
   transition: background 0.15s ease;
+  position: relative;
 }
 
 .tournament-row:hover {
@@ -1041,6 +1103,33 @@ const deleteTournament = async () => {
 
 .tournament-row:not(:last-child) {
   border-bottom: 1px solid var(--border-color, #334155);
+}
+
+/* Note indicator in corner */
+.note-indicator-corner {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.note-indicator-corner i {
+  font-size: 0.75rem;
+  color: #6366f1;
+}
+
+.note-indicator-corner:hover {
+  background: rgba(99, 102, 241, 0.3);
+  transform: scale(1.1);
 }
 
 .tournament-time-slot {
@@ -1144,12 +1233,13 @@ const deleteTournament = async () => {
   background: rgba(34, 197, 94, 0.15) !important;
 }
 
-.note-btn {
+.edit-note-btn {
   transition: all 0.2s ease;
 }
 
-.note-btn:hover {
+.edit-note-btn:hover {
   background: rgba(99, 102, 241, 0.15) !important;
+  color: #6366f1 !important;
 }
 
 .tournament-actions {

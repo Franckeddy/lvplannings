@@ -118,7 +118,7 @@ app.get('/api/users/:userId/summary', async (req, res) => {
 // POST ajouter un tournoi pour un utilisateur
 app.post('/api/users/:userId/tournaments', async (req, res) => {
   try {
-    const { date, time, casino, buyin, levels, user_note } = req.body;
+    const { date, time, casino, buyin, levels, user_note, scraped_tournament_id } = req.body;
     const userId = req.params.userId;
 
     if (!date || !time || !casino) {
@@ -134,8 +134,8 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
     }
 
     const result = await pool.query(
-      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [userId, date, time, casino, buyin || null, levels || '-', user_note || null]
+      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note, scraped_tournament_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [userId, date, time, casino, buyin || null, levels || '-', user_note || null, scraped_tournament_id || null]
     );
 
     res.status(201).json(result.rows[0]);

@@ -59,6 +59,15 @@
           :key="tournament.id"
           class="tournament-card"
         >
+          <!-- Indicateur d'utilisateurs inscrits avec notes -->
+          <div
+            v-if="getEnrolledUsers(tournament).some(u => u.user_note)"
+            class="enrolled-notes-indicator"
+            v-tooltip.top="getEnrolledUsers(tournament).filter(u => u.user_note).map(u => `${u.userName}: ${u.user_note}`).join('\n')"
+          >
+            <i class="pi pi-comment"></i>
+          </div>
+
           <div class="tournament-card-header">
             <div class="tournament-time">{{ tournament.displayTime }}</div>
             <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
@@ -94,6 +103,31 @@
               <div v-if="tournament.structureGuarantee" class="structure-tag guarantee">
                 <i class="pi pi-star-fill"></i>
                 {{ tournament.structureGuarantee }}
+              </div>
+            </div>
+
+            <!-- Utilisateurs inscrits -->
+            <div v-if="getEnrolledUsers(tournament).length > 0" class="enrolled-users">
+              <div class="enrolled-label">
+                <i class="pi pi-users"></i>
+                Inscrits:
+              </div>
+              <div class="enrolled-chips">
+                <div
+                  v-for="enrolled in getEnrolledUsers(tournament)"
+                  :key="enrolled.id"
+                  class="enrolled-chip"
+                  :style="{ backgroundColor: getUserColor(enrolled.userName) }"
+                >
+                  {{ enrolled.userName }}
+                  <span
+                    v-if="enrolled.user_note"
+                    class="enrolled-note-icon"
+                    v-tooltip.top="enrolled.user_note"
+                  >
+                    <i class="pi pi-comment"></i>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -192,9 +226,106 @@ const selectedUser = ref(null);
 const users = ref([]);
 const adding = ref(false);
 const userNote = ref('');
+const allUserTournaments = ref([]);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
+
+// Couleurs pour les utilisateurs
+const userColors = {};
+const colorPalette = [
+  '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981',
+  '#3b82f6', '#ef4444', '#14b8a6', '#f97316', '#84cc16'
+];
+
+const getUserColor = (name) => {
+  if (!userColors[name]) {
+    const index = Object.keys(userColors).length % colorPalette.length;
+    userColors[name] = colorPalette[index];
+  }
+  return userColors[name];
+};
+
+// Normaliser le nom du casino pour le matching
+const normalizeCasinoName = (name) => {
+  const lowerName = name.toLowerCase();
+
+  // Mapping des variations de noms
+  if (lowerName.includes('world series') || lowerName.includes('wsop')) {
+    return 'wsop';
+  }
+  if (lowerName.includes('orleans')) {
+    return 'orleans';
+  }
+  if (lowerName.includes('aria')) {
+    return 'aria';
+  }
+  if (lowerName.includes('venetian')) {
+    return 'venetian';
+  }
+  if (lowerName.includes('wynn')) {
+    return 'wynn';
+  }
+  if (lowerName.includes('bellagio')) {
+    return 'bellagio';
+  }
+  if (lowerName.includes('mgm')) {
+    return 'mgm';
+  }
+  if (lowerName.includes('caesars')) {
+    return 'caesars';
+  }
+
+  return lowerName.replace(/[^a-z0-9]/g, '');
+};
+
+// Normaliser l'heure pour le matching (format HH:MM)
+const normalizeTime = (time) => {
+  if (!time) return '';
+  // Prendre juste HH:MM
+  const parts = time.split(':');
+  if (parts.length >= 2) {
+    return `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}`;
+  }
+  return time;
+};
+
+// Normaliser la date pour le matching
+const normalizeDate = (dateStr) => {
+  if (!dateStr) return '';
+  return dateStr.toLowerCase().trim();
+};
+
+// Trouver les utilisateurs inscrits à un tournoi scrapé
+const getEnrolledUsers = (scrapedTournament) => {
+  const scrapedId = scrapedTournament.id;
+
+  // D'abord chercher par ID du tournoi scrapé (matching exact)
+  let matches = allUserTournaments.value.filter(ut =>
+    ut.scraped_tournament_id === scrapedId
+  );
+
+  // Si pas de match par ID, fallback sur date/time/casino
+  if (matches.length === 0) {
+    const scrapedDate = normalizeDate(formatDateForDb(scrapedTournament.date));
+    const scrapedTime = normalizeTime(scrapedTournament.time);
+    const scrapedCasinoNorm = normalizeCasinoName(scrapedTournament.casino);
+
+    matches = allUserTournaments.value.filter(ut => {
+      const userDate = normalizeDate(ut.date);
+      const userTime = normalizeTime(ut.time);
+      const userCasinoNorm = normalizeCasinoName(ut.casino);
+
+      const matchDate = userDate === scrapedDate;
+      const matchTime = userTime === scrapedTime;
+      const matchCasino = userCasinoNorm === scrapedCasinoNorm;
+
+      return matchDate && matchTime && matchCasino;
+    });
+  }
+
+  return matches;
+};
 
 const handleImageError = (event) => {
   event.target.style.display = 'none';
@@ -237,6 +368,29 @@ const loadUsers = async () => {
   }
 };
 
+const loadAllUserTournaments = async () => {
+  try {
+    const allTournaments = [];
+    for (const user of users.value) {
+      const response = await fetch(`${API_URL}/users/${user.id}/tournaments`);
+      if (response.ok) {
+        const tournaments = await response.json();
+        tournaments.forEach(t => {
+          allTournaments.push({
+            ...t,
+            userName: user.name,
+            oderId: user.id
+          });
+        });
+      }
+    }
+    allUserTournaments.value = allTournaments;
+    console.log('Tournois utilisateurs chargés:', allUserTournaments.value.length);
+  } catch (error) {
+    console.error('Erreur lors du chargement des tournois utilisateurs:', error);
+  }
+};
+
 const openDay = (day) => {
   selectedDay.value = day;
 };
@@ -263,7 +417,8 @@ const addToPlanning = async () => {
     casino: selectedTournament.value.casino,
     buyin: selectedTournament.value.buyIn,
     levels: selectedTournament.value.levels || '',
-    user_note: userNote.value || null
+    user_note: userNote.value || null,
+    scraped_tournament_id: selectedTournament.value.id
   };
 
   try {
@@ -283,6 +438,8 @@ const addToPlanning = async () => {
       selectedTournament.value = null;
       selectedUser.value = null;
       userNote.value = '';
+      // Recharger les tournois pour mettre à jour l'affichage
+      await loadAllUserTournaments();
       toast.add({
         severity: 'success',
         summary: 'Tournoi ajouté',
@@ -336,9 +493,10 @@ const hasStructureInfo = (tournament) => {
 };
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
   loadTimeline();
-  loadUsers();
+  await loadUsers();
+  await loadAllUserTournaments();
 });
 </script>
 
@@ -509,11 +667,40 @@ onMounted(() => {
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .tournament-card:hover {
   border-color: var(--accent-color, #818cf8);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Indicateur de notes dans le coin */
+.enrolled-notes-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(99, 102, 241, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.enrolled-notes-indicator i {
+  font-size: 0.75rem;
+  color: white;
+}
+
+.enrolled-notes-indicator:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.6);
 }
 
 .tournament-card-header {
@@ -632,6 +819,62 @@ onMounted(() => {
 
 .structure-tag.guarantee i {
   color: #f59e0b;
+}
+
+/* Enrolled users */
+.enrolled-users {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color, #334155);
+}
+
+.enrolled-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+}
+
+.enrolled-label i {
+  font-size: 0.6875rem;
+}
+
+.enrolled-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.enrolled-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.enrolled-note-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.enrolled-note-icon i {
+  font-size: 0.5rem;
+}
+
+.enrolled-note-icon:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .tournament-card-footer {

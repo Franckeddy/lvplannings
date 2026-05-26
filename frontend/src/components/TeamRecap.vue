@@ -117,6 +117,16 @@
                 <span class="casino-count">{{ casinoData.users.length }} personne{{ casinoData.users.length > 1 ? 's' : '' }}</span>
               </div>
             </div>
+
+            <!-- Notes du casino -->
+            <div
+              v-if="getCasinoNotes(casinoData).length > 0"
+              class="casino-notes-indicator"
+              v-tooltip.top="formatCasinoNotes(casinoData)"
+            >
+              <i class="pi pi-comment"></i>
+              <span class="notes-count">{{ getCasinoNotes(casinoData).length }}</span>
+            </div>
           </div>
 
           <!-- Horaires du casino -->
@@ -145,13 +155,17 @@
                   >
                     <div
                       class="user-chip"
-                      :class="{ 'has-note': user.user_note }"
                       :style="{ backgroundColor: getUserColor(user.name) }"
-                      v-tooltip.top="user.user_note ? user.user_note : null"
                       @click="openNoteDialog(user)"
                     >
                       {{ user.name }}
-                      <i v-if="user.user_note" class="pi pi-comment note-indicator"></i>
+                    </div>
+                    <div
+                      v-if="user.user_note"
+                      class="user-note-icon"
+                      v-tooltip.top="user.user_note"
+                    >
+                      <i class="pi pi-comment"></i>
                     </div>
                   </div>
                 </div>
@@ -625,6 +639,29 @@ const formatBuyIn = (amount) => {
   return '$' + amount.toLocaleString('en-US');
 };
 
+// Obtenir toutes les notes d'un casino
+const getCasinoNotes = (casinoData) => {
+  const notes = [];
+  Object.entries(casinoData.times).forEach(([time, timeData]) => {
+    timeData.users.forEach(user => {
+      if (user.user_note) {
+        notes.push({
+          time,
+          userName: user.name,
+          note: user.user_note
+        });
+      }
+    });
+  });
+  return notes;
+};
+
+// Formatter les notes du casino pour le tooltip
+const formatCasinoNotes = (casinoData) => {
+  const notes = getCasinoNotes(casinoData);
+  return notes.map(n => `${n.time} - ${n.userName}: ${n.note}`).join('\n');
+};
+
 const extractDay = (dateStr) => {
   if (!dateStr) return '-';
   const match = dateStr.match(/^(\d+)/);
@@ -1063,6 +1100,35 @@ onMounted(() => {
 .casino-name { color: var(--text-primary, #f1f5f9); font-weight: 600; font-size: 1.0625rem; }
 .casino-count { color: var(--text-secondary, #94a3b8); font-size: 0.8125rem; }
 
+/* Notes indicator in casino header */
+.casino-notes-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.casino-notes-indicator i {
+  font-size: 0.875rem;
+  color: #6366f1;
+}
+
+.casino-notes-indicator .notes-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.casino-notes-indicator:hover {
+  background: rgba(99, 102, 241, 0.25);
+  transform: scale(1.05);
+}
+
 /* Time Slots */
 .time-slots { padding: 8px 0; }
 
@@ -1109,6 +1175,9 @@ onMounted(() => {
 
 .user-chip-wrapper {
   display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
 }
 
 .user-chip {
@@ -1130,13 +1199,26 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.user-chip.has-note {
-  padding-right: 10px;
+.user-note-icon {
+  width: 20px;
+  height: 20px;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.note-indicator {
-  font-size: 0.6875rem;
-  opacity: 0.9;
+.user-note-icon i {
+  font-size: 0.625rem;
+  color: #6366f1;
+}
+
+.user-note-icon:hover {
+  background: rgba(99, 102, 241, 0.4);
+  transform: scale(1.1);
 }
 
 .user-chip.small { padding: 4px 10px; font-size: 0.75rem; }
