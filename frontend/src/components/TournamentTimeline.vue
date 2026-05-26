@@ -55,8 +55,8 @@
               <div class="tournament-details">
                 <div class="tournament-casino">{{ tournament.casino }}</div>
                 <div class="tournament-meta">
-                  <span class="buyin">${{ tournament.buyIn }}</span>
-                  <span class="levels-badge">{{ tournament.levels }}</span>
+                  <span class="buyin">${{ tournament.buyin }}</span>
+                  <span v-if="tournament.levels" class="levels-badge">{{ tournament.levels }}</span>
                 </div>
               </div>
             </div>
@@ -94,9 +94,9 @@
           </div>
           <div class="info-row">
             <span class="label">Buy-in:</span>
-            <span class="value">${{ selectedTournament.buyIn }}</span>
+            <span class="value">${{ selectedTournament.buyin }}</span>
           </div>
-          <div class="info-row">
+          <div v-if="selectedTournament.levels" class="info-row">
             <span class="label">Niveaux:</span>
             <span class="value">{{ selectedTournament.levels }}</span>
           </div>
@@ -224,7 +224,7 @@ const addToPlanning = async () => {
     date: formatDateForDb(selectedTournament.value.date),
     time: selectedTournament.value.time.substring(0, 5),
     casino: selectedTournament.value.casino,
-    buyin: selectedTournament.value.buyIn,
+    buyin: selectedTournament.value.buyin,
     levels: levels.value
   };
 
