@@ -52,6 +52,9 @@ async function initializeTables() {
 
     console.log('✓ Tables PostgreSQL créées avec succès');
 
+    // Migration: Ajouter la colonne user_note si elle n'existe pas
+    await migrateUserNoteColumn(client);
+
     // Initialiser les données d'HUGO si elles n'existent pas
     await initializeHugoData(client);
   } catch (error) {
@@ -59,6 +62,27 @@ async function initializeTables() {
     throw error;
   } finally {
     client.release();
+  }
+}
+
+// Migration pour ajouter la colonne user_note
+async function migrateUserNoteColumn(client) {
+  try {
+    const checkColumn = await client.query(`
+      SELECT column_name 
+      FROM information_schema.columns 
+      WHERE table_name = 'tournaments' AND column_name = 'user_note'
+    `);
+
+    if (checkColumn.rows.length === 0) {
+      await client.query(`
+        ALTER TABLE tournaments 
+        ADD COLUMN user_note TEXT
+      `);
+      console.log('✓ Migration: colonne user_note ajoutée');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la migration user_note:', error);
   }
 }
 

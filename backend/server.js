@@ -192,6 +192,22 @@ app.patch('/api/tournaments/:id/note', async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (error) {
+    console.error('Erreur PATCH /note:', error.message);
+    // Si la colonne n'existe pas, essayer de la créer
+    if (error.message.includes('user_note')) {
+      try {
+        await pool.query('ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS user_note TEXT');
+        // Réessayer la mise à jour
+        const { user_note } = req.body;
+        const result = await pool.query(
+          'UPDATE tournaments SET user_note = $1 WHERE id = $2 RETURNING *',
+          [user_note || null, req.params.id]
+        );
+        return res.json(result.rows[0]);
+      } catch (retryError) {
+        return res.status(500).json({ error: retryError.message });
+      }
+    }
     res.status(500).json({ error: error.message });
   }
 });
