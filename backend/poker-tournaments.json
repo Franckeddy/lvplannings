@@ -1,30 +1,26 @@
 [
   {
-    "casino": "Las Vegas Tournois à venir",
+    "casino": "Horseshoe Las Vegas",
     "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 0,
-    "source": "div",
-    "raw": {
-      "casino": "Las Vegas Tournois à venir",
-      "time": "10:00am",
-      "buyIn": "$0",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   },
   {
-    "casino": "aujourd’hui — 24 mai",
+    "casino": "World Series of Poker",
     "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "aujourd’hui — 24 mai",
-      "time": "10:00am",
-      "buyIn": "$100",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
+    "time": "09:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
     }
   },
   {
@@ -32,55 +28,23 @@
     "date": "2026-06-04",
     "time": "10:00:00",
     "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Caesars Palace",
-      "time": "10:00am",
-      "buyIn": "$100",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   },
   {
-    "casino": "Unknown",
+    "casino": "World Series of Poker",
     "date": "2026-06-04",
     "time": "10:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "10:00am",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "10:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "10:10am",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "10:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "10:10am",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          10",
-      "source": "div"
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
     }
   },
   {
@@ -88,13 +52,23 @@
     "date": "2026-06-04",
     "time": "10:10:00",
     "buyIn": 120,
-    "source": "div",
-    "raw": {
-      "casino": "South Point Casino",
-      "time": "10:10am",
-      "buyIn": "$120",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "10:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
     }
   },
   {
@@ -102,1021 +76,83 @@
     "date": "2026-06-04",
     "time": "11:00:00",
     "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "11:00am",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "11:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "11:00am",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "The Orleans Casino",
-    "date": "2026-06-04",
-    "time": "11:00:00",
-    "buyIn": 300,
-    "source": "div",
-    "raw": {
-      "casino": "The Orleans Casino",
-      "time": "11:00am",
-      "buyIn": "$300",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Red Rock Casino",
-    "date": "2026-06-04",
-    "time": "11:05:00",
-    "buyIn": 150,
-    "source": "div",
-    "raw": {
-      "casino": "Red Rock Casino",
-      "time": "11:05am",
-      "buyIn": "$150",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "11:05:00",
-    "buyIn": 150,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "11:05am",
-      "buyIn": "$150",
-      "date": "NLH\n        \n      \n    \n\n    \n          25",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "MGM Grand",
-    "date": "2026-06-04",
-    "time": "11:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "MGM Grand",
-      "time": "11:10am",
-      "buyIn": "$100",
-      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "11:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "11:10am",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          25",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Wynn Las Vegas",
-    "date": "2026-06-04",
-    "time": "12:00:00",
-    "buyIn": 1,
-    "source": "div",
-    "raw": {
-      "casino": "Wynn Las Vegas",
-      "time": "12:00pm",
-      "buyIn": "$1",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "12:00:00",
-    "buyIn": 1,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "12:00pm",
-      "buyIn": "$1",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "12:00:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "12:00pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Bellagio Casino",
-    "date": "2026-06-04",
-    "time": "12:00:00",
-    "buyIn": 200,
-    "source": "div",
-    "raw": {
-      "casino": "Bellagio Casino",
-      "time": "12:00pm",
-      "buyIn": "$200",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Westgate Las Vegas Resort & Casino",
-    "date": "2026-06-04",
-    "time": "12:05:00",
-    "buyIn": 55,
-    "source": "div",
-    "raw": {
-      "casino": "Westgate Las Vegas Resort & Casino",
-      "time": "12:05pm",
-      "buyIn": "$55",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "12:05:00",
-    "buyIn": 55,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "12:05pm",
-      "buyIn": "$55",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Wynn Las Vegas",
-    "date": "2026-06-04",
-    "time": "13:00:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Wynn Las Vegas",
-      "time": "1:00pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          1",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "13:00:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "1:00pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          1",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   },
   {
     "casino": "Aria Casino",
     "date": "2026-06-04",
-    "time": "13:00:00",
-    "buyIn": 200,
-    "source": "div",
-    "raw": {
-      "casino": "Aria Casino",
-      "time": "1:00pm",
-      "buyIn": "$200",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          1",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Mandalay Bay",
-    "date": "2026-06-04",
-    "time": "13:00:00",
-    "buyIn": 60,
-    "source": "div",
-    "raw": {
-      "casino": "Mandalay Bay",
-      "time": "1:00pm",
-      "buyIn": "$60",
-      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          1",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Horseshoe Las Vegas",
-    "date": "2026-06-04",
-    "time": "14:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "2:00pm",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          2",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "14:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "2:00pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Caesars Palace",
-    "date": "2026-06-04",
-    "time": "14:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Caesars Palace",
-      "time": "2:00pm",
-      "buyIn": "$100",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          2",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "South Point Casino",
-    "date": "2026-06-04",
-    "time": "14:10:00",
-    "buyIn": 120,
-    "source": "div",
-    "raw": {
-      "casino": "South Point Casino",
-      "time": "2:10pm",
-      "buyIn": "$120",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          2",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "14:10:00",
-    "buyIn": 120,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "2:10pm",
-      "buyIn": "$120",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Mandalay Bay",
-    "date": "2026-06-04",
-    "time": "14:45:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Mandalay Bay",
-      "time": "2:45pm",
-      "buyIn": "$160",
-      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          2",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "14:45:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "2:45pm",
-      "buyIn": "$160",
-      "date": "NLH\n        \n      \n    \n\n    \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Westgate Las Vegas Resort & Casino",
-    "date": "2026-06-04",
-    "time": "15:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Westgate Las Vegas Resort & Casino",
-      "time": "3:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          3",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "15:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "3:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          3",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "MGM Grand",
-    "date": "2026-06-04",
-    "time": "15:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "MGM Grand",
-      "time": "3:10pm",
-      "buyIn": "$100",
-      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          3",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "15:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "3:10pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          25",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Horseshoe Las Vegas",
-    "date": "2026-06-04",
-    "time": "17:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "5:00pm",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          5",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "17:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "5:00pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Bellagio Casino",
-    "date": "2026-06-04",
-    "time": "17:00:00",
-    "buyIn": 200,
-    "source": "div",
-    "raw": {
-      "casino": "Bellagio Casino",
-      "time": "5:00pm",
-      "buyIn": "$200",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          5",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Westgate Las Vegas Resort & Casino",
-    "date": "2026-06-04",
-    "time": "17:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Westgate Las Vegas Resort & Casino",
-      "time": "5:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          5",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "17:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "5:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          5",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Wynn Las Vegas",
-    "date": "2026-06-04",
-    "time": "18:00:00",
-    "buyIn": 1,
-    "source": "div",
-    "raw": {
-      "casino": "Wynn Las Vegas",
-      "time": "6:00pm",
-      "buyIn": "$1",
-      "date": "direct\n      \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "18:00:00",
-    "buyIn": 1,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "6:00pm",
-      "buyIn": "$1",
-      "date": "direct\n      \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "aujourd’hui — 24 mai",
-    "date": "2026-06-04",
-    "time": "18:00:00",
-    "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "aujourd’hui — 24 mai",
-      "time": "6:00pm",
-      "buyIn": "$240",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
-      "source": "div"
+    "time": "11:00:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
     }
   },
   {
     "casino": "The Orleans Casino",
     "date": "2026-06-04",
-    "time": "18:00:00",
-    "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "The Orleans Casino",
-      "time": "6:00pm",
-      "buyIn": "$240",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Caesars Palace",
-    "date": "2026-06-04",
-    "time": "18:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Caesars Palace",
-      "time": "6:00pm",
-      "buyIn": "$100",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "18:10:00",
-    "buyIn": 250,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "6:10pm",
-      "buyIn": "$250",
-      "date": "direct\n      \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "18:10:00",
-    "buyIn": 250,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "6:10pm",
-      "buyIn": "$250",
-      "date": "direct\n      \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "South Point Casino",
-    "date": "2026-06-04",
-    "time": "18:10:00",
-    "buyIn": 180,
-    "source": "div",
-    "raw": {
-      "casino": "South Point Casino",
-      "time": "6:10pm",
-      "buyIn": "$180",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Westgate Las Vegas Resort & Casino",
-    "date": "2026-06-04",
-    "time": "19:05:00",
-    "buyIn": 55,
-    "source": "div",
-    "raw": {
-      "casino": "Westgate Las Vegas Resort & Casino",
-      "time": "7:05pm",
-      "buyIn": "$55",
-      "date": "direct\n      \n\n    \n      \n        \n          7",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "19:05:00",
-    "buyIn": 55,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "7:05pm",
-      "buyIn": "$55",
-      "date": "direct\n      \n\n    \n      \n        \n          7",
-      "source": "div"
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
     }
   },
   {
     "casino": "MGM Grand",
     "date": "2026-06-04",
-    "time": "19:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "MGM Grand",
-      "time": "7:10pm",
-      "buyIn": "$100",
-      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          7",
-      "source": "div"
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
     }
   },
   {
-    "casino": "Unknown",
+    "casino": "Golden Nugget Las Vegas",
     "date": "2026-06-04",
-    "time": "19:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "7:10pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          25",
-      "source": "div"
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
     }
   },
   {
-    "casino": "Horseshoe Las Vegas",
+    "casino": "World Series of Poker",
     "date": "2026-06-04",
-    "time": "20:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "8:00pm",
-      "buyIn": "$160",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          8",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "20:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "8:00pm",
-      "buyIn": "$160",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Mandalay Bay",
-    "date": "2026-06-04",
-    "time": "20:00:00",
-    "buyIn": 60,
-    "source": "div",
-    "raw": {
-      "casino": "Mandalay Bay",
-      "time": "8:00pm",
-      "buyIn": "$60",
-      "date": "Bay\n    \n\n  \n\n    \n      \n        \n          8",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Caesars Palace",
-    "date": "2026-06-04",
-    "time": "21:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Caesars Palace",
-      "time": "9:00pm",
-      "buyIn": "$160",
-      "date": "Palace\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "21:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "9:00pm",
-      "buyIn": "$160",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Westgate Las Vegas Resort & Casino",
-    "date": "2026-06-04",
-    "time": "21:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Westgate Las Vegas Resort & Casino",
-      "time": "9:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "21:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "9:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "South Point Casino",
-    "date": "2026-06-04",
-    "time": "22:10:00",
-    "buyIn": 120,
-    "source": "div",
-    "raw": {
-      "casino": "South Point Casino",
-      "time": "10:10pm",
-      "buyIn": "$120",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "22:10:00",
-    "buyIn": 120,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "10:10pm",
-      "buyIn": "$120",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Horseshoe Las Vegas",
-    "date": "2026-06-04",
-    "time": "23:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "11:00pm",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "23:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "11:00pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "MGM Grand",
-    "date": "2026-06-04",
-    "time": "23:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "MGM Grand",
-      "time": "11:10pm",
-      "buyIn": "$100",
-      "date": "Grand\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "23:10:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "11:10pm",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          25",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "demain — 25 mai",
-    "date": "2026-06-04",
-    "time": "09:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "demain — 25 mai",
-      "time": "9:00am",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Horseshoe Las Vegas",
-    "date": "2026-06-04",
-    "time": "09:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Horseshoe Las Vegas",
-      "time": "9:00am",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "09:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "9:00am",
-      "buyIn": "$100",
-      "date": "NLH\n        \n      \n    \n\n    \n          20",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "demain — 25 mai",
-    "date": "2026-06-04",
-    "time": "12:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "demain — 25 mai",
-      "time": "12:10pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "12:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "12:10pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "12:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "12:10pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          12",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "The Orleans Casino",
-    "date": "2026-06-04",
-    "time": "16:00:00",
-    "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "The Orleans Casino",
-      "time": "4:00pm",
-      "buyIn": "$240",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          4",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "16:00:00",
-    "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "4:00pm",
-      "buyIn": "$240",
-      "date": "HORSE\n        \n      \n    \n\n    \n          30",
-      "source": "div"
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
     }
   },
   {
     "casino": "Red Rock Casino",
     "date": "2026-06-04",
-    "time": "18:05:00",
+    "time": "11:05:00",
     "buyIn": 85,
-    "source": "div",
-    "raw": {
-      "casino": "Red Rock Casino",
-      "time": "6:05pm",
-      "buyIn": "$85",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          6",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "18:05:00",
-    "buyIn": 85,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "6:05pm",
-      "buyIn": "$85",
-      "date": "NLH\n        \n      \n    \n\n    \n          15",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "demain — 25 mai",
-    "date": "2026-06-04",
-    "time": "23:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "demain — 25 mai",
-      "time": "11:00pm",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "mardi — 26 mai",
-    "date": "2026-06-04",
-    "time": "09:00:00",
-    "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "mardi — 26 mai",
-      "time": "9:00am",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "10:00am",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Venetian Las Vegas",
-    "date": "2026-06-04",
-    "time": "11:10:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "11:10am",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          11",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "World Series of Poker",
-    "date": "2026-06-04",
-    "time": "12:00:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "12:00pm",
-      "buyIn": "$70",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          12",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
     }
   },
   {
@@ -1124,13 +160,107 @@
     "date": "2026-06-04",
     "time": "12:00:00",
     "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "The Orleans Casino",
-      "time": "12:00pm",
-      "buyIn": "$600",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          12",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$50,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "35 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "12:00:00",
+    "buyIn": 25000,
+    "levels": null,
+    "structure": {
+      "chips": "150 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "13:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
     }
   },
   {
@@ -1138,41 +268,59 @@
     "date": "2026-06-04",
     "time": "13:00:00",
     "buyIn": 250,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "1:00pm",
-      "buyIn": "$250",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          1",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
     }
   },
   {
-    "casino": "Venetian Las Vegas",
+    "casino": "Horseshoe Las Vegas",
     "date": "2026-06-04",
     "time": "14:00:00",
-    "buyIn": 600,
-    "source": "div",
-    "raw": {
-      "casino": "Venetian Las Vegas",
-      "time": "2:00pm",
-      "buyIn": "$600",
-      "date": "direct\n      \n\n    \n      \n        \n          2",
-      "source": "div"
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   },
   {
     "casino": "World Series of Poker",
     "date": "2026-06-04",
     "time": "14:00:00",
-    "buyIn": 5,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "2:00pm",
-      "buyIn": "$5",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          2",
-      "source": "div"
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "14:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
     }
   },
   {
@@ -1180,41 +328,23 @@
     "date": "2026-06-04",
     "time": "15:00:00",
     "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "3:00pm",
-      "buyIn": "$240",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          3",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
     }
   },
   {
-    "casino": "Unknown",
+    "casino": "The Orleans Casino",
     "date": "2026-06-04",
-    "time": "15:00:00",
+    "time": "16:00:00",
     "buyIn": 240,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "3:00pm",
-      "buyIn": "$240",
-      "date": "NLH\n        \n      \n    \n\n    \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "mardi — 26 mai",
-    "date": "2026-06-04",
-    "time": "15:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "mardi — 26 mai",
-      "time": "3:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          3",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
     }
   },
   {
@@ -1222,181 +352,119 @@
     "date": "2026-06-04",
     "time": "16:00:00",
     "buyIn": 400,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "4:00pm",
-      "buyIn": "$400",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          4",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
     }
   },
   {
-    "casino": "Aria Casino",
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-04",
+    "time": "16:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
     "date": "2026-06-04",
     "time": "17:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Aria Casino",
-      "time": "5:00pm",
-      "buyIn": "$160",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          5",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "World Series of Poker",
-    "date": "2026-06-04",
-    "time": "19:00:00",
-    "buyIn": 585,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "7:00pm",
-      "buyIn": "$585",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          7",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "19:00:00",
-    "buyIn": 585,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "7:00pm",
-      "buyIn": "$585",
-      "date": "NLH\n        \n      \n    \n\n    \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "World Series of Poker",
-    "date": "2026-06-04",
-    "time": "20:00:00",
-    "buyIn": 200,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "8:00pm",
-      "buyIn": "$200",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          8",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "World Series of Poker",
-    "date": "2026-06-04",
-    "time": "22:00:00",
-    "buyIn": 135,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "10:00pm",
-      "buyIn": "$135",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Unknown",
-    "date": "2026-06-04",
-    "time": "22:00:00",
-    "buyIn": 135,
-    "source": "div",
-    "raw": {
-      "casino": "Unknown",
-      "time": "10:00pm",
-      "buyIn": "$135",
-      "date": "NLH\n        \n      \n    \n\n    \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "mercredi — 27 mai",
-    "date": "2026-06-04",
-    "time": "09:00:00",
     "buyIn": 100,
-    "source": "div",
-    "raw": {
-      "casino": "mercredi — 27 mai",
-      "time": "9:00am",
-      "buyIn": "$100",
-      "date": "Vegas\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   },
   {
-    "casino": "mercredi — 27 mai",
+    "casino": "Golden Nugget Las Vegas",
     "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "mercredi — 27 mai",
-      "time": "10:00am",
-      "buyIn": "$160",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "Aria Casino",
-    "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 160,
-    "source": "div",
-    "raw": {
-      "casino": "Aria Casino",
-      "time": "10:00am",
-      "buyIn": "$160",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "World Series of Poker",
-    "date": "2026-06-04",
-    "time": "10:00:00",
-    "buyIn": 550,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "10:00am",
-      "buyIn": "$550",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          10",
-      "source": "div"
+    "time": "17:00:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$7,500 Guaranteed"
     }
   },
   {
     "casino": "Wynn Las Vegas",
     "date": "2026-06-04",
-    "time": "11:00:00",
-    "buyIn": 1,
-    "source": "div",
-    "raw": {
-      "casino": "Wynn Las Vegas",
-      "time": "11:00am",
-      "buyIn": "$1",
-      "date": "direct\n      \n\n    \n      \n        \n          11",
-      "source": "div"
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
     }
   },
   {
-    "casino": "mercredi — 27 mai",
+    "casino": "The Orleans Casino",
     "date": "2026-06-04",
-    "time": "15:05:00",
-    "buyIn": 70,
-    "source": "div",
-    "raw": {
-      "casino": "mercredi — 27 mai",
-      "time": "3:05pm",
-      "buyIn": "$70",
-      "date": "direct\n      \n\n    \n      \n        \n          3",
-      "source": "div"
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-04",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "18:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
     }
   },
   {
@@ -1404,41 +472,4775 @@
     "date": "2026-06-04",
     "time": "19:00:00",
     "buyIn": 300,
-    "source": "div",
-    "raw": {
-      "casino": "Aria Casino",
-      "time": "7:00pm",
-      "buyIn": "$300",
-      "date": "Casino\n    \n\n  \n\n    \n      \n        \n          7",
-      "source": "div"
-    }
-  },
-  {
-    "casino": "jeudi — 28 mai",
-    "date": "2026-06-04",
-    "time": "09:00:00",
-    "buyIn": 250,
-    "source": "div",
-    "raw": {
-      "casino": "jeudi — 28 mai",
-      "time": "9:00am",
-      "buyIn": "$250",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
     }
   },
   {
     "casino": "World Series of Poker",
     "date": "2026-06-04",
+    "time": "19:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-04",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-04",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-04",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-04",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-04",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-05",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "10:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-05",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-05",
+    "time": "10:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$150,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "35 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 25000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "12:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-05",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "13:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-05",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "14:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": "60 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-05",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$6,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-05",
+    "time": "16:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-05",
+    "time": "17:00:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$7,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-05",
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-05",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-05",
+    "time": "18:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-05",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-05",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-05",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-05",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-05",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-05",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-05",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-05",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-06",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "10:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-06",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-06",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$150,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-06",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-06",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$50,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-06",
+    "time": "12:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "12:00:00",
+    "buyIn": 25000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "12:00:00",
+    "buyIn": 25000,
+    "levels": null,
+    "structure": {
+      "chips": "150 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-06",
+    "time": "13:00:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-06",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-06",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "14:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-06",
+    "time": "14:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-06",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-06",
+    "time": "17:00:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$7,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-06",
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-06",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-06",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-06",
+    "time": "18:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-06",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-06",
+    "time": "18:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-06",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "19:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-06",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-06",
+    "time": "20:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-06",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-06",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-06",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-06",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-06",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-07",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "10:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-07",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-07",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-07",
+    "time": "11:05:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-07",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-07",
+    "time": "12:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "35 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "12:00:00",
+    "buyIn": 25000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "12:00:00",
+    "buyIn": 2000,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-07",
+    "time": "12:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-07",
+    "time": "13:00:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-07",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "13:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-07",
+    "time": "14:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$50,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-07",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "14:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": "60 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-07",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$6,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "15:00:00",
+    "buyIn": 625,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-07",
+    "time": "17:00:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$7,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-07",
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "18:00:00",
+    "buyIn": 5300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-07",
+    "time": "18:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-07",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-07",
+    "time": "18:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-07",
+    "time": "18:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-07",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-07",
+    "time": "19:00:00",
+    "buyIn": 150,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-07",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-07",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-07",
+    "time": "21:30:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "12 niveaux min",
+      "guarantee": "$3,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-07",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-07",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-07",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-08",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "10:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-08",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-08",
+    "time": "10:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 5000,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "11:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-08",
+    "time": "11:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-08",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "12:00:00",
+    "buyIn": 2000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "12:00:00",
+    "buyIn": 50000,
+    "levels": null,
+    "structure": {
+      "chips": "300 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-08",
+    "time": "13:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-08",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-08",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "14:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-08",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$6,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-08",
+    "time": "16:00:00",
+    "buyIn": 125,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-08",
+    "time": "18:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-08",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-08",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-08",
+    "time": "18:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-08",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-08",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-08",
+    "time": "18:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-08",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "19:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-08",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-08",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-08",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-08",
+    "time": "21:30:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "12 niveaux min",
+      "guarantee": "$3,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-08",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-08",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-08",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-09",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "10:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-09",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-09",
+    "time": "10:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$250,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "11:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-09",
+    "time": "11:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "35 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$50,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "10 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 70,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "10 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 50000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "12:00:00",
+    "buyIn": 3000,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-09",
+    "time": "13:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": null,
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "13:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-09",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "14:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": "60 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-09",
+    "time": "14:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$6,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "15:00:00",
+    "buyIn": 850,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "15:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-09",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-09",
+    "time": "18:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-09",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "18:00:00",
+    "buyIn": 7500,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-09",
+    "time": "18:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-09",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-09",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-09",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-09",
+    "time": "18:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-09",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-09",
+    "time": "19:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-09",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-09",
+    "time": "21:30:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "12 niveaux min",
+      "guarantee": "$3,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-09",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-09",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-09",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-10",
+    "time": "10:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-10",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "10:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-10",
+    "time": "10:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-10",
+    "time": "11:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-10",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-10",
+    "time": "11:00:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$200,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-10",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-10",
+    "time": "11:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-10",
+    "time": "11:10:00",
+    "buyIn": 800,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$150,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "12:00:00",
+    "buyIn": 70,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "10 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-10",
+    "time": "12:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "12:00:00",
+    "buyIn": 3000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "12:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-10",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-10",
+    "time": "13:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$7,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "13:00:00",
+    "buyIn": 100000,
+    "levels": null,
+    "structure": {
+      "chips": "600 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-10",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "14:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "15:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-10",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-10",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-10",
+    "time": "18:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-10",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-10",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-10",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-10",
+    "time": "18:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$300,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-10",
+    "time": "19:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$2,500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-10",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "19:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-10",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-10",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-10",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-10",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-10",
+    "time": "21:30:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "12 niveaux min",
+      "guarantee": "$3,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-10",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-10",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-11",
+    "time": "09:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
     "time": "09:00:00",
     "buyIn": 250,
-    "source": "div",
-    "raw": {
-      "casino": "World Series of Poker",
-      "time": "9:00am",
-      "buyIn": "$250",
-      "date": "Poker\n    \n\n  \n\n    \n      \n        \n          9",
-      "source": "div"
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-11",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "10:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-11",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-11",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-11",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-11",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-11",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "11:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-11",
+    "time": "11:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 3500,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$5,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 70,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "10 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 3000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "12:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 100000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-11",
+    "time": "14:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$35,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-11",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "14:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": "60 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-11",
+    "time": "14:10:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-11",
+    "time": "15:00:00",
+    "buyIn": 15700,
+    "levels": null,
+    "structure": {
+      "chips": "125 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-11",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-11",
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-11",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-11",
+    "time": "18:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-11",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Red Rock Casino",
+    "date": "2026-06-11",
+    "time": "18:05:00",
+    "buyIn": 85,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-11",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-11",
+    "time": "18:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-11",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "19:00:00",
+    "buyIn": 585,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-11",
+    "time": "19:00:00",
+    "buyIn": 125,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-11",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-11",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-11",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-11",
+    "time": "21:30:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "12 niveaux min",
+      "guarantee": "$3,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-11",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-11",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-11",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "09:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-12",
+    "time": "09:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-12",
+    "time": "10:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "10:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-12",
+    "time": "10:10:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$1,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-12",
+    "time": "10:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "11:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-12",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-12",
+    "time": "11:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-12",
+    "time": "11:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$15,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "11:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 3500,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": "$5,000,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 70,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "10 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 1600,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$500,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "35 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "12:00:00",
+    "buyIn": 5000,
+    "levels": null,
+    "structure": {
+      "chips": "50 000 chip",
+      "levels": "60 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-12",
+    "time": "13:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "13:00:00",
+    "buyIn": 10000,
+    "levels": null,
+    "structure": {
+      "chips": null,
+      "levels": "Redémarrer, 40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "13:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-12",
+    "time": "14:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "14:00:00",
+    "buyIn": 1500,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "40 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "15:00:00",
+    "buyIn": 2800,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-12",
+    "time": "15:00:00",
+    "buyIn": 15700,
+    "levels": null,
+    "structure": {
+      "chips": "125 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "15:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-12",
+    "time": "16:00:00",
+    "buyIn": 240,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "16:00:00",
+    "buyIn": 400,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "17:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-12",
+    "time": "17:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 500,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$35,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Wynn Las Vegas",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$100,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "The Orleans Casino",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$30,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 25400,
+    "levels": null,
+    "structure": {
+      "chips": "40 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 250,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$10,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-12",
+    "time": "18:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-12",
+    "time": "18:10:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "30 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$20,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Venetian Las Vegas",
+    "date": "2026-06-12",
+    "time": "18:10:00",
+    "buyIn": 600,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": "$40,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Aria Casino",
+    "date": "2026-06-12",
+    "time": "19:00:00",
+    "buyIn": 300,
+    "levels": null,
+    "structure": {
+      "chips": "25 000 chip",
+      "levels": "25 niveaux min",
+      "guarantee": "$25,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "19:00:00",
+    "buyIn": 1100,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "30 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Golden Nugget Las Vegas",
+    "date": "2026-06-12",
+    "time": "19:00:00",
+    "buyIn": 130,
+    "levels": null,
+    "structure": {
+      "chips": "15 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "20:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,500 Guaranteed"
+    }
+  },
+  {
+    "casino": "Mandalay Bay",
+    "date": "2026-06-12",
+    "time": "20:00:00",
+    "buyIn": 60,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "20:00:00",
+    "buyIn": 200,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "Caesars Palace",
+    "date": "2026-06-12",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "MGM Grand",
+    "date": "2026-06-12",
+    "time": "21:00:00",
+    "buyIn": 160,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "20 niveaux min",
+      "guarantee": "$5,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "World Series of Poker",
+    "date": "2026-06-12",
+    "time": "22:00:00",
+    "buyIn": 135,
+    "levels": null,
+    "structure": {
+      "chips": "10 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": null
+    }
+  },
+  {
+    "casino": "South Point Casino",
+    "date": "2026-06-12",
+    "time": "22:10:00",
+    "buyIn": 120,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$4,000 Guaranteed"
+    }
+  },
+  {
+    "casino": "Horseshoe Las Vegas",
+    "date": "2026-06-12",
+    "time": "23:00:00",
+    "buyIn": 100,
+    "levels": null,
+    "structure": {
+      "chips": "20 000 chip",
+      "levels": "15 niveaux min",
+      "guarantee": "$1,000 Guaranteed"
     }
   }
 ]
