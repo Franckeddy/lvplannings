@@ -23,30 +23,36 @@
 
         <div class="divider"></div>
 
+        <nav class="sidebar-nav">
+          <Button
+            label="Planning des tournois"
+            icon="pi pi-calendar"
+            @click="currentView = 'timeline'"
+            :class="['nav-button', { 'nav-button-active': currentView === 'timeline' }]"
+          />
+          <Button
+            v-if="selectedUser"
+            :label="`Planning de ${selectedUser.name}`"
+            icon="pi pi-list-check"
+            @click="currentView = 'planning'"
+            :class="['nav-button', { 'nav-button-active': currentView === 'planning' }]"
+          />
+          <Button
+            label="Récap Team"
+            icon="pi pi-users"
+            @click="currentView = 'team'"
+            :class="['nav-button', { 'nav-button-active': currentView === 'team' }]"
+          />
+        </nav>
+
+        <div class="divider"></div>
+
         <UserSelector
           :users="users"
           :selected-user="selectedUser"
           @user-selected="handleUserSelected"
           @user-created="handleUserCreated"
         />
-
-        <div class="divider"></div>
-
-        <nav class="sidebar-nav">
-          <Button
-            v-if="selectedUser"
-            :label="`Planning de ${selectedUser.name}`"
-            @click="currentView = 'planning'"
-            text
-            class="planning-button"
-          />
-          <Button
-            label="Timeline des Tournois"
-            @click="currentView = 'timeline'"
-            text
-            class="timeline-button"
-          />
-        </nav>
       </div>
     </aside>
 
@@ -70,6 +76,11 @@
         @tournament-added="handleTournamentAddedFromTimeline"
       />
 
+      <!-- Team Recap View -->
+      <TeamRecap
+        v-else-if="currentView === 'team'"
+      />
+
       <!-- Welcome Message -->
       <div class="welcome" v-else-if="!selectedUser && currentView === 'planning'">
         <i class="pi pi-users" style="font-size: 4rem; color: #94a3b8;"></i>
@@ -85,6 +96,7 @@ import { userService } from './services/api';
 import UserSelector from './components/UserSelector.vue';
 import TournamentList from './components/TournamentList.vue';
 import TournamentTimeline from './components/TournamentTimeline.vue';
+import TeamRecap from './components/TeamRecap.vue';
 import Button from 'primevue/button';
 
 const users = ref([]);
@@ -361,43 +373,35 @@ body {
   gap: 0.75rem;
 }
 
-.planning-button {
+/* Navigation Buttons - Style uniforme */
+.nav-button {
   width: 100%;
-  justify-content: center;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  padding: 1rem 1.25rem;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1rem;
-  border: 2px solid var(--border-color);
+  justify-content: flex-start !important;
+  gap: 0.75rem;
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s ease;
+  padding: 0.875rem 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 0.9375rem !important;
+  border: 1px solid #334155 !important;
 }
 
-.planning-button:hover {
-  background: var(--sidebar-hover);
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.nav-button:hover {
+  background: var(--sidebar-hover) !important;
+  color: var(--text-primary) !important;
 }
 
-.timeline-button {
-  width: 100%;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-  transition: all 0.3s ease;
-  padding: 1.25rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1.125rem;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+.nav-button-active {
+  background: var(--accent-color) !important;
+  color: white !important;
 }
 
-.timeline-button:hover {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+.nav-button-active:hover {
+  background: var(--accent-color) !important;
+  color: white !important;
+  opacity: 0.9;
 }
 
 /* Main Content */

@@ -102,9 +102,9 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
     const { date, time, casino, buyin, levels } = req.body;
     const userId = req.params.userId;
 
-    if (!date || !time || !casino || !levels) {
+    if (!date || !time || !casino) {
       return res.status(400).json({
-        error: 'Les champs date, time, casino et levels sont requis'
+        error: 'Les champs date, time et casino sont requis'
       });
     }
 
@@ -116,7 +116,7 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
 
     const result = await pool.query(
       'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [userId, date, time, casino, buyin || null, levels]
+      [userId, date, time, casino, buyin || null, levels || '-']
     );
 
     res.status(201).json(result.rows[0]);

@@ -1,228 +1,320 @@
 <template>
-  <div class="tournament-container">
-    <Card class="summary-card">
-      <template #title>
-        <div class="card-header">
-          <span>Programme de {{ user.name }}</span>
-          <Button
-            icon="pi pi-refresh"
-            @click="$emit('refresh', user.id)"
-            :loading="loading"
-            text
-            rounded
-          />
-        </div>
-      </template>
-      <template #content>
-        <div v-if="summary" class="summary-grid">
-          <div class="summary-item">
-            <i class="pi pi-calendar summary-icon"></i>
-            <div>
-              <div class="summary-label">Période</div>
-              <div class="summary-value">{{ summary.startDate }} au {{ summary.endDate }}</div>
-            </div>
+  <Toast />
+  <div class="program-container">
+    <!-- Header avec stats -->
+    <div class="program-header">
+      <div class="header-top">
+        <div class="user-info">
+          <div class="user-avatar">
+            {{ user.name.charAt(0).toUpperCase() }}
           </div>
-
-          <div class="summary-item">
-            <i class="pi pi-list summary-icon"></i>
-            <div>
-              <div class="summary-label">Nombre de tournois</div>
-              <div class="summary-value">{{ summary.totalTournaments }}</div>
-            </div>
-          </div>
-
-          <div class="summary-item">
-            <i class="pi pi-dollar summary-icon"></i>
-            <div>
-              <div class="summary-label">Budget total</div>
-              <div class="summary-value">{{ summary.totalBuyins }} $</div>
-            </div>
-          </div>
-
-          <div class="summary-item">
-            <i class="pi pi-building summary-icon"></i>
-            <div>
-              <div class="summary-label">Casinos</div>
-              <div class="summary-value">{{ summary.casinos.join(', ') }}</div>
-            </div>
+          <div class="user-details">
+            <h1>Programme de {{ user.name }}</h1>
+            <p class="user-subtitle">Las Vegas 2026</p>
           </div>
         </div>
-      </template>
-    </Card>
-
-    <Card class="tournaments-card">
-      <template #title>
-        <div class="card-header">
-          <span>Tournois programmés</span>
-          <Button
-            icon="pi pi-upload"
-            label="Import rapide"
-            @click="showImportDialog = true"
-            severity="info"
-            outlined
-          />
-        </div>
-      </template>
-      <template #content>
-        <DataTable
-          :value="tournaments"
+        <Button
+          icon="pi pi-refresh"
+          @click="$emit('refresh', user.id)"
           :loading="loading"
-          stripedRows
-          showGridlines
-          responsiveLayout="scroll"
+          rounded
+          text
+          class="refresh-btn"
+        />
+      </div>
+
+      <!-- Stats Cards -->
+      <div v-if="summary" class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon tournaments">
+            <i class="pi pi-trophy"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">{{ summary.totalTournaments }}</span>
+            <span class="stat-label">Tournois</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon budget">
+            <i class="pi pi-wallet"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">${{ summary.totalBuyins?.toLocaleString() || 0 }}</span>
+            <span class="stat-label">Budget total</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon casinos">
+            <i class="pi pi-building"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">{{ summary.casinos?.length || 0 }}</span>
+            <span class="stat-label">Casinos</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon days">
+            <i class="pi pi-calendar"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">{{ Object.keys(tournamentsByDay).length }}</span>
+            <span class="stat-label">Jours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des tournois par jour -->
+    <div class="tournaments-section">
+      <div class="section-header">
+        <h2>Mon planning</h2>
+        <span class="tournament-count">{{ tournaments?.length || 0 }} tournoi(s)</span>
+      </div>
+
+      <!-- Loading -->
+      <div v-if="loading" class="loading-state">
+        <ProgressSpinner />
+        <p>Chargement...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="!tournaments || tournaments.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="pi pi-calendar-plus"></i>
+        </div>
+        <h3>Aucun tournoi programmé</h3>
+        <p>Ajoutez des tournois depuis le planning des tournois</p>
+      </div>
+
+      <!-- Tournaments grouped by day -->
+      <div v-else class="days-list">
+        <div
+          v-for="(dayData, date) in tournamentsByDay"
+          :key="date"
+          class="day-card"
         >
-          <Column field="date" header="Date" :sortable="true">
-            <template #body="slotProps">
-              <span class="date-badge">{{ slotProps.data.date }}</span>
-            </template>
-          </Column>
-
-          <Column field="time" header="Heure" :sortable="true" />
-
-          <Column field="casino" header="Casino" :sortable="true">
-            <template #body="slotProps">
-              <div class="casino-cell">
-                <div class="casino-logo-container">
-                  <img
-                    v-if="getCasinoLogo(slotProps.data.casino)"
-                    :src="getCasinoLogo(slotProps.data.casino)"
-                    :alt="slotProps.data.casino"
-                    class="casino-logo"
-                    @error="handleImageError"
-                  />
-                  <div v-else class="casino-initials">
-                    {{ getCasinoInitials(slotProps.data.casino) }}
-                  </div>
-                </div>
-                <Tag :value="slotProps.data.casino" severity="info" class="casino-tag" />
+          <!-- Day Header -->
+          <div class="day-card-header">
+            <div class="day-date-info">
+              <div class="day-badge">
+                <span class="day-number">{{ extractDay(date) }}</span>
+                <span class="day-month">{{ extractMonth(date) }}</span>
               </div>
-            </template>
-          </Column>
+              <div class="day-details">
+                <span class="day-name">{{ getDayName(date) }}</span>
+                <span class="day-stats">
+                  {{ dayData.tournaments.length }} tournoi{{ dayData.tournaments.length > 1 ? 's' : '' }}
+                  <span class="separator">•</span>
+                  {{ formatBuyIn(dayData.totalBuyin) }}
+                </span>
+              </div>
+            </div>
+            <div class="day-total">
+              {{ formatBuyIn(dayData.totalBuyin) }}
+            </div>
+          </div>
 
-          <Column field="buyin" header="Buy-In ($)" :sortable="true">
-            <template #body="slotProps">
-              <span v-if="slotProps.data.buyin" class="buyin-value">
-                {{ formatBuyIn(slotProps.data.buyin) }}
-              </span>
-              <span v-else class="no-buyin">-</span>
-            </template>
-          </Column>
+          <!-- Day Tournaments -->
+          <div class="day-tournaments">
+            <div
+              v-for="tournament in dayData.tournaments"
+              :key="tournament.id"
+              class="tournament-row"
+            >
+              <div class="tournament-time-slot">
+                <i class="pi pi-clock"></i>
+                <span>{{ tournament.time }}</span>
+              </div>
 
-          <Column field="levels" header="Niveaux" />
+              <div class="tournament-info">
+                <div class="casino-badge">
+                  <div class="casino-logo-wrapper">
+                    <img
+                      v-if="getCasinoLogo(tournament.casino)"
+                      :src="getCasinoLogo(tournament.casino)"
+                      :alt="tournament.casino"
+                      class="casino-logo"
+                      @error="handleImageError"
+                    />
+                    <div v-else class="casino-initials">
+                      {{ getCasinoInitials(tournament.casino) }}
+                    </div>
+                  </div>
+                  <span class="casino-name">{{ tournament.casino }}</span>
+                </div>
 
-          <Column header="Actions" :exportable="false" style="width: 100px;">
-            <template #body="slotProps">
+                <div v-if="tournament.levels && tournament.levels !== '-'" class="tournament-levels">
+                  {{ tournament.levels }}
+                </div>
+              </div>
+
+              <div class="tournament-buyin">
+                {{ formatBuyIn(tournament.buyin) }}
+              </div>
+
               <Button
                 icon="pi pi-trash"
-                @click="confirmDelete(slotProps.data)"
+                @click="confirmDelete(tournament)"
                 severity="danger"
                 text
                 rounded
-                aria-label="Supprimer"
+                size="small"
+                class="delete-btn"
+                v-tooltip.top="'Supprimer'"
               />
-            </template>
-          </Column>
-
-          <template #empty>
-            <div class="empty-state">
-              <i class="pi pi-inbox" style="font-size: 3rem; color: #94a3b8;"></i>
-              <p>Aucun tournoi programmé</p>
             </div>
-          </template>
-        </DataTable>
-      </template>
-    </Card>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <TournamentImport
-      v-model="showImportDialog"
-      :user="user"
-      @tournaments-imported="handleTournamentsImported"
-    />
-
+    <!-- Dialog de suppression -->
     <Dialog
       v-model:visible="showDeleteDialog"
-      header="Confirmer la suppression"
       :modal="true"
-      :style="{ width: '450px' }"
+      :style="{ width: '400px' }"
+      :showHeader="false"
+      class="delete-dialog"
     >
-      <div v-if="tournamentToDelete" class="delete-dialog-content">
-        <div class="warning-icon">
-          <i class="pi pi-exclamation-triangle"></i>
+      <div class="delete-dialog-content">
+        <div class="delete-icon">
+          <i class="pi pi-trash"></i>
         </div>
-        <p class="confirmation-text">
-          Êtes-vous sûr de vouloir supprimer ce tournoi ?
-        </p>
-        <div class="tournament-info-delete">
-          <div class="info-row">
-            <span class="label">Date:</span>
-            <span class="value">{{ tournamentToDelete.date }}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Heure:</span>
-            <span class="value">{{ tournamentToDelete.time }}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Casino:</span>
-            <span class="value">{{ tournamentToDelete.casino }}</span>
-          </div>
-          <div v-if="tournamentToDelete.buyin" class="info-row">
-            <span class="label">Buy-in:</span>
-            <span class="value">{{ formatBuyIn(tournamentToDelete.buyin) }}</span>
-          </div>
-        </div>
-        <p class="warning-text">Cette action est irréversible.</p>
-      </div>
+        <h3>Supprimer ce tournoi ?</h3>
 
-      <template #footer>
-        <Button
-          label="Annuler"
-          @click="showDeleteDialog = false"
-          severity="secondary"
-          outlined
-        />
-        <Button
-          label="Supprimer"
-          @click="deleteTournament"
-          severity="danger"
-          icon="pi pi-trash"
-        />
-      </template>
+        <div v-if="tournamentToDelete" class="delete-tournament-info">
+          <div class="delete-info-row">
+            <span>{{ tournamentToDelete.date }} à {{ tournamentToDelete.time }}</span>
+          </div>
+          <div class="delete-info-row casino">
+            {{ tournamentToDelete.casino }}
+          </div>
+          <div class="delete-info-row buyin">
+            {{ formatBuyIn(tournamentToDelete.buyin) }}
+          </div>
+        </div>
+
+        <p class="delete-warning">Cette action est irréversible</p>
+
+        <div class="delete-actions">
+          <Button
+            label="Annuler"
+            @click="showDeleteDialog = false"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="Supprimer"
+            @click="deleteTournament"
+            severity="danger"
+            icon="pi pi-trash"
+            :loading="deleting"
+            class="confirm-delete-btn"
+          />
+        </div>
+      </div>
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Card from 'primevue/card';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import { ref, computed } from 'vue';
 import Button from 'primevue/button';
-import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
-import TournamentImport from './TournamentImport.vue';
+import ProgressSpinner from 'primevue/progressspinner';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 
 // Configuration API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-defineProps({
+const props = defineProps({
   user: Object,
   tournaments: Array,
   summary: Object,
   loading: Boolean
 });
 
-const emit = defineEmits(['refresh', 'import-tournaments', 'delete-tournament']);
+const emit = defineEmits(['refresh', 'delete-tournament']);
 
-const showImportDialog = ref(false);
 const showDeleteDialog = ref(false);
 const tournamentToDelete = ref(null);
+const deleting = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
+const toast = useToast();
+
+// Grouper les tournois par jour
+const tournamentsByDay = computed(() => {
+  if (!props.tournaments) return {};
+
+  const grouped = {};
+
+  // Trier d'abord tous les tournois
+  const sorted = [...props.tournaments].sort((a, b) => {
+    const dateA = a.date + ' ' + a.time;
+    const dateB = b.date + ' ' + b.time;
+    return dateA.localeCompare(dateB);
+  });
+
+  // Grouper par date
+  sorted.forEach(tournament => {
+    const date = tournament.date;
+    if (!grouped[date]) {
+      grouped[date] = {
+        tournaments: [],
+        totalBuyin: 0
+      };
+    }
+    grouped[date].tournaments.push(tournament);
+    grouped[date].totalBuyin += tournament.buyin || 0;
+  });
+
+  return grouped;
+});
 
 const formatBuyIn = (amount) => {
   if (!amount) return '$0';
   return '$' + amount.toLocaleString('en-US');
+};
+
+const extractDay = (dateStr) => {
+  if (!dateStr) return '-';
+  const match = dateStr.match(/^(\d+)/);
+  return match ? match[1] : '-';
+};
+
+const extractMonth = (dateStr) => {
+  if (!dateStr) return '';
+  const match = dateStr.match(/-(.+)$/);
+  return match ? match[1].substring(0, 3).toUpperCase() : '';
+};
+
+const getDayName = (dateStr) => {
+  if (!dateStr) return '';
+  // Format attendu: "04-juin" ou similaire
+  const match = dateStr.match(/^(\d+)-(.+)$/);
+  if (!match) return '';
+
+  const day = parseInt(match[1]);
+  const monthName = match[2].toLowerCase();
+
+  const monthMap = {
+    'janvier': 0, 'février': 1, 'mars': 2, 'avril': 3,
+    'mai': 4, 'juin': 5, 'juillet': 6, 'août': 7,
+    'septembre': 8, 'octobre': 9, 'novembre': 10, 'décembre': 11
+  };
+
+  const month = monthMap[monthName];
+  if (month === undefined) return '';
+
+  const date = new Date(2026, month, day);
+  return date.toLocaleDateString('fr-FR', { weekday: 'long' });
 };
 
 const handleImageError = (event) => {
@@ -233,10 +325,6 @@ const handleImageError = (event) => {
   }
 };
 
-const handleTournamentsImported = (tournaments) => {
-  emit('import-tournaments', tournaments);
-};
-
 const confirmDelete = (tournament) => {
   tournamentToDelete.value = tournament;
   showDeleteDialog.value = true;
@@ -244,6 +332,8 @@ const confirmDelete = (tournament) => {
 
 const deleteTournament = async () => {
   if (!tournamentToDelete.value) return;
+
+  deleting.value = true;
 
   try {
     const response = await fetch(
@@ -254,197 +344,391 @@ const deleteTournament = async () => {
     if (response.ok) {
       emit('delete-tournament', tournamentToDelete.value.id);
       showDeleteDialog.value = false;
+      toast.add({
+        severity: 'success',
+        summary: 'Tournoi supprimé',
+        detail: 'Le tournoi a été retiré de votre planning',
+        life: 3000
+      });
       tournamentToDelete.value = null;
     } else {
-      console.error('Erreur lors de la suppression');
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Impossible de supprimer le tournoi',
+        life: 3000
+      });
     }
   } catch (error) {
     console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    deleting.value = false;
   }
 };
 </script>
 
 <style scoped>
-.tournament-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.program-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
 }
 
-.summary-card,
-.tournaments-card {
-  background: var(--bg-secondary, white);
-  box-shadow: var(--card-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
-  transition: all 0.3s ease;
+/* Header */
+.program-header {
+  margin-bottom: 32px;
 }
 
-.card-header {
+.header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 32px;
 }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.summary-item {
+.user-info {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 15px;
-  background: var(--bg-primary, #f8fafc);
-  border-radius: 8px;
-  border-left: 4px solid #3b82f6;
-  transition: background 0.3s ease;
+  gap: 16px;
 }
 
-.summary-icon {
-  font-size: 2rem;
-  color: #3b82f6;
-}
-
-.summary-label {
-  font-size: 0.875rem;
-  color: #64748b;
-  margin-bottom: 5px;
-}
-
-.summary-value {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-primary, #1e293b);
-  transition: color 0.3s ease;
-}
-
-.date-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #e0f2fe;
-  color: #0c4a6e;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.buyin-value {
-  font-weight: 600;
-  color: #059669;
-}
-
-.no-buyin {
-  color: #94a3b8;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px;
-}
-
-.empty-state p {
-  margin-top: 15px;
-  color: #64748b;
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.delete-dialog-content {
-  padding: 20px 0;
-  text-align: center;
-}
-
-.warning-icon {
-  font-size: 3rem;
-  color: #ef4444;
-  margin-bottom: 20px;
-}
-
-.warning-icon i {
-  font-size: 3rem;
-}
-
-.confirmation-text {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 20px;
-}
-
-.tournament-info-delete {
-  background: #fef2f2;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #fecaca;
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.tournament-info-delete .info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.tournament-info-delete .info-row:not(:last-child) {
-  border-bottom: 1px solid #fecaca;
-}
-
-.tournament-info-delete .label {
-  font-weight: 600;
-  color: #991b1b;
-}
-
-.tournament-info-delete .value {
-  font-weight: 500;
-  color: #dc2626;
-}
-
-.warning-text {
-  color: #dc2626;
-  font-size: 0.875rem;
-  font-style: italic;
-}
-
-.casino-cell {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.casino-logo-container {
-  position: relative;
-  width: 48px;
-  height: 48px;
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary, #f8fafc);
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #e2e8f0);
-  padding: 6px;
-  flex-shrink: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 700;
 }
 
-.casino-logo-container:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.user-details h1 {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.user-subtitle {
+  color: var(--accent-color, #818cf8);
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.refresh-btn {
+  color: var(--text-secondary, #94a3b8) !important;
+}
+
+.refresh-btn:hover {
+  color: var(--text-primary, #f1f5f9) !important;
+  background: var(--sidebar-hover, #334155) !important;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--accent-color, #818cf8);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.stat-icon.tournaments {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.stat-icon.budget {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.stat-icon.casinos {
+  background: rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+}
+
+.stat-icon.days {
+  background: rgba(236, 72, 153, 0.15);
+  color: #ec4899;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.875rem;
+  margin-top: 2px;
+}
+
+/* Tournaments Section */
+.tournaments-section {
+  background: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.section-header h2 {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tournament-count {
+  background: var(--accent-color, #818cf8);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Loading & Empty States */
+.loading-state,
+.empty-state {
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-primary, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.empty-icon i {
+  font-size: 2rem;
+  color: var(--accent-color, #818cf8);
+}
+
+.empty-state h3 {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.25rem;
+  margin: 0 0 8px 0;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+/* Days List */
+.days-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Day Card */
+.day-card {
+  background: var(--bg-primary, #0f172a);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.day-card:hover {
+  border-color: rgba(129, 140, 248, 0.5);
+}
+
+.day-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.day-date-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.day-badge {
+  min-width: 56px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.day-number {
+  display: block;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.day-month {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.day-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-name {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.day-stats {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.875rem;
+}
+
+.day-stats .separator {
+  margin: 0 6px;
+  opacity: 0.5;
+}
+
+.day-total {
+  color: #22c55e;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Day Tournaments */
+.day-tournaments {
+  padding: 8px 0;
+}
+
+.tournament-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  transition: background 0.15s ease;
+}
+
+.tournament-row:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.tournament-row:not(:last-child) {
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.tournament-time-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  color: var(--accent-color, #818cf8);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.tournament-time-slot i {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.tournament-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.casino-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.casino-logo-wrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #334155);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary, #1e293b);
+  padding: 3px;
+  flex-shrink: 0;
 }
 
 .casino-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
 }
 
 .casino-initials {
@@ -453,22 +737,189 @@ const deleteTournament = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--gradient-start, #667eea), var(--gradient-end, #764ba2));
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-weight: 700;
-  font-size: 0.875rem;
-  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.625rem;
+  border-radius: 4px;
 }
 
-.casino-tag {
-  flex: 1;
-  min-width: 0;
+.casino-name {
+  color: var(--text-primary, #f1f5f9);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.tournament-levels {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8125rem;
+  padding: 4px 10px;
+  background: var(--bg-secondary, #1e293b);
+  border-radius: 4px;
+}
+
+.tournament-buyin {
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  min-width: 70px;
+  text-align: right;
+}
+
+.delete-btn {
+  color: var(--text-secondary, #94a3b8) !important;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.tournament-row:hover .delete-btn {
+  opacity: 0.7;
+}
+
+.delete-btn:hover {
+  opacity: 1 !important;
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Delete Dialog */
+.delete-dialog-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.delete-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.delete-icon i {
+  font-size: 1.75rem;
+  color: #ef4444;
+}
+
+.delete-dialog-content h3 {
+  color: var(--text-primary, #1e293b);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.delete-tournament-info {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.delete-info-row {
+  color: #991b1b;
+  font-size: 0.9375rem;
+  padding: 4px 0;
+}
+
+.delete-info-row.casino {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.delete-info-row.buyin {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.delete-warning {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 0 0 24px 0;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cancel-btn {
+  min-width: 100px;
+}
+
+.confirm-delete-btn {
+  min-width: 120px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .casino-logo-container {
-    width: 40px;
-    height: 40px;
+  .program-container {
+    padding: 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .day-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .day-total {
+    align-self: flex-end;
+  }
+
+  .tournament-row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .tournament-time-slot {
+    min-width: auto;
+  }
+
+  .tournament-info {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .tournament-buyin {
+    min-width: auto;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .user-details h1 {
+    font-size: 1.25rem;
   }
 }
 </style>
