@@ -55,7 +55,7 @@
               <div class="tournament-details">
                 <div class="tournament-casino">{{ tournament.casino }}</div>
                 <div class="tournament-meta">
-                  <span class="buyin">${{ tournament.buyIn }}</span>
+                  <span class="buyin">${{ formatBuyIn(tournament.buyIn) }}</span>
                   <span v-if="tournament.levels" class="levels-badge">{{ tournament.levels }}</span>
                 </div>
               </div>
@@ -94,7 +94,7 @@
           </div>
           <div class="info-row">
             <span class="label">Buy-in:</span>
-            <span class="value">${{ selectedTournament.buyIn }}</span>
+            <span class="value">${{ formatBuyIn(selectedTournament.buyIn) }}</span>
           </div>
           <div v-if="selectedTournament.levels" class="info-row">
             <span class="label">Niveaux:</span>
@@ -261,6 +261,11 @@ const formatDateForDb = (dateStr) => {
   const day = date.getDate();
   const month = date.toLocaleDateString('fr-FR', { month: 'long' });
   return `${day.toString().padStart(2, '0')}-${month}`;
+};
+
+const formatBuyIn = (amount) => {
+  if (!amount) return '0';
+  return amount.toLocaleString('en-US');
 };
 
 // Lifecycle
