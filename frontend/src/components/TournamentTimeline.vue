@@ -180,6 +180,9 @@ import { useCasinoLogos } from '../composables/useCasinoLogos';
 
 const emit = defineEmits(['tournament-added']);
 
+// Configuration API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 // État
 const loading = ref(false);
 const timeline = ref([]);
@@ -210,7 +213,7 @@ const loadTimeline = async () => {
       endDate: '2026-06-12'
     });
 
-    const response = await fetch(`http://localhost:3000/api/scraped-tournaments/timeline?${params}`);
+    const response = await fetch(`${API_URL}/scraped-tournaments/timeline?${params}`);
 
     if (response.ok) {
       timeline.value = await response.json();
@@ -229,7 +232,7 @@ const loadTimeline = async () => {
 
 const loadUsers = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/users');
+    const response = await fetch(`${API_URL}/users`);
     if (response.ok) {
       users.value = await response.json();
     }
@@ -262,7 +265,7 @@ const addToPlanning = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/users/${selectedUser.value.id}/tournaments`,
+      `${API_URL}/users/${selectedUser.value.id}/tournaments`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

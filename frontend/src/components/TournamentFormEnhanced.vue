@@ -124,6 +124,9 @@ import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
 import AutoComplete from 'primevue/autocomplete';
 
+// Configuration API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 const props = defineProps({
   modelValue: Boolean,
   user: Object
@@ -199,7 +202,7 @@ const onDateChange = async () => {
   try {
     const dateValue = formData.value.date.value || formData.value.date;
     const response = await fetch(
-      `http://localhost:3000/api/scraped-tournaments/suggestions?date=${dateValue}`
+      `${API_URL}/scraped-tournaments/suggestions?date=${dateValue}`
     );
 
     if (response.ok) {

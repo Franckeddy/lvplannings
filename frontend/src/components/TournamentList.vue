@@ -202,6 +202,9 @@ import Dialog from 'primevue/dialog';
 import TournamentImport from './TournamentImport.vue';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 
+// Configuration API
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 defineProps({
   user: Object,
   tournaments: Array,
@@ -244,7 +247,7 @@ const deleteTournament = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/api/tournaments/${tournamentToDelete.value.id}`,
+      `${API_URL}/tournaments/${tournamentToDelete.value.id}`,
       { method: 'DELETE' }
     );
 
