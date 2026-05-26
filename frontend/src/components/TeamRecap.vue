@@ -140,11 +140,19 @@
                 <div class="time-users">
                   <div
                     v-for="user in timeData.users"
-                    :key="user.id"
-                    class="user-chip"
-                    :style="{ backgroundColor: getUserColor(user.name) }"
+                    :key="`${user.id}-${user.tournamentId}`"
+                    class="user-chip-wrapper"
                   >
-                    {{ user.name }}
+                    <div
+                      class="user-chip"
+                      :class="{ 'has-note': user.user_note }"
+                      :style="{ backgroundColor: getUserColor(user.name) }"
+                      v-tooltip.top="user.user_note ? user.user_note : null"
+                      @click="openNoteDialog(user)"
+                    >
+                      {{ user.name }}
+                      <i v-if="user.user_note" class="pi pi-comment note-indicator"></i>
+                    </div>
                   </div>
                 </div>
                 <Button
@@ -255,6 +263,49 @@
         />
       </template>
     </Dialog>
+
+    <!-- Dialog Note utilisateur -->
+    <Dialog
+      v-model:visible="showNoteDialog"
+      :modal="true"
+      :style="{ width: '450px' }"
+      :showHeader="false"
+      class="note-dialog"
+    >
+      <div class="note-dialog-content">
+        <div class="note-icon">
+          <i class="pi pi-file-edit"></i>
+        </div>
+        <h3>Note de {{ tournamentToEditNote?.userName }}</h3>
+
+        <div class="note-input-wrapper">
+          <Textarea
+            v-model="editingNote"
+            rows="4"
+            placeholder="Écrivez votre note ici..."
+            class="w-full"
+            autoResize
+          />
+        </div>
+
+        <div class="note-actions">
+          <Button
+            label="Annuler"
+            @click="showNoteDialog = false"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="Enregistrer"
+            @click="saveNote"
+            icon="pi pi-check"
+            :loading="savingNote"
+            class="confirm-note-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -264,6 +315,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
 import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -282,6 +334,12 @@ const selectedUserToJoin = ref(null);
 const joining = ref(false);
 const newUserName = ref('');
 const creatingUser = ref(false);
+
+// Note dialog state
+const showNoteDialog = ref(false);
+const tournamentToEditNote = ref(null);
+const editingNote = ref('');
+const savingNote = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -358,7 +416,12 @@ const teamByDay = computed(() => {
 
     const user = users.value.find(u => u.id === tournament.user_id);
     if (user) {
-      grouped[date].casinos[casino].times[time].users.push(user);
+      // Ajouter l'utilisateur avec les infos du tournoi (y compris la note)
+      grouped[date].casinos[casino].times[time].users.push({
+        ...user,
+        tournamentId: tournament.id,
+        user_note: tournament.user_note
+      });
       if (!grouped[date].casinos[casino].users.find(u => u.id === user.id)) {
         grouped[date].casinos[casino].users.push(user);
       }
@@ -600,6 +663,62 @@ const handleImageError = (event) => {
   const initialsDiv = event.target.nextElementSibling;
   if (initialsDiv) {
     initialsDiv.style.display = 'flex';
+  }
+};
+
+// Note management
+const openNoteDialog = (user) => {
+  tournamentToEditNote.value = {
+    id: user.tournamentId,
+    userName: user.name,
+    user_note: user.user_note
+  };
+  editingNote.value = user.user_note || '';
+  showNoteDialog.value = true;
+};
+
+const saveNote = async () => {
+  if (!tournamentToEditNote.value) return;
+
+  savingNote.value = true;
+
+  try {
+    const response = await fetch(
+      `${API_URL}/tournaments/${tournamentToEditNote.value.id}/note`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_note: editingNote.value || null })
+      }
+    );
+
+    if (response.ok) {
+      showNoteDialog.value = false;
+      toast.add({
+        severity: 'success',
+        summary: 'Note enregistrée',
+        detail: editingNote.value ? 'La note a été sauvegardée' : 'Note supprimée',
+        life: 3000
+      });
+      await loadAllData();
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Impossible de sauvegarder la note',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    savingNote.value = false;
   }
 };
 
@@ -988,6 +1107,10 @@ onMounted(() => {
 
 .time-users { display: flex; flex-wrap: wrap; gap: 8px; }
 
+.user-chip-wrapper {
+  display: inline-flex;
+}
+
 .user-chip {
   padding: 6px 14px;
   border-radius: 20px;
@@ -995,6 +1118,25 @@ onMounted(() => {
   font-size: 0.8125rem;
   font-weight: 600;
   white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-chip:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.user-chip.has-note {
+  padding-right: 10px;
+}
+
+.note-indicator {
+  font-size: 0.6875rem;
+  opacity: 0.9;
 }
 
 .user-chip.small { padding: 4px 10px; font-size: 0.75rem; }
@@ -1034,6 +1176,50 @@ onMounted(() => {
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-group label { color: var(--text-primary, #1e293b); font-weight: 600; font-size: 0.9375rem; }
 .input-full { width: 100%; }
+
+/* Note Dialog */
+.note-dialog-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.note-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.note-icon i {
+  font-size: 1.75rem;
+  color: #6366f1;
+}
+
+.note-dialog-content h3 {
+  color: var(--text-primary, #1e293b);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.note-input-wrapper {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.note-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-note-btn {
+  min-width: 120px;
+}
 
 .divider-or {
   display: flex;

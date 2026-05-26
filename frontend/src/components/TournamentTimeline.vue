@@ -139,6 +139,17 @@
             class="input-full"
           />
         </div>
+
+        <div class="form-group">
+          <label>Note (optionnel)</label>
+          <Textarea
+            v-model="userNote"
+            rows="2"
+            placeholder="Ajouter une note personnelle..."
+            class="input-full"
+            autoResize
+          />
+        </div>
       </div>
 
       <template #footer>
@@ -160,6 +171,7 @@ import { ref, onMounted } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
+import Textarea from 'primevue/textarea';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -179,6 +191,7 @@ const selectedTournament = ref(null);
 const selectedUser = ref(null);
 const users = ref([]);
 const adding = ref(false);
+const userNote = ref('');
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -234,6 +247,7 @@ const closeDay = () => {
 
 const selectTournament = (tournament) => {
   selectedTournament.value = tournament;
+  userNote.value = '';
   showSelectionDialog.value = true;
 };
 
@@ -248,7 +262,8 @@ const addToPlanning = async () => {
     time: selectedTournament.value.time.substring(0, 5),
     casino: selectedTournament.value.casino,
     buyin: selectedTournament.value.buyIn,
-    levels: selectedTournament.value.levels || ''
+    levels: selectedTournament.value.levels || '',
+    user_note: userNote.value || null
   };
 
   try {
@@ -267,6 +282,7 @@ const addToPlanning = async () => {
       showSelectionDialog.value = false;
       selectedTournament.value = null;
       selectedUser.value = null;
+      userNote.value = '';
       toast.add({
         severity: 'success',
         summary: 'Tournoi ajouté',

@@ -481,7 +481,7 @@ body {
 /* External Link Button */
 .sidebar-external-link {
   margin-top: auto;
-  padding-bottom: 1em;
+  padding-bottom: 3em;
 }
 
 .external-link-button {

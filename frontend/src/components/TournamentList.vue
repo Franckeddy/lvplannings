@@ -149,6 +149,16 @@
 
               <div class="tournament-actions">
                 <Button
+                  :icon="tournament.user_note ? 'pi pi-file-edit' : 'pi pi-file'"
+                  @click="openNoteDialog(tournament)"
+                  :severity="tournament.user_note ? 'info' : 'secondary'"
+                  text
+                  rounded
+                  size="small"
+                  class="note-btn"
+                  v-tooltip.top="tournament.user_note ? tournament.user_note : 'Ajouter une note'"
+                />
+                <Button
                   icon="pi pi-user-plus"
                   label="Rejoindre"
                   @click="openJoinDialog(tournament)"
@@ -299,6 +309,58 @@
         </div>
       </div>
     </Dialog>
+
+    <!-- Dialog Note utilisateur -->
+    <Dialog
+      v-model:visible="showNoteDialog"
+      :modal="true"
+      :style="{ width: '450px' }"
+      :showHeader="false"
+      class="note-dialog"
+    >
+      <div class="note-dialog-content">
+        <div class="note-icon">
+          <i class="pi pi-file-edit"></i>
+        </div>
+        <h3>Note pour ce tournoi</h3>
+
+        <div v-if="tournamentToEdit" class="note-tournament-info">
+          <div class="note-info-row">
+            <span>{{ tournamentToEdit.date }} à {{ tournamentToEdit.time }}</span>
+          </div>
+          <div class="note-info-row casino">
+            {{ tournamentToEdit.casino }}
+          </div>
+        </div>
+
+        <div class="note-input-wrapper">
+          <Textarea
+            v-model="editingNote"
+            rows="4"
+            placeholder="Écrivez votre note ici..."
+            class="w-full"
+            autoResize
+          />
+        </div>
+
+        <div class="note-actions">
+          <Button
+            label="Annuler"
+            @click="showNoteDialog = false"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="Enregistrer"
+            @click="saveNote"
+            icon="pi pi-check"
+            :loading="savingNote"
+            class="confirm-note-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -308,6 +370,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
 import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -328,6 +391,12 @@ const emit = defineEmits(['refresh', 'delete-tournament', 'import-tournaments', 
 const showDeleteDialog = ref(false);
 const tournamentToDelete = ref(null);
 const deleting = ref(false);
+
+// Note dialog state
+const showNoteDialog = ref(false);
+const tournamentToEdit = ref(null);
+const editingNote = ref('');
+const savingNote = ref(false);
 
 // Join tournament state
 const showJoinDialog = ref(false);
@@ -574,6 +643,60 @@ const handleImageError = (event) => {
 const confirmDelete = (tournament) => {
   tournamentToDelete.value = tournament;
   showDeleteDialog.value = true;
+};
+
+// Note management
+const openNoteDialog = (tournament) => {
+  tournamentToEdit.value = tournament;
+  editingNote.value = tournament.user_note || '';
+  showNoteDialog.value = true;
+};
+
+const saveNote = async () => {
+  if (!tournamentToEdit.value) return;
+
+  savingNote.value = true;
+
+  try {
+    const response = await fetch(
+      `${API_URL}/tournaments/${tournamentToEdit.value.id}/note`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_note: editingNote.value || null })
+      }
+    );
+
+    if (response.ok) {
+      // Mettre à jour localement le tournoi
+      tournamentToEdit.value.user_note = editingNote.value || null;
+      showNoteDialog.value = false;
+      toast.add({
+        severity: 'success',
+        summary: 'Note enregistrée',
+        detail: editingNote.value ? 'Votre note a été sauvegardée' : 'Note supprimée',
+        life: 3000
+      });
+      emit('refresh');
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Impossible de sauvegarder la note',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    savingNote.value = false;
+  }
 };
 
 const deleteTournament = async () => {
@@ -1021,6 +1144,14 @@ const deleteTournament = async () => {
   background: rgba(34, 197, 94, 0.15) !important;
 }
 
+.note-btn {
+  transition: all 0.2s ease;
+}
+
+.note-btn:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
 .tournament-actions {
   display: flex;
   gap: 4px;
@@ -1210,6 +1341,69 @@ const deleteTournament = async () => {
 }
 
 .confirm-delete-btn {
+  min-width: 120px;
+}
+
+/* Note Dialog */
+.note-dialog-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.note-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.note-icon i {
+  font-size: 1.75rem;
+  color: #6366f1;
+}
+
+.note-dialog-content h3 {
+  color: var(--text-primary, #1e293b);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.note-tournament-info {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.note-info-row {
+  color: #0369a1;
+  font-size: 0.9375rem;
+  padding: 4px 0;
+}
+
+.note-info-row.casino {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.note-input-wrapper {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.note-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-note-btn {
   min-width: 120px;
 }
 

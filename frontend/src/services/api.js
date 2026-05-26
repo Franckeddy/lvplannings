@@ -39,6 +39,10 @@ export const tournamentService = {
 
   delete(id) {
     return api.delete(`/tournaments/${id}`);
+  },
+
+  updateNote(id, user_note) {
+    return api.patch(`/tournaments/${id}/note`, { user_note });
   }
 };
 

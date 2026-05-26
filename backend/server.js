@@ -118,7 +118,7 @@ app.get('/api/users/:userId/summary', async (req, res) => {
 // POST ajouter un tournoi pour un utilisateur
 app.post('/api/users/:userId/tournaments', async (req, res) => {
   try {
-    const { date, time, casino, buyin, levels } = req.body;
+    const { date, time, casino, buyin, levels, user_note } = req.body;
     const userId = req.params.userId;
 
     if (!date || !time || !casino) {
@@ -134,8 +134,8 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
     }
 
     const result = await pool.query(
-      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [userId, date, time, casino, buyin || null, levels || '-']
+      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [userId, date, time, casino, buyin || null, levels || '-', user_note || null]
     );
 
     res.status(201).json(result.rows[0]);
@@ -147,7 +147,7 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
 // PUT mettre à jour un tournoi
 app.put('/api/tournaments/:id', async (req, res) => {
   try {
-    const { date, time, casino, buyin, levels } = req.body;
+    const { date, time, casino, buyin, levels, user_note } = req.body;
     const tournamentId = req.params.id;
 
     const tournamentResult = await pool.query('SELECT * FROM tournaments WHERE id = $1', [tournamentId]);
@@ -157,16 +157,38 @@ app.put('/api/tournaments/:id', async (req, res) => {
     const tournament = tournamentResult.rows[0];
 
     const result = await pool.query(
-      'UPDATE tournaments SET date = $1, time = $2, casino = $3, buyin = $4, levels = $5 WHERE id = $6 RETURNING *',
+      'UPDATE tournaments SET date = $1, time = $2, casino = $3, buyin = $4, levels = $5, user_note = $6 WHERE id = $7 RETURNING *',
       [
         date || tournament.date,
         time || tournament.time,
         casino || tournament.casino,
         buyin !== undefined ? buyin : tournament.buyin,
         levels || tournament.levels,
+        user_note !== undefined ? user_note : tournament.user_note,
         tournamentId
       ]
     );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PATCH mettre à jour uniquement la note d'un tournoi
+app.patch('/api/tournaments/:id/note', async (req, res) => {
+  try {
+    const { user_note } = req.body;
+    const tournamentId = req.params.id;
+
+    const result = await pool.query(
+      'UPDATE tournaments SET user_note = $1 WHERE id = $2 RETURNING *',
+      [user_note || null, tournamentId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tournoi non trouvé' });
+    }
 
     res.json(result.rows[0]);
   } catch (error) {

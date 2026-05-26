@@ -30,6 +30,7 @@ async function initializeTables() {
         casino TEXT NOT NULL,
         buyin INTEGER,
         levels TEXT NOT NULL,
+        user_note TEXT,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
 
@@ -100,8 +101,8 @@ async function initializeHugoData(client) {
 
       for (const tournament of hugoTournaments) {
         await client.query(
-          'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels) VALUES ($1, $2, $3, $4, $5, $6)',
-          [userId, tournament.date, tournament.time, tournament.casino, tournament.buyin, tournament.levels]
+          'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+          [userId, tournament.date, tournament.time, tournament.casino, tournament.buyin, tournament.levels, tournament.user_note]
         );
       }
 
