@@ -13,6 +13,30 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vue-vendor': ['vue'],
+          'primevue-vendor': ['primevue/config', '@primeuix/themes/aura'],
+          'primevue-components': [
+            'primevue/button',
+            'primevue/select',
+            'primevue/inputtext',
+            'primevue/textarea',
+            'primevue/dialog',
+            'primevue/datatable',
+            'primevue/column',
+            'primevue/fileupload',
+            'primevue/card',
+            'primevue/tag',
+            'primevue/tabview',
+            'primevue/tabpanel'
+          ],
+          'axios': ['axios']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 600
   }
 });
