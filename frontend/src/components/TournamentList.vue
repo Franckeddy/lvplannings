@@ -102,7 +102,7 @@
           <Column field="buyin" header="Buy-In ($)" :sortable="true">
             <template #body="slotProps">
               <span v-if="slotProps.data.buyin" class="buyin-value">
-                {{ formatBuyIn(slotProps.data.buyin) }} $
+                {{ formatBuyIn(slotProps.data.buyin) }}
               </span>
               <span v-else class="no-buyin">-</span>
             </template>
@@ -167,7 +167,7 @@
           </div>
           <div v-if="tournamentToDelete.buyin" class="info-row">
             <span class="label">Buy-in:</span>
-            <span class="value">{{ formatBuyIn(tournamentToDelete.buyin) }} $</span>
+            <span class="value">{{ formatBuyIn(tournamentToDelete.buyin) }}</span>
           </div>
         </div>
         <p class="warning-text">Cette action est irréversible.</p>
@@ -218,8 +218,8 @@ const tournamentToDelete = ref(null);
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 
 const formatBuyIn = (amount) => {
-  if (!amount) return '0';
-  return amount.toLocaleString('en-US');
+  if (!amount) return '$0';
+  return '$' + amount.toLocaleString('en-US');
 };
 
 const handleImageError = (event) => {

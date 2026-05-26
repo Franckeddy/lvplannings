@@ -55,7 +55,7 @@
               <div class="tournament-details">
                 <div class="tournament-casino">{{ tournament.casino }}</div>
                 <div class="tournament-meta">
-                  <span class="buyin">${{ formatBuyIn(tournament.buyIn) }}</span>
+                  <span class="buyin">{{ formatBuyIn(tournament.buyIn) }}</span>
                   <span v-if="tournament.levels" class="levels-badge">{{ tournament.levels }}</span>
                 </div>
                 <div v-if="hasStructureInfo(tournament)" class="tournament-structure">
@@ -108,7 +108,7 @@
           </div>
           <div class="info-row">
             <span class="label">Buy-in:</span>
-            <span class="value">${{ formatBuyIn(selectedTournament.buyIn) }}</span>
+            <span class="value">{{ formatBuyIn(selectedTournament.buyIn) }}</span>
           </div>
           <div v-if="selectedTournament.levels" class="info-row">
             <span class="label">Niveaux:</span>
@@ -296,8 +296,8 @@ const formatDateForDb = (dateStr) => {
 };
 
 const formatBuyIn = (amount) => {
-  if (!amount) return '0';
-  return amount.toLocaleString('en-US');
+  if (!amount) return '$0';
+  return '$' + amount.toLocaleString('en-US');
 };
 
 const hasStructureInfo = (tournament) => {
