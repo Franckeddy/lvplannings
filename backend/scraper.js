@@ -312,12 +312,43 @@ async function scrapePokerAtlas() {
             }
           }
 
+          // Extraire la structure (chips, niveaux, garantie)
+          let structure = {
+            chips: '',
+            levels: '',
+            guarantee: ''
+          };
+
+          const structureInfoEl = element.querySelector('.structure-info');
+          if (structureInfoEl) {
+            const details = structureInfoEl.querySelectorAll('.detail');
+            details.forEach(detail => {
+              const text = detail.textContent.trim();
+
+              // Détecter les chips (ex: "30 000 chip")
+              if (text.toLowerCase().includes('chip')) {
+                structure.chips = text;
+              }
+              // Détecter les niveaux (ex: "20 niveaux min")
+              else if (text.toLowerCase().includes('niveau')) {
+                structure.levels = text;
+              }
+              // Détecter la garantie (ex: "$15K Gtd" ou "$15,000 Guaranteed")
+              else if (text.includes('$') && (text.toLowerCase().includes('gtd') || text.toLowerCase().includes('guaranteed'))) {
+                // Extraire le texte de l'abbr si présent
+                const abbrEl = detail.querySelector('abbr');
+                structure.guarantee = abbrEl ? abbrEl.getAttribute('title') || text : text;
+              }
+            });
+          }
+
           if (casino || time || buyIn) {
             results.push({
               casino,
               time,
               buyIn,
               date,
+              structure,
               rawHTML: element.innerHTML.substring(0, 200) // Pour debug
             });
           }
@@ -338,17 +369,36 @@ async function scrapePokerAtlas() {
       console.log(`   Heure: ${t.time || 'N/A'}`);
       console.log(`   Buy-in: ${t.buyIn || 'N/A'}`);
       console.log(`   Date: ${t.date || 'N/A'}`);
+      if (t.structure) {
+        console.log(`   Structure:`);
+        if (t.structure.chips) console.log(`     - Chips: ${t.structure.chips}`);
+        if (t.structure.levels) console.log(`     - Niveaux: ${t.structure.levels}`);
+        if (t.structure.guarantee) console.log(`     - Garantie: ${t.structure.guarantee}`);
+      }
       console.log('');
     });
 
     // Parser et formater les données
-    const formattedTournaments = tournaments.map(t => ({
-      casino: t.casino || 'Unknown',
-      date: formatDate(CONFIG.targetDates.start), // Pour l'instant, utiliser la date de début
-      time: parseTime(t.time) || '12:00:00',
-      buyIn: parseBuyIn(t.buyIn) || 0,
-      rawData: t
-    })).filter(t => t.casino !== 'Unknown' && t.buyIn > 0);
+    const formattedTournaments = tournaments.map(t => {
+      const formatted = {
+        casino: t.casino || 'Unknown',
+        date: formatDate(CONFIG.targetDates.start), // Pour l'instant, utiliser la date de début
+        time: parseTime(t.time) || '12:00:00',
+        buyIn: parseBuyIn(t.buyIn) || 0,
+        rawData: t
+      };
+
+      // Ajouter la structure si disponible
+      if (t.structure && (t.structure.chips || t.structure.levels || t.structure.guarantee)) {
+        formatted.structure = {
+          chips: t.structure.chips || null,
+          levels: t.structure.levels || null,
+          guarantee: t.structure.guarantee || null
+        };
+      }
+
+      return formatted;
+    }).filter(t => t.casino !== 'Unknown' && t.buyIn > 0);
 
     // Sauvegarder dans un fichier JSON
     const outputFile = 'poker-tournaments.json';
