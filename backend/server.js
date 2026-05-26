@@ -55,6 +55,25 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+// DELETE supprimer un utilisateur et ses tournois
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Supprimer d'abord les tournois de cet utilisateur
+    await pool.query('DELETE FROM tournaments WHERE user_id = $1', [userId]);
+
+    // Puis supprimer l'utilisateur
+    const result = await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET tous les tournois d'un utilisateur
 app.get('/api/users/:userId/tournaments', async (req, res) => {
   try {

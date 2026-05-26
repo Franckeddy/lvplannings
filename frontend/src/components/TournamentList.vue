@@ -202,12 +202,34 @@
         <div class="join-select-wrapper">
           <label>Choisir un membre</label>
           <Select
+            v-if="availableUsers.length > 0"
             v-model="selectedUserToJoin"
             :options="availableUsers"
             optionLabel="name"
             placeholder="Sélectionner..."
             class="w-full"
           />
+          <div class="divider-or" v-if="availableUsers.length > 0">
+            <span>ou créez un nouveau pseudo</span>
+          </div>
+          <div class="create-user-section">
+            <div class="create-user-inline">
+              <InputText
+                v-model="newUserName"
+                placeholder="Votre pseudo..."
+                class="input-pseudo"
+                @keyup.enter="createUserAndJoin"
+              />
+              <Button
+                label="Créer"
+                icon="pi pi-plus"
+                @click="createUserAndJoin"
+                :disabled="!newUserName || creatingUser"
+                :loading="creatingUser"
+                size="small"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="join-actions">
@@ -285,6 +307,7 @@ import { ref, computed } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
+import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -300,7 +323,7 @@ const props = defineProps({
   loading: Boolean
 });
 
-const emit = defineEmits(['refresh', 'delete-tournament', 'import-tournaments']);
+const emit = defineEmits(['refresh', 'delete-tournament', 'import-tournaments', 'user-created']);
 
 const showDeleteDialog = ref(false);
 const tournamentToDelete = ref(null);
@@ -312,6 +335,8 @@ const tournamentToJoin = ref(null);
 const selectedUserToJoin = ref(null);
 const joining = ref(false);
 const users = ref([]);
+const newUserName = ref('');
+const creatingUser = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -388,6 +413,82 @@ const joinTournament = async () => {
     });
   } finally {
     joining.value = false;
+  }
+};
+
+// Créer un utilisateur et l'ajouter au tournoi
+const createUserAndJoin = async () => {
+  if (!newUserName.value.trim() || !tournamentToJoin.value) return;
+
+  creatingUser.value = true;
+
+  try {
+    // Créer l'utilisateur
+    const createResponse = await fetch(`${API_URL}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newUserName.value.trim() })
+    });
+
+    if (!createResponse.ok) {
+      const error = await createResponse.json();
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: error.error || 'Impossible de créer l\'utilisateur',
+        life: 3000
+      });
+      return;
+    }
+
+    const newUser = await createResponse.json();
+
+    // Ajouter le tournoi pour ce nouvel utilisateur
+    const joinResponse = await fetch(
+      `${API_URL}/users/${newUser.id}/tournaments`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: tournamentToJoin.value.date,
+          time: tournamentToJoin.value.time,
+          casino: tournamentToJoin.value.casino,
+          buyin: tournamentToJoin.value.buyin,
+          levels: tournamentToJoin.value.levels || '-'
+        })
+      }
+    );
+
+    if (joinResponse.ok) {
+      toast.add({
+        severity: 'success',
+        summary: 'Bienvenue !',
+        detail: `${newUser.name} a été créé et inscrit au tournoi`,
+        life: 3000
+      });
+      showJoinDialog.value = false;
+      newUserName.value = '';
+      tournamentToJoin.value = null;
+      emit('user-created');
+      await loadUsers();
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Utilisateur créé mais erreur lors de l\'inscription',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    creatingUser.value = false;
   }
 };
 
@@ -1001,6 +1102,44 @@ const deleteTournament = async () => {
   min-width: 120px;
 }
 
+/* Create user section */
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.divider-or::before,
+.divider-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.divider-or span {
+  color: #64748b;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.create-user-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.create-user-inline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-pseudo {
+  flex: 1;
+}
+
 /* Delete Dialog */
 .delete-dialog-content {
   padding: 32px 24px;
@@ -1370,6 +1509,23 @@ const deleteTournament = async () => {
   .confirm-join-btn {
     width: 100%;
     min-width: auto;
+  }
+
+  .divider-or {
+    margin: 10px 0;
+  }
+
+  .divider-or span {
+    font-size: 0.75rem;
+  }
+
+  .create-user-inline {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-pseudo {
+    width: 100%;
   }
 }
 </style>

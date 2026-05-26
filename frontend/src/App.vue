@@ -66,11 +66,24 @@
         <div class="divider"></div>
 
         <UserSelector
+          :key="usersKey"
           :users="users"
           :selected-user="selectedUser"
           @user-selected="handleUserSelected"
           @user-created="handleUserCreated"
         />
+
+        <div class="sidebar-external-link">
+          <a
+            href="https://bdtgif.github.io/PokerNotes/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="external-link-button"
+          >
+            <i class="pi pi-external-link"></i>
+            POKER-HANDS
+          </a>
+        </div>
       </div>
     </aside>
 
@@ -86,6 +99,7 @@
         @refresh="loadUserData"
         @import-tournaments="handleImportTournaments"
         @delete-tournament="handleDeleteTournament"
+        @user-created="loadUsers"
       />
 
       <!-- Timeline View -->
@@ -97,6 +111,7 @@
       <!-- Team Recap View -->
       <TeamRecap
         v-else-if="currentView === 'team'"
+        @user-created="loadUsers"
       />
 
       <!-- Welcome Message -->
@@ -118,6 +133,7 @@ import TeamRecap from './components/TeamRecap.vue';
 import Button from 'primevue/button';
 
 const users = ref([]);
+const usersKey = ref(0);
 const sidebarCollapsed = ref(false);
 const selectedUser = ref(null);
 const tournaments = ref([]);
@@ -150,6 +166,7 @@ const loadUsers = async () => {
   try {
     const response = await userService.getAll();
     users.value = response.data;
+    usersKey.value++; // Force re-render du UserSelector
   } catch (error) {
     console.error('Erreur lors du chargement des utilisateurs:', error);
   }
@@ -459,6 +476,39 @@ body {
   background: var(--accent-color) !important;
   color: white !important;
   opacity: 0.9;
+}
+
+/* External Link Button */
+.sidebar-external-link {
+  margin-top: auto;
+  padding-bottom: 1em;
+}
+
+.external-link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.external-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+  opacity: 0.95;
+}
+
+.external-link-button i {
+  font-size: 0.875rem;
 }
 
 /* Main Content */

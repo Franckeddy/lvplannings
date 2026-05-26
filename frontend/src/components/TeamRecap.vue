@@ -207,15 +207,35 @@
         <div class="form-group">
           <label>Qui souhaite rejoindre ?</label>
           <Select
+            v-if="availableUsersToJoin.length > 0"
+            :key="usersKey"
             v-model="selectedUserToJoin"
             :options="availableUsersToJoin"
             optionLabel="name"
             placeholder="Sélectionnez un membre..."
             class="input-full"
           />
-          <small v-if="availableUsersToJoin.length === 0" class="no-users-msg">
-            Tous les membres sont déjà inscrits à ce tournoi
-          </small>
+          <div class="divider-or" v-if="availableUsersToJoin.length > 0">
+            <span>ou créez un nouveau pseudo</span>
+          </div>
+          <div class="create-user-section">
+            <div class="create-user-inline">
+              <InputText
+                v-model="newUserName"
+                placeholder="Votre pseudo..."
+                class="input-pseudo"
+                @keyup.enter="createUserAndJoin"
+              />
+              <Button
+                label="Créer"
+                icon="pi pi-plus"
+                @click="createUserAndJoin"
+                :disabled="!newUserName || creatingUser"
+                :loading="creatingUser"
+                size="small"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -243,6 +263,7 @@ import { ref, computed, onMounted } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
+import InputText from 'primevue/inputtext';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -252,15 +273,20 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 const loading = ref(false);
 const users = ref([]);
+const usersKey = ref(0);
 const allTournaments = ref([]);
 const selectedDate = ref(null);
 const showJoinDialog = ref(false);
 const tournamentToJoin = ref(null);
 const selectedUserToJoin = ref(null);
 const joining = ref(false);
+const newUserName = ref('');
+const creatingUser = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
+
+const emit = defineEmits(['user-created']);
 
 // Couleurs pour les utilisateurs
 const userColors = {};
@@ -421,6 +447,83 @@ const joinTournament = async () => {
   }
 };
 
+const createUserAndJoin = async () => {
+  if (!newUserName.value.trim() || !tournamentToJoin.value) return;
+
+  creatingUser.value = true;
+
+  try {
+    // Créer l'utilisateur
+    const createResponse = await fetch(`${API_URL}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newUserName.value.trim() })
+    });
+
+    if (!createResponse.ok) {
+      const error = await createResponse.json();
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: error.error || 'Impossible de créer l\'utilisateur',
+        life: 3000
+      });
+      return;
+    }
+
+    const newUser = await createResponse.json();
+
+    // Ajouter le tournoi pour ce nouvel utilisateur
+    const tournamentData = {
+      date: tournamentToJoin.value.date,
+      time: tournamentToJoin.value.time,
+      casino: tournamentToJoin.value.casino,
+      buyin: tournamentToJoin.value.buyin,
+      levels: tournamentToJoin.value.levels || '-'
+    };
+
+    const joinResponse = await fetch(
+      `${API_URL}/users/${newUser.id}/tournaments`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(tournamentData)
+      }
+    );
+
+    if (joinResponse.ok) {
+      toast.add({
+        severity: 'success',
+        summary: 'Bienvenue !',
+        detail: `${newUser.name} a été créé et inscrit au tournoi`,
+        life: 3000
+      });
+      showJoinDialog.value = false;
+      newUserName.value = '';
+      tournamentToJoin.value = null;
+      emit('user-created');
+      await loadAllData();
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Utilisateur créé mais erreur lors de l\'inscription',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    creatingUser.value = false;
+  }
+};
+
 const loadAllData = async () => {
   loading.value = true;
 
@@ -428,6 +531,7 @@ const loadAllData = async () => {
     const usersResponse = await fetch(`${API_URL}/users`);
     if (usersResponse.ok) {
       users.value = await usersResponse.json();
+      usersKey.value++; // Force re-render du Select
     }
 
     const allTournamentsData = [];
@@ -930,7 +1034,43 @@ onMounted(() => {
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-group label { color: var(--text-primary, #1e293b); font-weight: 600; font-size: 0.9375rem; }
 .input-full { width: 100%; }
-.no-users-msg { color: #f59e0b; font-style: italic; }
+
+.divider-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.divider-or::before,
+.divider-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color, #e2e8f0);
+}
+
+.divider-or span {
+  color: var(--text-secondary, #64748b);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.create-user-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.create-user-inline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-pseudo {
+  flex: 1;
+}
 
 /* Responsive */
 @media (max-width: 1024px) {
@@ -1207,8 +1347,21 @@ onMounted(() => {
     font-size: 0.875rem;
   }
 
-  .no-users-msg {
-    font-size: 0.8125rem;
+  .divider-or {
+    margin: 10px 0;
+  }
+
+  .divider-or span {
+    font-size: 0.75rem;
+  }
+
+  .create-user-inline {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-pseudo {
+    width: 100%;
   }
 }
 </style>
