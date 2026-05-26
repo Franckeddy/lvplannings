@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/lvplannings/',
   server: {
     port: 5173,
     proxy: {
@@ -12,5 +11,8 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    outDir: 'dist'
   }
 });
