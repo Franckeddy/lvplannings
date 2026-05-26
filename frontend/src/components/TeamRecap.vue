@@ -118,10 +118,10 @@
               </div>
             </div>
 
-            <!-- Notes du casino -->
+            <!-- Notes du casino (desktop: tooltip) -->
             <div
               v-if="getCasinoNotes(casinoData).length > 0"
-              class="casino-notes-indicator"
+              class="casino-notes-indicator desktop-only"
               v-tooltip.top="formatCasinoNotes(casinoData)"
             >
               <i class="pi pi-comment"></i>
@@ -162,11 +162,22 @@
                     </div>
                     <div
                       v-if="user.user_note"
-                      class="user-note-icon"
+                      class="user-note-icon desktop-only"
                       v-tooltip.top="user.user_note"
                     >
                       <i class="pi pi-comment"></i>
                     </div>
+                  </div>
+                </div>
+                <!-- Notes visibles sur mobile -->
+                <div class="mobile-user-notes" v-if="timeData.users.some(u => u.user_note)">
+                  <div
+                    v-for="user in timeData.users.filter(u => u.user_note)"
+                    :key="'note-' + user.tournamentId"
+                    class="mobile-user-note-item"
+                  >
+                    <span class="mobile-note-user">{{ user.name }}:</span>
+                    <span class="mobile-note-text">{{ user.user_note }}</span>
                   </div>
                 </div>
                 <Button
@@ -1221,6 +1232,46 @@ onMounted(() => {
   transform: scale(1.1);
 }
 
+/* Mobile user notes */
+.mobile-user-notes {
+  display: none;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+}
+
+.mobile-user-note-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 0.75rem;
+}
+
+.mobile-user-note-item:not(:last-child) {
+  border-bottom: 1px dashed rgba(99, 102, 241, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.mobile-note-user {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.mobile-note-text {
+  color: var(--text-secondary, #94a3b8);
+  word-break: break-word;
+}
+
+/* Desktop only elements */
+.desktop-only {
+  display: flex;
+}
+
 .user-chip.small { padding: 4px 10px; font-size: 0.75rem; }
 
 .join-btn {
@@ -1352,8 +1403,17 @@ onMounted(() => {
   .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
   .detail-stats { flex-wrap: wrap; gap: 12px; }
   .time-slot { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 16px; }
-  .time-right { width: 100%; justify-content: space-between; }
+  .time-right { width: 100%; justify-content: space-between; flex-direction: column; gap: 10px; }
   .time-left { width: 100%; flex-wrap: wrap; }
+
+  /* Show mobile notes, hide desktop elements */
+  .mobile-user-notes {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
 
   .date-card {
     padding: 16px;

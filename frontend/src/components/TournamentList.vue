@@ -105,10 +105,10 @@
               </div>
             </div>
 
-            <!-- Notes du jour -->
+            <!-- Notes du jour (desktop: tooltip, mobile: visible) -->
             <div
               v-if="getDayNotes(dayData.tournaments).length > 0"
-              class="day-notes-indicator"
+              class="day-notes-indicator desktop-only"
               v-tooltip.top="formatDayNotes(dayData.tournaments)"
             >
               <i class="pi pi-comment"></i>
@@ -127,13 +127,19 @@
               :key="tournament.id"
               class="tournament-row"
             >
-              <!-- Note indicator in top right -->
+              <!-- Note indicator in top right (desktop only) -->
               <div
                 v-if="tournament.user_note"
-                class="note-indicator-corner"
+                class="note-indicator-corner desktop-only"
                 v-tooltip.top="tournament.user_note"
               >
                 <i class="pi pi-comment"></i>
+              </div>
+
+              <!-- Note visible on mobile -->
+              <div v-if="tournament.user_note" class="mobile-note-display">
+                <i class="pi pi-comment"></i>
+                <span>{{ tournament.user_note }}</span>
               </div>
 
               <div class="tournament-time-slot">
@@ -1132,6 +1138,30 @@ const deleteTournament = async () => {
   transform: scale(1.1);
 }
 
+/* Mobile note display */
+.mobile-note-display {
+  display: none;
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.mobile-note-display i {
+  color: #6366f1;
+  margin-right: 8px;
+  font-size: 0.75rem;
+}
+
+/* Desktop only elements */
+.desktop-only {
+  display: flex;
+}
+
 .tournament-time-slot {
   display: flex;
   align-items: center;
@@ -1521,6 +1551,16 @@ const deleteTournament = async () => {
 @media (max-width: 768px) {
   .program-container {
     padding: 12px;
+  }
+
+  /* Show mobile notes, hide desktop elements */
+  .mobile-note-display {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .desktop-only {
+    display: none !important;
   }
 
   .stats-grid {

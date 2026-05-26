@@ -62,7 +62,7 @@
           <!-- Indicateur d'utilisateurs inscrits avec notes -->
           <div
             v-if="getEnrolledUsers(tournament).some(u => u.user_note)"
-            class="enrolled-notes-indicator"
+            class="enrolled-notes-indicator desktop-only"
             v-tooltip.top="getEnrolledUsers(tournament).filter(u => u.user_note).map(u => `${u.userName}: ${u.user_note}`).join('\n')"
           >
             <i class="pi pi-comment"></i>
@@ -122,14 +122,26 @@
                   {{ enrolled.userName }}
                   <span
                     v-if="enrolled.user_note"
-                    class="enrolled-note-icon"
+                    class="enrolled-note-icon desktop-only"
                     v-tooltip.top="enrolled.user_note"
                   >
                     <i class="pi pi-comment"></i>
                   </span>
                 </div>
               </div>
+              <!-- Notes visibles sur mobile -->
+              <div class="mobile-notes" v-if="getEnrolledUsers(tournament).some(u => u.user_note)">
+                <div
+                  v-for="enrolled in getEnrolledUsers(tournament).filter(u => u.user_note)"
+                  :key="'note-' + enrolled.id"
+                  class="mobile-note-item"
+                >
+                  <span class="mobile-note-user">{{ enrolled.userName }}:</span>
+                  <span class="mobile-note-text">{{ enrolled.user_note }}</span>
+                </div>
+              </div>
             </div>
+
           </div>
 
           <div class="tournament-card-footer">
@@ -877,6 +889,45 @@ onMounted(async () => {
   background: rgba(255, 255, 255, 0.4);
 }
 
+/* Mobile notes (visible only on mobile) */
+.mobile-notes {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+}
+
+.mobile-note-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 0.75rem;
+}
+
+.mobile-note-item:not(:last-child) {
+  border-bottom: 1px dashed rgba(99, 102, 241, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.mobile-note-user {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.mobile-note-text {
+  color: var(--text-secondary, #94a3b8);
+  word-break: break-word;
+}
+
+/* Desktop only elements */
+.desktop-only {
+  display: flex;
+}
+
 .tournament-card-footer {
   padding: 16px;
   border-top: 1px solid var(--border-color, #334155);
@@ -1031,6 +1082,15 @@ onMounted(async () => {
 
   .casino-name {
     font-size: 1rem;
+  }
+
+  /* Show mobile notes, hide desktop tooltips */
+  .mobile-notes {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none !important;
   }
 }
 
