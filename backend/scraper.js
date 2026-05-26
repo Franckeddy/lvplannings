@@ -54,7 +54,7 @@ async function scrapePokerAtlas() {
   const browser = await puppeteer.launch({
     headless: false, // Mode visible pour debug
     defaultViewport: null,
-    args: ['--start-maximized']
+    args: ['--start-maximized', '--no-sandbox', '--disable-setuid-sandbox']
   });
 
   try {

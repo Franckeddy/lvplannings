@@ -66,10 +66,11 @@ async function scrapePokerAtlasWithScroll() {
   console.log('🚀 Démarrage du scraper PokerAtlas avec scroll...\n');
 
   const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: null,
+    headless: true,
+    defaultViewport: { width: 1920, height: 1080 },
     args: [
-      '--start-maximized',
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
       '--disable-blink-features=AutomationControlled'
     ]
   });
@@ -148,93 +149,69 @@ async function scrapePokerAtlasWithScroll() {
 
     console.log('🎯 Extraction des données...\n');
 
-    // Extraire tous les tournois
+    // Extraire tous les tournois avec la structure HTML spécifique
     const tournaments = await page.evaluate(() => {
       const results = [];
 
-      // Stratégie 1: Chercher des tables
-      const tables = document.querySelectorAll('table');
-      console.log(`Trouvé ${tables.length} tables`);
+      // Cibler spécifiquement les <li class="tournament-item">
+      const tournamentItems = document.querySelectorAll('li.tournament-item, .tournament-item');
 
-      tables.forEach(table => {
-        const rows = table.querySelectorAll('tr');
-        rows.forEach(row => {
-          const cells = row.querySelectorAll('td, th');
-          if (cells.length >= 3) {
-            const cellTexts = Array.from(cells).map(c => c.textContent.trim());
+      console.log(`Trouvé ${tournamentItems.length} tournament-item`);
 
-            // Chercher des patterns
-            const timePattern = /\d{1,2}:\d{2}\s*[ap]m/i;
-            const pricePattern = /\$\d+/;
-            const datePattern = /[A-Za-z]+\s+\d{1,2}/;
+      tournamentItems.forEach((item, index) => {
+        try {
+          // Casino name
+          const venueNameEl = item.querySelector('.venue-name, h2.venue-name');
+          const casino = venueNameEl ? venueNameEl.textContent.trim() : '';
 
-            let casino = '', time = '', buyIn = '', date = '';
+          // Time
+          const timeEl = item.querySelector('.time, span.time, li.detail.start .time');
+          const time = timeEl ? timeEl.textContent.trim() : '';
 
-            cellTexts.forEach(text => {
-              if (timePattern.test(text)) time = text;
-              if (pricePattern.test(text) && !buyIn) buyIn = text;
-              if (datePattern.test(text)) date = text;
-              if (!time && !pricePattern.test(text) && text.length > 3 && text.length < 50) {
-                casino = text;
+          // Date
+          const dateEl = item.querySelector('.date, span.date, li.detail.start .date');
+          const date = dateEl ? dateEl.textContent.trim() : '';
+
+          // Buy-in - SÉLECTEUR SPÉCIFIQUE: <li class="detail buy-in">
+          const buyInEl = item.querySelector('li.detail.buy-in, .detail.buy-in');
+          const buyIn = buyInEl ? buyInEl.textContent.trim() : '';
+
+          // Structure
+          let structure = {
+            chips: '',
+            levels: '',
+            guarantee: ''
+          };
+
+          const structureInfoEl = item.querySelector('.structure-info, ul.structure-info');
+          if (structureInfoEl) {
+            const details = structureInfoEl.querySelectorAll('.detail, li.detail');
+            details.forEach(detail => {
+              const text = detail.textContent.trim();
+
+              if (text.toLowerCase().includes('chip')) {
+                structure.chips = text;
+              } else if (text.toLowerCase().includes('niveau') || text.toLowerCase().includes('min')) {
+                structure.levels = text;
+              } else if ((text.includes('$') || text.includes('K')) && (text.toLowerCase().includes('gtd') || text.toLowerCase().includes('guaranteed'))) {
+                const abbrEl = detail.querySelector('abbr');
+                structure.guarantee = abbrEl ? (abbrEl.getAttribute('title') || text) : text;
               }
             });
-
-            if (casino || time || buyIn) {
-              results.push({ casino, time, buyIn, date, source: 'table' });
-            }
           }
-        });
-      });
 
-      // Stratégie 2: Chercher des divs avec classes spécifiques
-      const tournaments = document.querySelectorAll('[class*="tournament"], [class*="event-"], .venue-container');
-      console.log(`Trouvé ${tournaments.length} éléments avec classes tournament/event`);
-
-      tournaments.forEach(el => {
-        const text = el.textContent;
-        const timeMatch = text.match(/(\d{1,2}:\d{2}\s*[ap]m)/i);
-        const priceMatch = text.match(/\$(\d+)/);
-        const dateMatch = text.match(/([A-Za-z]+\s+\d{1,2})/);
-
-        // Chercher le nom du casino
-        const headings = el.querySelectorAll('h1, h2, h3, h4, strong, .venue-name, .casino-name');
-        let casino = '';
-        if (headings.length > 0) {
-          casino = headings[0].textContent.trim();
-        }
-
-        if (timeMatch || priceMatch) {
-          results.push({
-            casino: casino || 'Unknown',
-            time: timeMatch ? timeMatch[1] : '',
-            buyIn: priceMatch ? priceMatch[0] : '',
-            date: dateMatch ? dateMatch[1] : '',
-            source: 'div'
-          });
-        }
-      });
-
-      // Stratégie 3: Extraction par structure de liens
-      const venueLinks = document.querySelectorAll('a[href*="/poker-room/"]');
-      console.log(`Trouvé ${venueLinks.length} liens vers des venues`);
-
-      venueLinks.forEach(link => {
-        const parent = link.closest('tr, div, li');
-        if (parent) {
-          const text = parent.textContent;
-          const timeMatch = text.match(/(\d{1,2}:\d{2}\s*[ap]m)/i);
-          const priceMatch = text.match(/\$(\d+)/);
-          const dateMatch = text.match(/([A-Za-z]+\s+\d{1,2})/);
-
-          if (timeMatch || priceMatch) {
+          if (casino && (time || buyIn)) {
             results.push({
-              casino: link.textContent.trim(),
-              time: timeMatch ? timeMatch[1] : '',
-              buyIn: priceMatch ? priceMatch[0] : '',
-              date: dateMatch ? dateMatch[1] : '',
-              source: 'link'
+              casino,
+              time,
+              buyIn,
+              date,
+              structure,
+              source: 'tournament-item'
             });
           }
+        } catch (err) {
+          console.error(`Erreur élément ${index}:`, err.message);
         }
       });
 
@@ -251,14 +228,24 @@ async function scrapePokerAtlasWithScroll() {
         const parsedBuyIn = parseBuyIn(t.buyIn);
         const parsedDate = parseDate(t.date);
 
-        return {
+        const formatted = {
           casino: t.casino,
-          date: parsedDate || '2026-06-04', // Date par défaut
+          date: parsedDate || '2026-06-04',
           time: parsedTime || '12:00:00',
           buyIn: parsedBuyIn || 0,
-          source: t.source,
-          raw: t
+          levels: null
         };
+
+        // Ajouter la structure si disponible
+        if (t.structure && (t.structure.chips || t.structure.levels || t.structure.guarantee)) {
+          formatted.structure = {
+            chips: t.structure.chips || null,
+            levels: t.structure.levels || null,
+            guarantee: t.structure.guarantee || null
+          };
+        }
+
+        return formatted;
       })
       .filter((t, index, self) =>
         // Éviter les doublons
@@ -278,7 +265,12 @@ async function scrapePokerAtlasWithScroll() {
       console.log(`   Date: ${t.date}`);
       console.log(`   Heure: ${t.time}`);
       console.log(`   Buy-in: $${t.buyIn}`);
-      console.log(`   Source: ${t.source}`);
+      if (t.structure) {
+        console.log(`   Structure:`);
+        if (t.structure.chips) console.log(`     - Chips: ${t.structure.chips}`);
+        if (t.structure.levels) console.log(`     - Niveaux: ${t.structure.levels}`);
+        if (t.structure.guarantee) console.log(`     - Garantie: ${t.structure.guarantee}`);
+      }
     });
 
     // Sauvegarder
@@ -286,8 +278,10 @@ async function scrapePokerAtlasWithScroll() {
     console.log(`\n💾 Données sauvegardées dans ${CONFIG.outputFile}`);
 
     // Statistiques
+    const withStructure = formattedTournaments.filter(t => t.structure).length;
     const stats = {
       total: formattedTournaments.length,
+      withStructure: withStructure,
       casinos: new Set(formattedTournaments.map(t => t.casino)).size,
       dates: new Set(formattedTournaments.map(t => t.date)).size,
       avgBuyIn: Math.round(
@@ -297,6 +291,7 @@ async function scrapePokerAtlasWithScroll() {
 
     console.log('\n📈 Statistiques:');
     console.log(`   Total tournois: ${stats.total}`);
+    console.log(`   Avec structure: ${stats.withStructure}`);
     console.log(`   Casinos uniques: ${stats.casinos}`);
     console.log(`   Dates différentes: ${stats.dates}`);
     console.log(`   Buy-in moyen: $${stats.avgBuyIn}`);

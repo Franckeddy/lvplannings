@@ -155,21 +155,88 @@
                 {{ formatBuyIn(tournament.buyin) }}
               </div>
 
-              <Button
-                icon="pi pi-trash"
-                @click="confirmDelete(tournament)"
-                severity="danger"
-                text
-                rounded
-                size="small"
-                class="delete-btn"
-                v-tooltip.top="'Supprimer'"
-              />
+              <div class="tournament-actions">
+                <Button
+                  icon="pi pi-user-plus"
+                  label="Rejoindre"
+                  @click="openJoinDialog(tournament)"
+                  text
+                  size="small"
+                  class="join-btn"
+                />
+                <Button
+                  icon="pi pi-trash"
+                  @click="confirmDelete(tournament)"
+                  severity="danger"
+                  text
+                  rounded
+                  size="small"
+                  class="delete-btn"
+                  v-tooltip.top="'Supprimer'"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Dialog pour rejoindre un tournoi -->
+    <Dialog
+      v-model:visible="showJoinDialog"
+      :modal="true"
+      :style="{ width: '400px' }"
+      :showHeader="false"
+      class="join-dialog"
+    >
+      <div class="join-dialog-content">
+        <div class="join-icon">
+          <i class="pi pi-user-plus"></i>
+        </div>
+        <h3>Ajouter un membre à ce tournoi</h3>
+
+        <div v-if="tournamentToJoin" class="join-tournament-info">
+          <div class="join-info-row">
+            <span>{{ tournamentToJoin.date }} à {{ tournamentToJoin.time }}</span>
+          </div>
+          <div class="join-info-row casino">
+            {{ tournamentToJoin.casino }}
+          </div>
+          <div class="join-info-row buyin">
+            {{ formatBuyIn(tournamentToJoin.buyin) }}
+          </div>
+        </div>
+
+        <div class="join-select-wrapper">
+          <label>Choisir un membre</label>
+          <Select
+            v-model="selectedUserToJoin"
+            :options="availableUsers"
+            optionLabel="name"
+            placeholder="Sélectionner..."
+            class="w-full"
+          />
+        </div>
+
+        <div class="join-actions">
+          <Button
+            label="Annuler"
+            @click="showJoinDialog = false"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="Ajouter"
+            @click="joinTournament"
+            icon="pi pi-user-plus"
+            :loading="joining"
+            :disabled="!selectedUserToJoin"
+            class="confirm-join-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
 
     <!-- Dialog de suppression -->
     <Dialog
@@ -225,6 +292,7 @@
 import { ref, computed } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import Select from 'primevue/select';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -240,14 +308,99 @@ const props = defineProps({
   loading: Boolean
 });
 
-const emit = defineEmits(['refresh', 'delete-tournament']);
+const emit = defineEmits(['refresh', 'delete-tournament', 'import-tournaments']);
 
 const showDeleteDialog = ref(false);
 const tournamentToDelete = ref(null);
 const deleting = ref(false);
 
+// Join tournament state
+const showJoinDialog = ref(false);
+const tournamentToJoin = ref(null);
+const selectedUserToJoin = ref(null);
+const joining = ref(false);
+const users = ref([]);
+
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
+
+// Charger les utilisateurs
+const loadUsers = async () => {
+  try {
+    const response = await fetch(`${API_URL}/users`);
+    users.value = await response.json();
+  } catch (error) {
+    console.error('Erreur chargement users:', error);
+  }
+};
+
+// Utilisateurs disponibles (exclure l'utilisateur actuel)
+const availableUsers = computed(() => {
+  return users.value.filter(u => u.id !== props.user?.id);
+});
+
+// Ouvrir le dialog pour rejoindre
+const openJoinDialog = (tournament) => {
+  tournamentToJoin.value = tournament;
+  selectedUserToJoin.value = null;
+  showJoinDialog.value = true;
+};
+
+// Ajouter le tournoi à un autre utilisateur
+const joinTournament = async () => {
+  if (!tournamentToJoin.value || !selectedUserToJoin.value) return;
+
+  joining.value = true;
+
+  try {
+    const response = await fetch(
+      `${API_URL}/users/${selectedUserToJoin.value.id}/tournaments`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: tournamentToJoin.value.date,
+          time: tournamentToJoin.value.time,
+          casino: tournamentToJoin.value.casino,
+          buyin: tournamentToJoin.value.buyin,
+          levels: tournamentToJoin.value.levels
+        })
+      }
+    );
+
+    if (response.ok) {
+      showJoinDialog.value = false;
+      toast.add({
+        severity: 'success',
+        summary: 'Membre ajouté',
+        detail: `${selectedUserToJoin.value.name} rejoint ce tournoi`,
+        life: 3000
+      });
+      selectedUserToJoin.value = null;
+      tournamentToJoin.value = null;
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Impossible d\'ajouter le membre',
+        life: 3000
+      });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue',
+      life: 3000
+    });
+  } finally {
+    joining.value = false;
+  }
+};
+
+// Charger les users au démarrage
+loadUsers();
 
 // Grouper les tournois par jour
 const tournamentsByDay = computed(() => {
@@ -767,19 +920,102 @@ const deleteTournament = async () => {
 }
 
 .delete-btn {
-  color: var(--text-secondary, #94a3b8) !important;
-  opacity: 0;
+  color: #ef4444 !important;
   transition: all 0.2s ease;
 }
 
-.tournament-row:hover .delete-btn {
-  opacity: 0.7;
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
 }
 
-.delete-btn:hover {
-  opacity: 1 !important;
-  color: #ef4444 !important;
-  background: rgba(239, 68, 68, 0.1) !important;
+.join-btn {
+  color: #22c55e !important;
+  transition: all 0.2s ease;
+}
+
+.join-btn:hover {
+  background: rgba(34, 197, 94, 0.15) !important;
+}
+
+.tournament-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* Join Dialog */
+.join-dialog-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.join-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.join-icon i {
+  font-size: 1.75rem;
+  color: #22c55e;
+}
+
+.join-dialog-content h3 {
+  color: var(--text-primary, #1e293b);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.join-tournament-info {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.join-info-row {
+  color: #166534;
+  font-size: 0.9375rem;
+  padding: 4px 0;
+}
+
+.join-info-row.casino {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.join-info-row.buyin {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.join-select-wrapper {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.join-select-wrapper label {
+  display: block;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.join-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-join-btn {
+  min-width: 120px;
 }
 
 /* Delete Dialog */
