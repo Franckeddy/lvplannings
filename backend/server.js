@@ -190,13 +190,13 @@ app.get('/api/scraped-tournaments', async (req, res) => {
     }
 
     if (minBuyIn) {
-      query += ` AND buyIn >= $${paramIndex}`;
+      query += ` AND buyin >= $${paramIndex}`;
       params.push(parseInt(minBuyIn));
       paramIndex++;
     }
 
     if (maxBuyIn) {
-      query += ` AND buyIn <= $${paramIndex}`;
+      query += ` AND buyin <= $${paramIndex}`;
       params.push(parseInt(maxBuyIn));
       paramIndex++;
     }
@@ -233,11 +233,11 @@ app.get('/api/scraped-tournaments/stats', async (req, res) => {
         COUNT(*) as total,
         COUNT(DISTINCT casino) as casinos,
         COUNT(DISTINCT date) as dates,
-        AVG(buyIn) as avgBuyIn,
-        MIN(buyIn) as minBuyIn,
-        MAX(buyIn) as maxBuyIn,
-        MIN(date) as startDate,
-        MAX(date) as endDate
+        AVG(buyin) as "avgBuyIn",
+        MIN(buyin) as "minBuyIn",
+        MAX(buyin) as "maxBuyIn",
+        MIN(date) as "startDate",
+        MAX(date) as "endDate"
       FROM scraped_tournaments
     `);
     res.json(result.rows[0]);
@@ -261,9 +261,9 @@ app.get('/api/scraped-tournaments/suggestions', async (req, res) => {
         casino,
         date,
         time,
-        buyIn,
+        buyin as "buyIn",
         levels,
-        SUBSTRING(time FROM 1 FOR 5) as displayTime
+        SUBSTRING(time FROM 1 FOR 5) as "displayTime"
       FROM scraped_tournaments
       WHERE date = $1
       ORDER BY time, casino
@@ -286,9 +286,9 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
         casino,
         date,
         time,
-        buyIn,
+        buyin as "buyIn",
         levels,
-        SUBSTRING(time FROM 1 FOR 5) as displayTime
+        SUBSTRING(time FROM 1 FOR 5) as "displayTime"
       FROM scraped_tournaments
       WHERE 1=1
     `;
