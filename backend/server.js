@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import db from './database.js';
+import pool from './database.js';
 
 dotenv.config();
 
@@ -12,41 +12,43 @@ app.use(cors());
 app.use(express.json());
 
 // GET tous les utilisateurs
-app.get('/api/users', (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
-    const users = db.prepare('SELECT * FROM users ORDER BY name').all();
-    res.json(users);
+    const result = await pool.query('SELECT * FROM users ORDER BY name');
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET un utilisateur par ID
-app.get('/api/users/:id', (req, res) => {
+app.get('/api/users/:id', async (req, res) => {
   try {
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.id);
-    if (!user) {
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
-    res.json(user);
+    res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // POST créer un nouvel utilisateur
-app.post('/api/users', (req, res) => {
+app.post('/api/users', async (req, res) => {
   try {
     const { name } = req.body;
     if (!name) {
       return res.status(400).json({ error: 'Le nom est requis' });
     }
 
-    const result = db.prepare('INSERT INTO users (name) VALUES (?)').run(name);
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(user);
+    const result = await pool.query(
+      'INSERT INTO users (name) VALUES ($1) RETURNING *',
+      [name]
+    );
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    if (error.message.includes('UNIQUE constraint failed')) {
+    if (error.code === '23505') { // Code PostgreSQL pour violation de contrainte UNIQUE
       return res.status(409).json({ error: 'Cet utilisateur existe déjà' });
     }
     res.status(500).json({ error: error.message });
@@ -54,25 +56,28 @@ app.post('/api/users', (req, res) => {
 });
 
 // GET tous les tournois d'un utilisateur
-app.get('/api/users/:userId/tournaments', (req, res) => {
+app.get('/api/users/:userId/tournaments', async (req, res) => {
   try {
-    const tournaments = db.prepare(
-      'SELECT * FROM tournaments WHERE user_id = ? ORDER BY date, time'
-    ).all(req.params.userId);
-    res.json(tournaments);
+    const result = await pool.query(
+      'SELECT * FROM tournaments WHERE user_id = $1 ORDER BY date, time',
+      [req.params.userId]
+    );
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET le résumé d'un utilisateur (stats)
-app.get('/api/users/:userId/summary', (req, res) => {
+app.get('/api/users/:userId/summary', async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const tournaments = db.prepare(
-      'SELECT * FROM tournaments WHERE user_id = ?'
-    ).all(userId);
+    const result = await pool.query(
+      'SELECT * FROM tournaments WHERE user_id = $1',
+      [userId]
+    );
+    const tournaments = result.rows;
 
     const totalBuyins = tournaments.reduce((sum, t) => sum + (t.buyin || 0), 0);
     const casinos = [...new Set(tournaments.map(t => t.casino))];
@@ -92,7 +97,7 @@ app.get('/api/users/:userId/summary', (req, res) => {
 });
 
 // POST ajouter un tournoi pour un utilisateur
-app.post('/api/users/:userId/tournaments', (req, res) => {
+app.post('/api/users/:userId/tournaments', async (req, res) => {
   try {
     const { date, time, casino, buyin, levels } = req.body;
     const userId = req.params.userId;
@@ -103,56 +108,58 @@ app.post('/api/users/:userId/tournaments', (req, res) => {
       });
     }
 
-    const user = db.prepare('SELECT id FROM users WHERE id = ?').get(userId);
-    if (!user) {
+    // Vérifier que l'utilisateur existe
+    const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
+    if (userResult.rows.length === 0) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
 
-    const result = db.prepare(
-      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels) VALUES (?, ?, ?, ?, ?, ?)'
-    ).run(userId, date, time, casino, buyin || null, levels);
+    const result = await pool.query(
+      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [userId, date, time, casino, buyin || null, levels]
+    );
 
-    const tournament = db.prepare('SELECT * FROM tournaments WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(tournament);
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // PUT mettre à jour un tournoi
-app.put('/api/tournaments/:id', (req, res) => {
+app.put('/api/tournaments/:id', async (req, res) => {
   try {
     const { date, time, casino, buyin, levels } = req.body;
     const tournamentId = req.params.id;
 
-    const tournament = db.prepare('SELECT * FROM tournaments WHERE id = ?').get(tournamentId);
-    if (!tournament) {
+    const tournamentResult = await pool.query('SELECT * FROM tournaments WHERE id = $1', [tournamentId]);
+    if (tournamentResult.rows.length === 0) {
       return res.status(404).json({ error: 'Tournoi non trouvé' });
     }
+    const tournament = tournamentResult.rows[0];
 
-    db.prepare(
-      'UPDATE tournaments SET date = ?, time = ?, casino = ?, buyin = ?, levels = ? WHERE id = ?'
-    ).run(
-      date || tournament.date,
-      time || tournament.time,
-      casino || tournament.casino,
-      buyin !== undefined ? buyin : tournament.buyin,
-      levels || tournament.levels,
-      tournamentId
+    const result = await pool.query(
+      'UPDATE tournaments SET date = $1, time = $2, casino = $3, buyin = $4, levels = $5 WHERE id = $6 RETURNING *',
+      [
+        date || tournament.date,
+        time || tournament.time,
+        casino || tournament.casino,
+        buyin !== undefined ? buyin : tournament.buyin,
+        levels || tournament.levels,
+        tournamentId
+      ]
     );
 
-    const updatedTournament = db.prepare('SELECT * FROM tournaments WHERE id = ?').get(tournamentId);
-    res.json(updatedTournament);
+    res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // DELETE supprimer un tournoi
-app.delete('/api/tournaments/:id', (req, res) => {
+app.delete('/api/tournaments/:id', async (req, res) => {
   try {
-    const result = db.prepare('DELETE FROM tournaments WHERE id = ?').run(req.params.id);
-    if (result.changes === 0) {
+    const result = await pool.query('DELETE FROM tournaments WHERE id = $1', [req.params.id]);
+    if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Tournoi non trouvé' });
     }
     res.status(204).send();
@@ -162,61 +169,66 @@ app.delete('/api/tournaments/:id', (req, res) => {
 });
 
 // GET tous les tournois scrapés
-app.get('/api/scraped-tournaments', (req, res) => {
+app.get('/api/scraped-tournaments', async (req, res) => {
   try {
     const { date, casino, minBuyIn, maxBuyIn } = req.query;
 
     let query = 'SELECT * FROM scraped_tournaments WHERE 1=1';
     const params = [];
+    let paramIndex = 1;
 
     if (date) {
-      query += ' AND date = ?';
+      query += ` AND date = $${paramIndex}`;
       params.push(date);
+      paramIndex++;
     }
 
     if (casino) {
-      query += ' AND casino LIKE ?';
+      query += ` AND casino ILIKE $${paramIndex}`;
       params.push(`%${casino}%`);
+      paramIndex++;
     }
 
     if (minBuyIn) {
-      query += ' AND buyIn >= ?';
+      query += ` AND buyIn >= $${paramIndex}`;
       params.push(parseInt(minBuyIn));
+      paramIndex++;
     }
 
     if (maxBuyIn) {
-      query += ' AND buyIn <= ?';
+      query += ` AND buyIn <= $${paramIndex}`;
       params.push(parseInt(maxBuyIn));
+      paramIndex++;
     }
 
     query += ' ORDER BY date, time';
 
-    const tournaments = db.prepare(query).all(...params);
-    res.json(tournaments);
+    const result = await pool.query(query, params);
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET les casinos disponibles dans les tournois scrapés
-app.get('/api/scraped-tournaments/casinos', (req, res) => {
+app.get('/api/scraped-tournaments/casinos', async (req, res) => {
   try {
-    const casinos = db.prepare(`
+    const result = await pool.query(`
       SELECT DISTINCT casino, COUNT(*) as count
       FROM scraped_tournaments
       GROUP BY casino
       ORDER BY casino
-    `).all();
-    res.json(casinos);
+    `);
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET les statistiques des tournois scrapés
-app.get('/api/scraped-tournaments/stats', (req, res) => {
+app.get('/api/scraped-tournaments/stats', async (req, res) => {
   try {
-    const stats = db.prepare(`
+    const result = await pool.query(`
       SELECT
         COUNT(*) as total,
         COUNT(DISTINCT casino) as casinos,
@@ -227,15 +239,15 @@ app.get('/api/scraped-tournaments/stats', (req, res) => {
         MIN(date) as startDate,
         MAX(date) as endDate
       FROM scraped_tournaments
-    `).get();
-    res.json(stats);
+    `);
+    res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET suggestions de tournois pour autocomplétion (par date)
-app.get('/api/scraped-tournaments/suggestions', (req, res) => {
+app.get('/api/scraped-tournaments/suggestions', async (req, res) => {
   try {
     const { date } = req.query;
 
@@ -243,7 +255,7 @@ app.get('/api/scraped-tournaments/suggestions', (req, res) => {
       return res.status(400).json({ error: 'Le paramètre date est requis' });
     }
 
-    const tournaments = db.prepare(`
+    const result = await pool.query(`
       SELECT
         id,
         casino,
@@ -251,20 +263,20 @@ app.get('/api/scraped-tournaments/suggestions', (req, res) => {
         time,
         buyIn,
         levels,
-        SUBSTR(time, 1, 5) as displayTime
+        SUBSTRING(time FROM 1 FOR 5) as displayTime
       FROM scraped_tournaments
-      WHERE date = ?
+      WHERE date = $1
       ORDER BY time, casino
-    `).all(date);
+    `, [date]);
 
-    res.json(tournaments);
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // GET timeline de tous les tournois (groupés par date)
-app.get('/api/scraped-tournaments/timeline', (req, res) => {
+app.get('/api/scraped-tournaments/timeline', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
@@ -276,25 +288,29 @@ app.get('/api/scraped-tournaments/timeline', (req, res) => {
         time,
         buyIn,
         levels,
-        SUBSTR(time, 1, 5) as displayTime
+        SUBSTRING(time FROM 1 FOR 5) as displayTime
       FROM scraped_tournaments
       WHERE 1=1
     `;
     const params = [];
+    let paramIndex = 1;
 
     if (startDate) {
-      query += ' AND date >= ?';
+      query += ` AND date >= $${paramIndex}`;
       params.push(startDate);
+      paramIndex++;
     }
 
     if (endDate) {
-      query += ' AND date <= ?';
+      query += ` AND date <= $${paramIndex}`;
       params.push(endDate);
+      paramIndex++;
     }
 
     query += ' ORDER BY date, time, casino';
 
-    const tournaments = db.prepare(query).all(...params);
+    const result = await pool.query(query, params);
+    const tournaments = result.rows;
 
     // Grouper par date
     const groupedByDate = tournaments.reduce((acc, tournament) => {
@@ -319,5 +335,5 @@ app.get('/api/scraped-tournaments/timeline', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Serveur API démarré sur http://localhost:${PORT}`);
+  console.log(`✓ Serveur API démarré sur le port ${PORT}`);
 });
