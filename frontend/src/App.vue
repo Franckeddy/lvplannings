@@ -1,5 +1,23 @@
 <template>
   <div class="app-container dark-mode">
+    <!-- Mobile Toggle Button -->
+    <button
+      v-if="isMobile && sidebarCollapsed"
+      class="mobile-toggle"
+      @click="toggleSidebar"
+      aria-label="Ouvrir le menu"
+    >
+      <i class="pi pi-bars"></i>
+    </button>
+
+    <!-- Overlay for mobile -->
+    <div
+      v-if="isMobile && !sidebarCollapsed"
+      class="sidebar-overlay"
+      :class="{ 'active': !sidebarCollapsed }"
+      @click="toggleSidebar"
+    ></div>
+
     <!-- Sidebar Latérale Gauche -->
     <aside class="sidebar" :class="{ 'collapsed': sidebarCollapsed }">
       <div class="sidebar-header">
@@ -27,20 +45,20 @@
           <Button
             label="Planning des tournois"
             icon="pi pi-calendar"
-            @click="currentView = 'timeline'"
+            @click="selectView('timeline')"
             :class="['nav-button', { 'nav-button-active': currentView === 'timeline' }]"
           />
           <Button
             v-if="selectedUser"
             :label="`Planning de ${selectedUser.name}`"
             icon="pi pi-list-check"
-            @click="currentView = 'planning'"
+            @click="selectView('planning')"
             :class="['nav-button', { 'nav-button-active': currentView === 'planning' }]"
           />
           <Button
             label="Récap Team"
             icon="pi pi-users"
-            @click="currentView = 'team'"
+            @click="selectView('team')"
             :class="['nav-button', { 'nav-button-active': currentView === 'team' }]"
           />
         </nav>
@@ -91,7 +109,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { userService } from './services/api';
 import UserSelector from './components/UserSelector.vue';
 import TournamentList from './components/TournamentList.vue';
@@ -106,6 +124,27 @@ const tournaments = ref([]);
 const summary = ref(null);
 const loading = ref(false);
 const currentView = ref('planning');
+const windowWidth = ref(window.innerWidth);
+
+// Computed pour détecter si on est sur mobile
+const isMobile = computed(() => windowWidth.value <= 768);
+
+// Fonction pour gérer le resize
+const handleResize = () => {
+  windowWidth.value = window.innerWidth;
+  // Fermer automatiquement la sidebar sur mobile au chargement
+  if (isMobile.value && !sidebarCollapsed.value) {
+    // On ne ferme pas automatiquement, on laisse l'utilisateur décider
+  }
+};
+
+// Fonction pour sélectionner une vue et fermer la sidebar sur mobile
+const selectView = (view) => {
+  currentView.value = view;
+  if (isMobile.value) {
+    sidebarCollapsed.value = true;
+  }
+};
 
 const loadUsers = async () => {
   try {
@@ -138,6 +177,9 @@ const loadUserData = async (userId) => {
 const handleUserSelected = (user) => {
   selectedUser.value = user;
   loadUserData(user.id);
+  if (isMobile.value) {
+    sidebarCollapsed.value = true;
+  }
 };
 
 const handleUserCreated = async (userName) => {
@@ -187,7 +229,7 @@ const handleImportTournaments = async (tournamentsArray) => {
   }
 };
 
-const handleDeleteTournament = async (tournamentId) => {
+const handleDeleteTournament = async () => {
   if (!selectedUser.value) return;
 
   // Recharger les données pour mettre à jour l'affichage
@@ -196,17 +238,32 @@ const handleDeleteTournament = async (tournamentId) => {
 
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value;
-  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString());
+  // Ne sauvegarder l'état que sur desktop
+  if (!isMobile.value) {
+    localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString());
+  }
 };
 
 onMounted(() => {
   loadUsers();
 
-  // Charger l'état de la sidebar depuis localStorage
-  const savedSidebarState = localStorage.getItem('sidebarCollapsed');
-  if (savedSidebarState !== null) {
-    sidebarCollapsed.value = savedSidebarState === 'true';
+  // Ajouter le listener pour le resize
+  window.addEventListener('resize', handleResize);
+
+  // Charger l'état de la sidebar depuis localStorage (desktop seulement)
+  if (!isMobile.value) {
+    const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+    if (savedSidebarState !== null) {
+      sidebarCollapsed.value = savedSidebarState === 'true';
+    }
+  } else {
+    // Sur mobile, la sidebar est fermée par défaut
+    sidebarCollapsed.value = true;
   }
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
 });
 </script>
 
@@ -450,6 +507,39 @@ body {
   transition: color 0.3s ease;
 }
 
+/* Mobile overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+}
+
+/* Mobile toggle button fixe */
+.mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 998;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .sidebar {
@@ -463,6 +553,7 @@ body {
 
   .main-content {
     margin-left: 280px;
+    padding: 1.5rem;
   }
 
   .sidebar.collapsed ~ .main-content {
@@ -472,25 +563,93 @@ body {
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 100%;
+    width: 85%;
+    max-width: 320px;
     transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
   }
 
   .sidebar:not(.collapsed) {
     transform: translateX(0);
   }
 
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    width: 85%;
+    max-width: 320px;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar:not(.collapsed) ~ .sidebar-overlay {
+    display: block;
+    opacity: 1;
+  }
+
   .main-content {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 4.5rem;
+  }
+
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 0;
   }
 
   .sidebar-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: var(--sidebar-bg);
-    z-index: 1001;
+    padding: 1rem;
+  }
+
+  .sidebar-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .welcome {
+    margin: 20px auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .welcome i {
+    font-size: 3rem !important;
+  }
+
+  .welcome p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .main-content {
+    padding: 0.75rem;
+    padding-top: 4rem;
+  }
+
+  .title-text h1 {
+    font-size: 1.25rem;
+  }
+
+  .nav-button {
+    padding: 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .welcome {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
   }
 }
 
@@ -507,5 +666,19 @@ body {
 .dark-mode :deep(.p-tabview-panels) {
   background: var(--bg-secondary);
   color: var(--text-primary);
+}
+
+/* Dialog responsive */
+.dark-mode :deep(.p-dialog) {
+  max-width: calc(100vw - 2rem);
+  margin: 1rem;
+}
+
+@media (max-width: 480px) {
+  .dark-mode :deep(.p-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none;
+    margin: 0.5rem;
+  }
 }
 </style>

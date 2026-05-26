@@ -695,20 +695,254 @@ onMounted(() => {
   .dates-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .timeline-header h2 {
+    font-size: 2rem;
+  }
+
+  .tournaments-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .timeline-container {
+    padding: 16px;
+  }
+
+  .timeline-header {
+    margin-bottom: 32px;
+  }
+
+  .timeline-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .timeline-header .subtitle {
+    font-size: 1rem;
+  }
+
   .dates-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .date-card {
+    padding: 18px;
+  }
+
+  .day-number {
+    font-size: 2.5rem;
   }
 
   .tournaments-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .day-detail-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+
+  .day-detail-title h2 {
+    font-size: 1.5rem;
+  }
+
+  .tournament-card-header {
+    padding: 14px;
+  }
+
+  .tournament-time {
+    font-size: 1.25rem;
+  }
+
+  .tournament-buyin {
+    padding: 5px 12px;
+    font-size: 0.9375rem;
+  }
+
+  .tournament-card-body {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .casino-name {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .timeline-container {
+    padding: 12px;
+  }
+
+  .dates-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .date-card {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 12px;
+  }
+
+  .day-name {
+    font-size: 0.75rem;
+  }
+
+  .day-number {
+    font-size: 2.25rem;
+  }
+
+  .month-name {
+    font-size: 0.875rem;
+  }
+
+  .tournament-count {
+    font-size: 0.875rem;
+  }
+
+  .timeline-header {
+    margin-bottom: 24px;
+  }
+
+  .timeline-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .timeline-header .subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .day-detail-header {
+    gap: 12px;
+  }
+
+  .back-button {
+    padding: 0.625rem 1rem;
+  }
+
+  .day-detail-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .tournament-badge {
+    font-size: 0.8125rem;
+    padding: 3px 10px;
+  }
+
+  .tournament-card {
+    border-radius: 10px;
+  }
+
+  .casino-logo-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .casino-name {
+    font-size: 0.9375rem;
+  }
+
+  .tournament-levels {
+    font-size: 0.875rem;
+  }
+
+  .structure-tag {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .tournament-card-footer {
+    padding: 14px;
+  }
+
+  .add-button {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-container {
+    padding: 8px;
+  }
+
+  .date-card {
+    padding: 14px;
+  }
+
+  .day-number {
+    font-size: 2rem;
+  }
+
+  .tournament-card-header {
+    padding: 12px;
+  }
+
+  .tournament-time {
+    font-size: 1.125rem;
+  }
+
+  .tournament-buyin {
+    padding: 4px 10px;
+    font-size: 0.875rem;
+  }
+
+  .tournament-card-body {
+    padding: 14px;
+    gap: 12px;
+  }
+}
+
+/* Dialog responsive */
+:deep(.p-dialog) {
+  margin: 1rem;
+  max-width: calc(100vw - 2rem);
+}
+
+@media (max-width: 480px) {
+  :deep(.p-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none;
+    margin: 0.5rem;
+  }
+
+  .selection-dialog-content {
+    gap: 18px;
+    padding: 4px 0;
+  }
+
+  .selected-tournament-summary {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .summary-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .summary-time {
+    font-size: 1.5rem;
+  }
+
+  .summary-casino {
+    font-size: 1.125rem;
+  }
+
+  .summary-date {
+    font-size: 0.875rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
   }
 }
 </style>

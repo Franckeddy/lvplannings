@@ -12,14 +12,6 @@
           <p class="header-subtitle">Planning consolidé de l'équipe</p>
         </div>
       </div>
-      <Button
-        icon="pi pi-refresh"
-        @click="loadAllData"
-        :loading="loading"
-        rounded
-        text
-        class="refresh-btn"
-      />
     </div>
 
 
@@ -558,15 +550,6 @@ onMounted(() => {
   margin: 0;
 }
 
-.refresh-btn {
-  color: var(--text-secondary, #94a3b8) !important;
-}
-
-.refresh-btn:hover {
-  color: var(--text-primary, #f1f5f9) !important;
-  background: var(--sidebar-hover, #334155) !important;
-}
-
 /* Loading & Empty States */
 .loading-state, .empty-state {
   padding: 80px 24px;
@@ -956,16 +939,276 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .team-container { padding: 16px; }
-  .dates-grid { grid-template-columns: 1fr; }
+  .dates-grid { grid-template-columns: 1fr; gap: 16px; }
   .team-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
   .detail-stats { flex-wrap: wrap; gap: 12px; }
-  .time-slot { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .time-slot { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 16px; }
   .time-right { width: 100%; justify-content: space-between; }
+  .time-left { width: 100%; flex-wrap: wrap; }
+
+  .date-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .date-card-header {
+    flex-direction: row;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .date-badge {
+    min-width: 48px;
+    padding: 8px 12px;
+  }
+
+  .date-number {
+    font-size: 1.25rem;
+  }
+
+  .date-day-name {
+    font-size: 1rem;
+  }
+
+  .casino-header {
+    padding: 14px 16px;
+  }
+
+  .casino-info {
+    gap: 12px;
+  }
+
+  .casino-logo-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .casino-name {
+    font-size: 0.9375rem;
+  }
+
+  .back-button {
+    padding: 8px 14px;
+    font-size: 0.875rem;
+    margin-bottom: 18px;
+  }
 }
 
 @media (max-width: 480px) {
-  .header-icon { width: 48px; height: 48px; font-size: 1.25rem; }
+  .team-container { padding: 12px; }
+  .header-icon { width: 48px; height: 48px; font-size: 1.25rem; border-radius: 12px; }
   .header-text h1 { font-size: 1.25rem; }
+  .header-subtitle { font-size: 0.875rem; }
+
+  .dates-grid {
+    gap: 12px;
+  }
+
+  .date-card {
+    padding: 14px;
+  }
+
+  .date-badge {
+    min-width: 44px;
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  .date-number {
+    font-size: 1.125rem;
+  }
+
+  .date-month {
+    font-size: 0.625rem;
+    margin-top: 2px;
+  }
+
+  .date-day-name {
+    font-size: 0.9375rem;
+  }
+
+  .date-card-members {
+    gap: 5px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .member-tag {
+    padding: 3px 10px;
+    font-size: 0.6875rem;
+  }
+
+  .date-card-stats {
+    gap: 10px;
+  }
+
+  .mini-stat {
+    font-size: 0.75rem;
+  }
+
+  .date-total {
+    font-size: 1rem;
+  }
+
+  .detail-header {
+    padding: 14px;
+    border-radius: 12px;
+    gap: 14px;
+  }
+
+  .detail-date-badge {
+    min-width: 60px;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+
+  .detail-date-number {
+    font-size: 1.75rem;
+  }
+
+  .detail-date-month {
+    font-size: 0.6875rem;
+  }
+
+  .detail-date-info h2 {
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .detail-stats {
+    font-size: 0.8125rem;
+    gap: 10px;
+  }
+
+  .casino-card {
+    border-radius: 12px;
+  }
+
+  .casino-header {
+    padding: 12px 14px;
+  }
+
+  .casino-logo-wrapper {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .casino-name {
+    font-size: 0.875rem;
+  }
+
+  .casino-count {
+    font-size: 0.75rem;
+  }
+
+  .time-slot {
+    padding: 12px 14px;
+  }
+
+  .time-badge {
+    min-width: 70px;
+    font-size: 0.875rem;
+  }
+
+  .time-buyin {
+    font-size: 0.875rem;
+  }
+
+  .time-levels {
+    font-size: 0.75rem;
+  }
+
+  .time-right {
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .time-users {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .user-chip {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+
+  .join-btn {
+    justify-content: center !important;
+  }
+
+  .back-button {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    margin-bottom: 14px;
+  }
+
+  .casinos-list {
+    gap: 12px;
+  }
+}
+
+/* Dialog responsive */
+:deep(.p-dialog) {
+  margin: 1rem;
+  max-width: calc(100vw - 2rem);
+}
+
+@media (max-width: 480px) {
+  :deep(.p-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none;
+    margin: 0.5rem;
+  }
+
+  .join-dialog-content {
+    gap: 16px;
+    padding: 6px 0;
+  }
+
+  .join-tournament-summary {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .summary-row {
+    padding: 5px 0;
+  }
+
+  .summary-label {
+    font-size: 0.8125rem;
+  }
+
+  .summary-value {
+    font-size: 0.9375rem;
+  }
+
+  .summary-value.highlight,
+  .summary-value.buyin {
+    font-size: 1rem;
+  }
+
+  .current-participants {
+    gap: 6px;
+  }
+
+  .participants-label {
+    font-size: 0.8125rem;
+  }
+
+  .participants-chips {
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+  }
+
+  .no-users-msg {
+    font-size: 0.8125rem;
+  }
 }
 </style>

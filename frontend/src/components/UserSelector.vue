@@ -132,4 +132,71 @@ const createUser = () => {
 .input-full {
   width: 100%;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .selector-wrapper label {
+    font-size: 0.8125rem;
+  }
+
+  :deep(.p-button) {
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  :deep(.p-select) {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selector-wrapper {
+    gap: 0.625rem;
+  }
+
+  .selector-wrapper label {
+    font-size: 0.75rem;
+  }
+
+  :deep(.p-button) {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  :deep(.p-select) {
+    font-size: 0.875rem;
+  }
+
+  .dialog-content {
+    padding: 16px 0;
+  }
+
+  .dialog-content label {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Dialog responsive */
+:deep(.p-dialog) {
+  max-width: calc(100vw - 2rem);
+  margin: 1rem;
+}
+
+@media (max-width: 480px) {
+  :deep(.p-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none;
+    margin: 0.5rem;
+  }
+
+  :deep(.p-dialog-footer) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  :deep(.p-dialog-footer .p-button) {
+    width: 100%;
+    margin: 0;
+  }
+}
 </style>

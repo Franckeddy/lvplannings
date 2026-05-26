@@ -13,14 +13,6 @@
             <p class="user-subtitle">Las Vegas 2026</p>
           </div>
         </div>
-        <Button
-          icon="pi pi-refresh"
-          @click="$emit('refresh', user.id)"
-          :loading="loading"
-          rounded
-          text
-          class="refresh-btn"
-        />
       </div>
 
       <!-- Stats Cards -->
@@ -578,15 +570,6 @@ const deleteTournament = async () => {
   font-weight: 500;
 }
 
-.refresh-btn {
-  color: var(--text-secondary, #94a3b8) !important;
-}
-
-.refresh-btn:hover {
-  color: var(--text-primary, #f1f5f9) !important;
-  background: var(--sidebar-hover, #334155) !important;
-}
-
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -1096,27 +1079,49 @@ const deleteTournament = async () => {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
 }
 
 @media (max-width: 768px) {
   .program-container {
-    padding: 16px;
+    padding: 12px;
   }
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 14px;
+    gap: 12px;
   }
 
   .header-top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    margin-bottom: 20px;
   }
 
   .day-card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    padding: 14px 16px;
   }
 
   .day-total {
@@ -1124,38 +1129,247 @@ const deleteTournament = async () => {
   }
 
   .tournament-row {
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 16px;
   }
 
   .tournament-time-slot {
     min-width: auto;
+    justify-content: flex-start;
   }
 
   .tournament-info {
     flex: 1 1 100%;
-    order: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .casino-badge {
+    width: 100%;
+  }
+
+  .tournament-levels {
+    margin-left: 42px;
   }
 
   .tournament-buyin {
     min-width: auto;
-    margin-left: auto;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  .tournament-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color, #334155);
+  }
+
+  .join-btn {
+    flex: 1;
+    justify-content: start !important;
+  }
+
+  .section-header {
+    padding: 16px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .section-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .days-list {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .user-details h1 {
+    font-size: 1.375rem;
   }
 }
 
 @media (max-width: 480px) {
+  .program-container {
+    padding: 8px;
+  }
+
+  .program-header {
+    margin-bottom: 20px;
+  }
+
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    gap: 10px;
+    border-radius: 10px;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    font-size: 1.125rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
   }
 
   .user-avatar {
     width: 48px;
     height: 48px;
     font-size: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .user-info {
+    gap: 12px;
   }
 
   .user-details h1 {
+    font-size: 1.125rem;
+  }
+
+  .user-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .section-header h2 {
+    font-size: 1rem;
+  }
+
+  .tournament-count {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+  }
+
+  .day-badge {
+    min-width: 48px;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+
+  .day-number {
     font-size: 1.25rem;
+  }
+
+  .day-month {
+    font-size: 0.625rem;
+  }
+
+  .day-name {
+    font-size: 1rem;
+  }
+
+  .day-stats {
+    font-size: 0.8125rem;
+  }
+
+  .day-total {
+    font-size: 1.125rem;
+  }
+
+  .casino-name {
+    font-size: 0.875rem;
+  }
+
+  .tournament-buyin {
+    font-size: 0.9375rem;
+  }
+
+  .tournament-time-slot {
+    font-size: 0.875rem;
+  }
+
+  .tournaments-section {
+    border-radius: 12px;
+  }
+
+  .day-card {
+    border-radius: 10px;
+  }
+
+  .days-list {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  .day-tournaments {
+    padding: 4px 0;
+  }
+
+  .join-btn :deep(.p-button-label) {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Dialog responsive mobile */
+:deep(.p-dialog) {
+  margin: 1rem;
+  max-width: calc(100vw - 2rem);
+}
+
+@media (max-width: 480px) {
+  :deep(.p-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none;
+    margin: 0.5rem;
+  }
+
+  .delete-dialog-content,
+  .join-dialog-content {
+    padding: 24px 16px;
+  }
+
+  .delete-icon,
+  .join-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+  }
+
+  .delete-icon i,
+  .join-icon i {
+    font-size: 1.5rem;
+  }
+
+  .delete-dialog-content h3,
+  .join-dialog-content h3 {
+    font-size: 1.125rem;
+    margin-bottom: 16px;
+  }
+
+  .delete-tournament-info,
+  .join-tournament-info {
+    padding: 14px;
+  }
+
+  .delete-actions,
+  .join-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancel-btn,
+  .confirm-delete-btn,
+  .confirm-join-btn {
+    width: 100%;
+    min-width: auto;
   }
 }
 </style>
