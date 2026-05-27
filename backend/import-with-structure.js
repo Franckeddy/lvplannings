@@ -89,13 +89,15 @@ async function cleanAndImportTournaments(jsonFile = 'poker-tournaments.json') {
         await pool.query(
           `INSERT INTO scraped_tournaments (
             casino, date, time, buyin, levels,
-            structure_chips, structure_levels, structure_guarantee
+            structure_chips, structure_levels, structure_guarantee,
+            name, day, is_restart
           )
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
            ON CONFLICT DO NOTHING`,
           [
             t.casino, t.date, t.time, t.buyIn, t.levels || null,
-            structureChips, structureLevels, structureGuarantee
+            structureChips, structureLevels, structureGuarantee,
+            t.name || null, t.day || null, t.isRestart || false
           ]
         );
         inserted++;

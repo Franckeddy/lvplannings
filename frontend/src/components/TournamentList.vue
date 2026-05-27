@@ -1229,6 +1229,28 @@ const deleteTournament = async () => {
   font-size: 0.9375rem;
 }
 
+.day-badge-small {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.restart-badge-small {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
 .tournament-levels {
   color: var(--text-secondary, #94a3b8);
   font-size: 0.8125rem;

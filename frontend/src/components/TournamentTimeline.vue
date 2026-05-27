@@ -430,7 +430,10 @@ const addToPlanning = async () => {
     buyin: selectedTournament.value.buyIn,
     levels: selectedTournament.value.levels || '',
     user_note: userNote.value || null,
-    scraped_tournament_id: selectedTournament.value.id
+    scraped_tournament_id: selectedTournament.value.id,
+    name: selectedTournament.value.name || null,
+    day: selectedTournament.value.day || null,
+    isRestart: selectedTournament.value.isRestart || false
   };
 
   try {
@@ -727,6 +730,34 @@ onMounted(async () => {
   color: white;
   font-size: 1.5rem;
   font-weight: 700;
+}
+
+.tournament-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.day-badge-tag {
+  background: rgba(245, 158, 11, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.restart-badge-tag {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 .tournament-buyin {

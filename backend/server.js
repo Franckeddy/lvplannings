@@ -78,7 +78,7 @@ app.delete('/api/users/:id', async (req, res) => {
 app.get('/api/users/:userId/tournaments', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM tournaments WHERE user_id = $1 ORDER BY date, time',
+      'SELECT id, user_id, date, time, casino, buyin, levels, user_note, scraped_tournament_id, name, day, is_restart as "isRestart" FROM tournaments WHERE user_id = $1 ORDER BY date, time',
       [req.params.userId]
     );
     res.json(result.rows);
@@ -118,7 +118,7 @@ app.get('/api/users/:userId/summary', async (req, res) => {
 // POST ajouter un tournoi pour un utilisateur
 app.post('/api/users/:userId/tournaments', async (req, res) => {
   try {
-    const { date, time, casino, buyin, levels, user_note, scraped_tournament_id } = req.body;
+    const { date, time, casino, buyin, levels, user_note, scraped_tournament_id, name, day, isRestart } = req.body;
     const userId = req.params.userId;
 
     if (!date || !time || !casino) {
@@ -134,8 +134,8 @@ app.post('/api/users/:userId/tournaments', async (req, res) => {
     }
 
     const result = await pool.query(
-      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note, scraped_tournament_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [userId, date, time, casino, buyin || null, levels || '-', user_note || null, scraped_tournament_id || null]
+      'INSERT INTO tournaments (user_id, date, time, casino, buyin, levels, user_note, scraped_tournament_id, name, day, is_restart) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+      [userId, date, time, casino, buyin || null, levels || '-', user_note || null, scraped_tournament_id || null, name || null, day || null, isRestart || false]
     );
 
     res.status(201).json(result.rows[0]);
@@ -351,7 +351,10 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
         SUBSTRING(time FROM 1 FOR 5) as "displayTime",
         structure_chips as "structureChips",
         structure_levels as "structureLevels",
-        structure_guarantee as "structureGuarantee"
+        structure_guarantee as "structureGuarantee",
+        name,
+        day,
+        is_restart as "isRestart"
       FROM scraped_tournaments
       WHERE 1=1
     `;

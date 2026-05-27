@@ -1,0 +1,2542 @@
+<section id="upcoming-tournaments-list-27" class="paginated-upcoming-tournaments-list tournaments-list has-listing-ad">
+      <h2 id="header-2026-06-09" class="header">mardi — 9 juin</h2>
+      <ol>
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-100-900am-nl-holdem-no-limit-holdem-poker-tournament?topid=168636-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          9:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/caesars-palace-las-vegas-100-1000am-nl-holdem-no-limit-holdem-poker-tournament?topid=100359-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Caesars Palace" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/EQYTGn32XiDgrVQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Caesars Palace</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-31-1500-nl-holdem-super-turbo-bounty-wsop?topid=262127">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,500</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">25 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #31 - <span>Super Turbo Bounty </span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-deepstack-championship-2026-event-37-1100-nl-holdem-dcps-2026-37-1-100-nlh-1d-venetian-las-vegas?topid=273273">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="DeepStack Champio..." width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/tvDnfFSLM6zqb89CCA6oTA" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Venetian Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+      <div class="live-header">
+        Voir les infos en direct
+      </div>
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:10am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">40 000 chip</li>
+
+          <li class="detail">40 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000,000 Guaranteed">$1MM Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">DeepStack Championship 2026 - Event #37 - <span>DCPS 2026 #37 $1,100 NLH 1D</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-south-point-summer-events-300-nl-holdem-the-lucky-300-south-point-275790?topid=275790-35716">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="SP Summer" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/qIL0FjVAwaNqIz0" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">South Point Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:10am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$300</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$300,000 Guaranteed">$300K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">South Point Summer Events - Series Event - <span>The Lucky 300 - Day 1C</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-100-1100am-nl-holdem-no-limit-holdem-poker-tournament-259444?topid=259444-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wynn-summer-classic-event-26-1600-nl-holdem-1-600-nlh-1c-2m-gtd-wynn?topid=272318">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="2026 Wynn Summer ..." width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y8YzkAed-seaDik" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Wynn Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+      <div class="live-header">
+        Voir les infos en direct
+      </div>
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,600</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">40 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$2,500,000 Guaranteed">$2.5MM Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Wynn Summer Classic - Event #26 - <span>$1,600 NLH 1C $2M GTD</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-aria-poker-classic-26-1100-pl-omaha-pot-limit-omaha-aria?topid=273261">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Aria Poker Classic" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/shnQQ41c00L9NJE" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Aria Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,100</li>
+
+      <li class="detail type">
+        <abbr title="PL Omaha">
+          <span>PLO</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$250,000 Guaranteed">$250K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">Aria Poker Classic '26 - Series Event - <span>Pot Limit Omaha</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-orleans-summer-open-300-nl-holdem-monster-stack-the-orleans?topid=272478-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Orleans Open" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/U9jJz_8UIcDX-qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">The Orleans Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$300</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$30,000 Guaranteed">$30K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Orleans Summer Open - Series Event - <span>Monster Stack</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-mgm-grand-summer-poker-festival-26-event-7-400-nl-holdem-grand-stack-mgm-grand?topid=274611-35602">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Summer Festival" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/1-Ax3BUUXNa8g9Y" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">MGM Grand</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$400</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$100,000 Guaranteed">$100K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">MGM Grand Summer Poker Festival '26 - Event #7 - <span>Grand Stack - Day 1A</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time restart restart cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-18-1500-nl-holdem-monster-stack-wsop?topid=262120-7921">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,500</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+        <li class="detail red-restart">Redémarrer, 60 niveaux min</li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #18 - <span>Monster Stack </span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time restart restart cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-28-600-ml-ha-deep-stack-mixed-nlh-plo-8-handed-wsop?topid=262125-8400">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$600</li>
+
+      <li class="detail type">
+        <abbr title="ML HA">
+          <span>MLHA</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+        <li class="detail red-restart">Redémarrer, 30 niveaux min</li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #28 - <span>Deep Stack Mixed NLH-PLO (8-Handed) </span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item  cds-item">
+  <a class="venue" href="/fr/poker-tournament/red-rock-las-vegas-85-1105am-nl-holdem-no-limit-holdem-poker-tournament?topid=225690-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Red Rock" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/D7KeLkY076b4iKs" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Red Rock Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:05am
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$85</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">15 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wynn-summer-classic-event-28-1100-fl-m-1-100-toe-50k-gtd-wynn?topid=272326">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="2026 Wynn Summer ..." width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y8YzkAed-seaDik" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Wynn Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+      <div class="live-header">
+        Voir les infos en direct
+      </div>
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,100</li>
+
+      <li class="detail type">
+        <abbr title="FL M">
+          <span>FLM</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">35 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$50,000 Guaranteed">$50K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Wynn Summer Classic - Event #28 - <span>$1,100 TOE $50K GTD</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-120-nl-holdem-high-roller-step-1-landmark-satellite-to-step-2-landmark-satellite-wsop-273638?topid=273638-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$120</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">10 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>High Roller Step 1 Landmark Satellite to Step 2 Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-70-nl-holdem-colossus-landmark-satellite-wsop?topid=273636-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$70</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">10 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>Colossus Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time restart restart cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-mgm-grand-summer-poker-festival-26-event-6-500-nl-holdem-gcp-tour-mystery-ticket-nlh-mgm-grand?topid=274607-8317">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Summer Festival" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/1-Ax3BUUXNa8g9Y" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">MGM Grand</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$500</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+        <li class="detail red-restart">Redémarrer, 30 niveaux min</li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">MGM Grand Summer Poker Festival '26 - Event #6 - <span>GCP Tour - Mystery Ticket - NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time restart restart cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-29-50000-nl-holdem-high-roller-8-handed-wsop?topid=261284-8062">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$50,000</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+        <li class="detail red-restart">Redémarrer, 60 niveaux min</li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #29 - <span>High Roller (8-Handed)</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-32-3000-nl-holdem-nlh-wsop?topid=262128">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          12:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$3,000</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">40 000 chip</li>
+
+          <li class="detail">60 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #32 - <span>NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-grand-poker-series-event-25-56-200-nl-holdem-nlh-golden-nugget-lv?topid=274249-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="GPS '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y_oiob62QAHl8qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Golden Nugget Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          1:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$200</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+
+
+          <li class="detail"><abbr title="$25,000 Guaranteed">$25K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Grand Poker Series - Event #25, 56 - <span>NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time restart restart cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-30-1500-fl-holdem-limit-holdem-7-handed-wsop?topid=262126-8063">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          1:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,500</li>
+
+      <li class="detail type">
+        <abbr title="FL Holdem">
+          <span>FLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+        <li class="detail red-restart">Redémarrer, 40 niveaux min</li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #30 - <span>Limit Hold'em (7-Handed) </span></span>
+    </div>
+  </div>
+</li>
+
+      </ol>
+    </section>
+<section id="upcoming-tournaments-list-28" class="paginated-upcoming-tournaments-list tournaments-list has-listing-ad">
+      <h2 id="header-2026-06-09" class="header">mardi — 9 juin</h2>
+      <ol>
+
+<li class="tournament-item intermittent side-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-250-nl-holdem-daily-deepstack-nlh-wsop?topid=262422-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          1:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$250</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">25 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Side Event - <span>Daily Deepstack NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-100-200pm-nl-holdem-no-limit-holdem-poker-tournament?topid=84548-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          2:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/caesars-palace-las-vegas-100-200pm-nl-holdem-no-limit-holdem-poker-tournament?topid=100360-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Caesars Palace" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/EQYTGn32XiDgrVQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Caesars Palace</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          2:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em  </span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-event-33-10000-pl-omaha8-plo8-championship-8-handed-wsop?topid=261289">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          2:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$10,000</li>
+
+      <li class="detail type">
+        <abbr title="PL Omaha8">
+          <span>PLO8</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">60 000 chip</li>
+
+          <li class="detail">60 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Event #33 - <span>PLO8 Championship (8-Handed)</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-south-point-summer-events-120-fl-omaha8-omaha-8-b-south-point?topid=275730-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="SP Summer" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/qIL0FjVAwaNqIz0" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">South Point Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          2:10pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$120</li>
+
+      <li class="detail type">
+        <abbr title="FL Omaha8">
+          <span>FLO8</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">15 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$6,000 Guaranteed">$6K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">South Point Summer Events - Series Event - <span>Omaha 8/B</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-850-nl-holdem-landmark-step-2-satellite-to-7-500-high-roller-landmark-satellite-wsop?topid=273639-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          3:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$850</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>Landmark Step 2 Satellite to $7,500 High Roller Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent side-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-250-horse-h-o-r-s-e-deepstack-wsop?topid=262421-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          3:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$250</li>
+
+      <li class="detail type">
+        <abbr title="HORSE">
+          <span>HORSE</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">25 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Side Event - <span>H.O.R.S.E. Deepstack</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-240-nl-holdem-daily-landmark-satellite-wsop?topid=262486-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          3:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$240</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>Daily Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-orleans-summer-open-240-horse-h-o-r-s-e-the-orleans?topid=272177-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Orleans Open" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/U9jJz_8UIcDX-qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">The Orleans Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          4:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$240</li>
+
+      <li class="detail type">
+        <abbr title="HORSE">
+          <span>HORSE</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$10,000 Guaranteed">$10K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Orleans Summer Open - Series Event - <span>H.O.R.S.E.</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent side-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-400-nl-holdem-daily-deepstack-nlh-wsop?topid=262423-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          4:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$400</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Side Event - <span>Daily Deepstack NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-100-500pm-nl-holdem-no-limit-holdem-poker-tournament?topid=161583-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          5:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wynn-summer-classic-event-26-1600-nl-holdem-1-600-nlh-1d-2m-gtd-wynn?topid=272322">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="2026 Wynn Summer ..." width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y8YzkAed-seaDik" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Wynn Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+      <div class="live-header">
+        Voir les infos en direct
+      </div>
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$1,600</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">40 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$2,500,000 Guaranteed">$2.5MM Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Wynn Summer Classic - Event #26 - <span>$1,600 NLH 1D $2M GTD</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-orleans-summer-open-200-nl-holdem-nightly-monster-stack-the-orleans?topid=272172-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Orleans Open" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/U9jJz_8UIcDX-qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">The Orleans Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$200</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$15,000 Guaranteed">$15K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Orleans Summer Open - Series Event - <span>Nightly Monster Stack</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-7500-nl-holdem-high-roller-nlh-landmark-satellite-wsop?topid=273640-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$7,500</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>High Roller NLH Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-mgm-grand-summer-poker-festival-26-event-7-400-nl-holdem-grand-stack-mgm-grand?topid=274611-35603">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Summer Festival" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/1-Ax3BUUXNa8g9Y" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">MGM Grand</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$400</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$100,000 Guaranteed">$100K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">MGM Grand Summer Poker Festival '26 - Event #7 - <span>Grand Stack - Day 1B</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/caesars-palace-las-vegas-100-600pm-nl-holdem-no-limit-holdem-poker-tournament?topid=110998-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Caesars Palace" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/EQYTGn32XiDgrVQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Caesars Palace</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em </span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item  cds-item">
+  <a class="venue" href="/fr/poker-tournament/red-rock-las-vegas-85-605pm-nl-holdem-no-limit-holdem-poker-tournament?topid=278069-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Red Rock" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/D7KeLkY076b4iKs" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Red Rock Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:05pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$85</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">15 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-deepstack-championship-2026-event-41-600-nl-holdem-dcps-2026-41-600-nlh-bounty-1day-venetian-las-vegas?topid=273238">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="DeepStack Champio..." width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/tvDnfFSLM6zqb89CCA6oTA" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Venetian Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+      <div class="live-header">
+        Voir les infos en direct
+      </div>
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:10pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$600</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">25 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$40,000 Guaranteed">$40K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">DeepStack Championship 2026 - Event #41 - <span>DCPS 2026 #41 $600 NLH Bounty (1Day)</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-south-point-summer-events-300-nl-holdem-the-lucky-300-south-point-275790?topid=275790-35717">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="SP Summer" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/qIL0FjVAwaNqIz0" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">South Point Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          6:10pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$300</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">30 000 chip</li>
+
+          <li class="detail">30 niveaux min</li>
+
+          <li class="detail"><abbr title="$300,000 Guaranteed">$300K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">South Point Summer Events - Series Event - <span>The Lucky 300 - Day 1D</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-aria-poker-classic-26-300-nl-holdem-no-limit-holdem-aria?topid=273145-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Aria Poker Classic" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/shnQQ41c00L9NJE" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Aria Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          7:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$300</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">25 000 chip</li>
+
+          <li class="detail">25 niveaux min</li>
+
+          <li class="detail"><abbr title="$25,000 Guaranteed">$25K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">Aria Poker Classic '26 - Series Event - <span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item one-time series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-grand-poker-series-event-26-250-nl-holdem-tag-team-nlh-golden-nugget-lv?topid=274040">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="GPS '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y_oiob62QAHl8qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Golden Nugget Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          7:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$250</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$20,000 Guaranteed">$20K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Grand Poker Series - Event #26 - <span>Tag Team NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-585-nl-holdem-landmark-satellite-wsop?topid=273369-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          7:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$585</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-160-800pm-nl-holdem-no-limit-holdem-poker-tournament?topid=161584-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          8:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$160</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,500 Guaranteed">$1.5K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent side-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-200-nl-holdem-daily-deepstack-nlh-wsop?topid=262424-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          8:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$200</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Side Event - <span>Daily Deepstack NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/caesars-palace-las-vegas-160-900pm-nl-holdem-no-limit-holdem-poker-tournament?topid=100361-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Caesars Palace" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/EQYTGn32XiDgrVQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Caesars Palace</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          9:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$160</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">20 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em </span></span>
+    </div>
+  </div>
+</li>
+
+      </ol>
+    </section>
+<section id="upcoming-tournaments-list-29" class="paginated-upcoming-tournaments-list tournaments-list has-listing-ad">
+      <h2 id="header-2026-06-09" class="header">mardi — 9 juin</h2>
+      <ol>
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-grand-poker-series-event-21-24-27-30-34-120-nl-holdem-late-night-survivor-turbo-nlh-golden-nugget-lv?topid=274038-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="GPS '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/y_oiob62QAHl8qg" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Golden Nugget Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          9:30pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$120</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">12 niveaux min</li>
+
+          <li class="detail"><abbr title="$3,000 Guaranteed">$3K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - <span>Late Night Survivor Turbo NLH</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent satellite cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-2026-wsop-world-series-of-poker-135-nl-holdem-daily-landmark-satellite-wsop?topid=262488-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="WSOP '26" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/wNC0BE4F89xz8cae4MgA1g" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">World Series of Poker</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$135</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">10 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+
+    </ul>
+
+    <div class="details">
+      <span class="name">2026 WSOP - World Series of Poker - Satellite - <span>Daily Landmark Satellite</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item intermittent series-event cds-item">
+  <a class="venue" href="/fr/poker-tournament/2026-south-point-summer-events-120-nl-holdem-nlh-turbo-bounty-south-point?topid=275732-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="SP Summer" width="150" height="94" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/qIL0FjVAwaNqIz0" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">South Point Casino</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          10:10pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$120</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$4,000 Guaranteed">$4K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name">South Point Summer Events - Series Event - <span>NLH Turbo Bounty</span></span>
+    </div>
+  </div>
+</li>
+
+
+<li class="tournament-item daily cds-item">
+  <a class="venue" href="/fr/poker-tournament/horseshoe-las-vegas-100-1100pm-nl-holdem-no-limit-holdem-poker-tournament?topid=161585-2026-06-09">
+    <div class="venue-title">
+      <div class="venue-logo">
+
+          <img alt="Horseshoe Las Vegas" width="96" height="60" style="object-fit: cover; object-position: center" src="https://pokeratlas-images-production.s3.amazonaws.com/venues/images/J9ituMTcB5J4ueg28NA6SQ" loading="lazy">
+
+
+      </div>
+      <h2 class="venue-name">Horseshoe Las Vegas</h2>
+    </div>
+</a>
+  <div class="tournament">
+
+    <ul class="details description">
+      <li class="detail start" style="white-space: nowrap">
+        <span class="time">
+          11:00pm
+
+        </span>
+
+        <span class="date" style="font-weight: normal">
+          (6/09)
+        </span>
+      </li>
+
+      <li class="detail buy-in">$100</li>
+
+      <li class="detail type">
+        <abbr title="NL Holdem">
+          <span>NLH</span>
+        </abbr>
+      </li>
+    </ul>
+
+    <ul class="details structure-info">
+          <li class="detail">20 000 chip</li>
+
+          <li class="detail">15 niveaux min</li>
+
+          <li class="detail"><abbr title="$1,000 Guaranteed">$1K Gtd</abbr></li>
+
+    </ul>
+
+    <div class="details">
+      <span class="name"><span>No Limit Hold'em</span></span>
+    </div>
+  </div>
+</li>
+
+      </ol>
+    </section>

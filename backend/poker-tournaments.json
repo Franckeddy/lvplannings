@@ -5,9 +5,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -17,9 +20,12 @@
     "time": "09:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Seniors (50+) Weekly Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -29,9 +35,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -41,9 +50,12 @@
     "time": "10:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack - Flight B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -53,9 +65,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -65,9 +80,12 @@
     "time": "10:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #36 - DCPS 2026 #36 $800 NLH 1A",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -77,9 +95,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -89,9 +110,12 @@
     "time": "11:00:00",
     "buyIn": 800,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - Seniors No Limit Hold'em (50+)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -101,9 +125,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Mega Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -113,9 +140,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #2 - Grand Stack - Day 1B",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -125,9 +155,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #5, 9, 17, 31, 35 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -137,9 +170,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -149,9 +185,12 @@
     "time": "11:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -161,9 +200,12 @@
     "time": "12:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Triple Stud Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$50,000 Guaranteed"
     }
   },
@@ -173,9 +215,12 @@
     "time": "12:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #6 - PLO Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "35 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -185,9 +230,12 @@
     "time": "12:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #11 - GG Million$ High Roller",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -197,9 +245,12 @@
     "time": "12:00:00",
     "buyIn": 25000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #19 - High Roller Multi-Flight (8-Handed) - Flight B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "150 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -209,9 +260,12 @@
     "time": "13:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #16 - NLH Day 2 $1.5M GTD",
+    "day": 2,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -221,9 +275,12 @@
     "time": "13:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #18 - $1,100 NLH $200K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -233,9 +290,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -245,9 +305,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #17 - NL 2-7 Single Draw Championship",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -257,9 +320,12 @@
     "time": "13:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #20 - Dealer's Choice",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -269,9 +335,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -281,9 +350,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -293,9 +365,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -305,9 +380,12 @@
     "time": "14:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #21 - PLO8",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -317,9 +395,12 @@
     "time": "14:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Restart - The Lucky 300",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -329,9 +410,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -341,9 +425,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - TOE",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -353,9 +440,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -365,9 +455,12 @@
     "time": "16:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #36 - DCPS 2026 #36 $800 NLH 1B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -377,9 +470,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -389,9 +485,12 @@
     "time": "17:00:00",
     "buyIn": 150,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #7, 11, 15, 19, 41, 45, 68, 80, 83 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$7,500 Guaranteed"
     }
   },
@@ -401,9 +500,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #19 - $1,100 NLH Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -413,9 +515,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -425,9 +530,12 @@
     "time": "18:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #2 - Grand Stack - Day 1C",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -437,9 +545,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -449,9 +560,12 @@
     "time": "18:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -461,9 +575,12 @@
     "time": "18:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Deep Stack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -473,9 +590,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -485,9 +605,12 @@
     "time": "19:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - 7-Card Stud Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -497,9 +620,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -509,9 +635,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -521,9 +650,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -533,9 +665,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -545,9 +680,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -557,9 +695,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -569,9 +710,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -581,9 +725,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -593,9 +740,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -605,9 +755,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -617,9 +770,12 @@
     "time": "10:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack - Flight C",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -629,9 +785,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -641,9 +800,12 @@
     "time": "10:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #36 - DCPS 2026 #36 $800 NLH 1C",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -653,9 +815,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -665,9 +830,12 @@
     "time": "11:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$150,000 Guaranteed"
     }
   },
@@ -677,9 +845,12 @@
     "time": "11:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -689,9 +860,12 @@
     "time": "11:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #3 - Big O / PLO 8",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -701,9 +875,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #5, 9, 17, 31, 35 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -713,9 +890,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -725,9 +905,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #16 - NLH Final Table $1.5M GTD",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -737,9 +920,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #20 - $1,100 NLH $200K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -749,9 +935,12 @@
     "time": "12:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #2 - Grand Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -761,9 +950,12 @@
     "time": "12:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - 7-Game Draw Mix Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -773,9 +965,12 @@
     "time": "12:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #10 - Omaha 8/Stud 8 Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "35 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -785,9 +980,12 @@
     "time": "12:00:00",
     "buyIn": 25000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #19 - High Roller Multi-Flight (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -797,9 +995,12 @@
     "time": "12:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #22 - Big O - Flight A",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -809,9 +1010,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -821,9 +1025,12 @@
     "time": "13:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #21 - PLO8",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -833,9 +1040,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -845,9 +1055,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -857,9 +1070,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -869,9 +1085,12 @@
     "time": "14:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #23 - 7-Card Stud Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "60 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -881,9 +1100,12 @@
     "time": "14:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Crazy Pineapple",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$6,000 Guaranteed"
     }
   },
@@ -893,9 +1115,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -905,9 +1130,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -917,9 +1145,12 @@
     "time": "16:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #36 - DCPS 2026 #36 $800 NLH 1D",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -929,9 +1160,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -941,9 +1175,12 @@
     "time": "17:00:00",
     "buyIn": 150,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #7, 11, 15, 19, 41, 45, 68, 80, 83 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$7,500 Guaranteed"
     }
   },
@@ -953,9 +1190,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #21 - $1,100 NLH Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -965,9 +1205,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -977,9 +1220,12 @@
     "time": "18:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Deep Stack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -989,9 +1235,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -1001,9 +1250,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -1013,9 +1265,12 @@
     "time": "19:00:00",
     "buyIn": 585,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1025,9 +1280,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -1037,9 +1295,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1049,9 +1310,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1061,9 +1325,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1073,9 +1340,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Side Event - No Limit Hold'em - $100 Rebuys/Addons",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -1085,9 +1355,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1097,9 +1370,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -1109,9 +1385,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1121,9 +1400,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1133,9 +1415,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1145,9 +1430,12 @@
     "time": "10:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack - Flight D",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1157,9 +1445,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #37 - DCPS 2026 #37 $1,100 NLH 1A",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -1169,9 +1460,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -1181,9 +1475,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1193,9 +1490,12 @@
     "time": "11:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$150,000 Guaranteed"
     }
   },
@@ -1205,9 +1505,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Mega Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -1217,9 +1520,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #5 - GCP Tour - Big Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -1229,9 +1535,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #13, 39 - Golden Saturday",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -1241,9 +1550,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1253,9 +1565,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #22 - $1,100 NLH $200K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -1265,9 +1580,12 @@
     "time": "12:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - TOE Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$50,000 Guaranteed"
     }
   },
@@ -1277,9 +1595,12 @@
     "time": "12:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #14 - PLO",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -1289,9 +1610,12 @@
     "time": "12:00:00",
     "buyIn": 25000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #19 - High Roller Multi-Flight (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1301,9 +1625,12 @@
     "time": "12:00:00",
     "buyIn": 25000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #24 - High Roller (6-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "150 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1313,9 +1640,12 @@
     "time": "13:00:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #36 - DCPS 2026 #36 $800 NLH Day 2",
+    "day": 2,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1325,9 +1655,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1337,9 +1670,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #23 - 7-Card Stud Championship",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1349,9 +1685,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -1361,9 +1700,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1373,9 +1715,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1385,9 +1730,12 @@
     "time": "14:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #22 - Big O - Flight B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1397,9 +1745,12 @@
     "time": "14:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Omaha 8/B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -1409,9 +1760,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1421,9 +1775,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Triple Triple Draw",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -1433,9 +1790,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1445,9 +1805,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1457,9 +1820,12 @@
     "time": "17:00:00",
     "buyIn": 150,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #7, 11, 15, 19, 41, 45, 68, 80, 83 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$7,500 Guaranteed"
     }
   },
@@ -1469,9 +1835,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #23 - $1,100 NLH Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -1481,9 +1850,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -1493,9 +1865,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1505,9 +1880,12 @@
     "time": "18:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH - Day 1A",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -1517,9 +1895,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #38 - DCPS 2026 #38 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -1529,9 +1910,12 @@
     "time": "18:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Double Green Chip Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -1541,9 +1925,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -1553,9 +1940,12 @@
     "time": "19:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Dealers Choice Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -1565,9 +1955,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -1577,9 +1970,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -1589,9 +1985,12 @@
     "time": "20:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em Saturday Night Classic",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1601,9 +2000,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1613,9 +2015,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1625,9 +2030,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Side Event - No Limit Hold'em - $100 Rebuys/Addons",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -1637,9 +2045,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1649,9 +2060,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Crazy Pineapple",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -1661,9 +2075,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1673,9 +2090,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1685,9 +2105,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1697,9 +2120,12 @@
     "time": "10:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #25 - Freezeout",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -1709,9 +2135,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #37 - DCPS 2026 #37 $1,100 NLH 1B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -1721,9 +2150,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -1733,9 +2165,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1745,9 +2180,12 @@
     "time": "11:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -1757,9 +2195,12 @@
     "time": "11:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Sunday Special",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -1769,9 +2210,12 @@
     "time": "11:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH - Day 1B",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -1781,9 +2225,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #5, 9, 17, 31, 35 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -1793,9 +2240,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1805,9 +2255,12 @@
     "time": "11:05:00",
     "buyIn": 150,
     "levels": null,
+    "name": "Sunday Funday Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -1817,9 +2270,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #24 - $1,100 PLO $200K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -1829,9 +2285,12 @@
     "time": "12:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #18 - H.O.R.S.E. Championship (7-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "35 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -1841,9 +2300,12 @@
     "time": "12:00:00",
     "buyIn": 25000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #24 - High Roller (6-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -1853,9 +2315,12 @@
     "time": "12:00:00",
     "buyIn": 2000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #26 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1865,9 +2330,12 @@
     "time": "12:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #39 - DCPS 2026 #39 $800 PLO Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -1877,9 +2345,12 @@
     "time": "13:00:00",
     "buyIn": 800,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -1889,9 +2360,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1901,9 +2375,12 @@
     "time": "13:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #22 - Big O",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1913,9 +2390,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -1925,9 +2405,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1937,9 +2420,12 @@
     "time": "14:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #Sat - $600 Milestone to $5K Seniors NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$50,000 Guaranteed"
     }
   },
@@ -1949,9 +2435,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -1961,9 +2450,12 @@
     "time": "14:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #27 - Dealer's Choice Championship (7-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "60 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -1973,9 +2465,12 @@
     "time": "14:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$6,000 Guaranteed"
     }
   },
@@ -1985,9 +2480,12 @@
     "time": "15:00:00",
     "buyIn": 625,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - High Roller Step Landmark Satellite to $5,300 High Roller Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -1997,9 +2495,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2009,9 +2510,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2021,9 +2525,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2033,9 +2540,12 @@
     "time": "17:00:00",
     "buyIn": 150,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #7, 11, 15, 19, 41, 45, 68, 80, 83 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$7,500 Guaranteed"
     }
   },
@@ -2045,9 +2555,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #25 - $1,100 PLO Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -2057,9 +2570,12 @@
     "time": "18:00:00",
     "buyIn": 5300,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - High Roller NLH Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2069,9 +2585,12 @@
     "time": "18:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Big O",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -2081,9 +2600,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2093,9 +2615,12 @@
     "time": "18:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH - Day 1C",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -2105,9 +2630,12 @@
     "time": "18:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Crazy Pineapple",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -2117,9 +2645,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -2129,9 +2660,12 @@
     "time": "19:00:00",
     "buyIn": 150,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #20 - Bar Poker Open Golden Nugget 10-Year Anniversary Nightly NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -2141,9 +2675,12 @@
     "time": "19:00:00",
     "buyIn": 585,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2153,9 +2690,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -2165,9 +2705,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -2177,9 +2720,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2189,9 +2735,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2201,9 +2750,12 @@
     "time": "21:30:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - Late Night Survivor Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "12 niveaux min",
+      "levels": "niveau de 12 min",
       "guarantee": "$3,000 Guaranteed"
     }
   },
@@ -2213,9 +2765,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -2225,9 +2780,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -2237,9 +2795,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2249,9 +2810,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2261,9 +2825,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2273,9 +2840,12 @@
     "time": "10:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #28 - Deep Stack Mixed NLH-PLO (8-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2285,9 +2855,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #37 - DCPS 2026 #37 $1,100 NLH 1C",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -2297,9 +2870,12 @@
     "time": "10:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1A",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -2309,9 +2885,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2321,9 +2900,12 @@
     "time": "11:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1A $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -2333,9 +2915,12 @@
     "time": "11:00:00",
     "buyIn": 5000,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #27 - $5,000 Seniors NLH High Roller 50+ $300K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -2345,9 +2930,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - NLH Super Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -2357,9 +2945,12 @@
     "time": "11:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - Mystery Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -2369,9 +2960,12 @@
     "time": "11:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH - Day 1D",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -2381,9 +2975,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -2393,9 +2990,12 @@
     "time": "11:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #25 - Freezeout",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2405,9 +3005,12 @@
     "time": "11:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2417,9 +3020,12 @@
     "time": "12:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - BEAST Championship (Badgui, Stud-8, A-5, Stud, 2-7)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -2429,9 +3035,12 @@
     "time": "12:00:00",
     "buyIn": 2000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #26 - NLH",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -2441,9 +3050,12 @@
     "time": "12:00:00",
     "buyIn": 50000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #29 - High Roller (8-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "300 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -2453,9 +3065,12 @@
     "time": "13:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - T.O.E.",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -2465,9 +3080,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -2477,9 +3095,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #27 - Dealer's Choice Championship (7-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -2489,9 +3110,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2501,9 +3125,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2513,9 +3140,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2525,9 +3155,12 @@
     "time": "14:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #30 - Limit Hold'em (7-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -2537,9 +3170,12 @@
     "time": "14:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Chip Chop Survivor",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$6,000 Guaranteed"
     }
   },
@@ -2549,9 +3185,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2561,9 +3200,12 @@
     "time": "16:00:00",
     "buyIn": 125,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - 1K Bankroll Builder",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2573,9 +3215,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2585,9 +3230,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2597,9 +3245,12 @@
     "time": "18:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1B $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -2609,9 +3260,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -2621,9 +3275,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2633,9 +3290,12 @@
     "time": "18:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH - Day 1E",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -2645,9 +3305,12 @@
     "time": "18:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2657,9 +3320,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #40 - DCPS 2026 #40 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -2669,9 +3335,12 @@
     "time": "18:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1B",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -2681,9 +3350,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -2693,9 +3365,12 @@
     "time": "19:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - PLO 8 or Better Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2705,9 +3380,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -2717,9 +3395,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -2729,9 +3410,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -2741,9 +3425,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2753,9 +3440,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2765,9 +3455,12 @@
     "time": "21:30:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - Late Night Survivor Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "12 niveaux min",
+      "levels": "niveau de 12 min",
       "guarantee": "$3,000 Guaranteed"
     }
   },
@@ -2777,9 +3470,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -2789,9 +3485,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -2801,9 +3500,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2813,9 +3515,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2825,9 +3530,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2837,9 +3545,12 @@
     "time": "10:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #31 - Super Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2849,9 +3560,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #37 - DCPS 2026 #37 $1,100 NLH 1D",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -2861,9 +3575,12 @@
     "time": "10:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1C",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -2873,9 +3590,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -2885,9 +3605,12 @@
     "time": "11:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1C $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -2897,9 +3620,12 @@
     "time": "11:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - Pot Limit Omaha",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$250,000 Guaranteed"
     }
   },
@@ -2909,9 +3635,12 @@
     "time": "11:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -2921,9 +3650,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #7 - Grand Stack - Day 1A",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -2933,9 +3665,12 @@
     "time": "11:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #18 - Monster Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -2945,9 +3680,12 @@
     "time": "11:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #28 - Deep Stack Mixed NLH-PLO (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -2957,9 +3695,12 @@
     "time": "11:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -2969,9 +3710,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #28 - $1,100 TOE $50K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "35 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$50,000 Guaranteed"
     }
   },
@@ -2981,9 +3725,12 @@
     "time": "12:00:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - High Roller Step 1 Landmark Satellite to Step 2 Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "10 niveaux min",
+      "levels": "niveau de 10 min",
       "guarantee": null
     }
   },
@@ -2993,9 +3740,12 @@
     "time": "12:00:00",
     "buyIn": 70,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Colossus Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "10 niveaux min",
+      "levels": "niveau de 10 min",
       "guarantee": null
     }
   },
@@ -3005,9 +3755,12 @@
     "time": "12:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #6 - GCP Tour - Mystery Ticket - NLH",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3017,9 +3770,12 @@
     "time": "12:00:00",
     "buyIn": 50000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #29 - High Roller (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3029,9 +3785,12 @@
     "time": "12:00:00",
     "buyIn": 3000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #32 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3041,6 +3800,9 @@
     "time": "13:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #25, 56 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": null,
       "levels": null,
@@ -3053,9 +3815,12 @@
     "time": "13:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #30 - Limit Hold'em (7-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -3065,9 +3830,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3077,9 +3845,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3089,9 +3860,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3101,9 +3875,12 @@
     "time": "14:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #33 - PLO8 Championship (8-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "60 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3113,9 +3890,12 @@
     "time": "14:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Omaha 8/B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$6,000 Guaranteed"
     }
   },
@@ -3125,9 +3905,12 @@
     "time": "15:00:00",
     "buyIn": 850,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Landmark Step 2 Satellite to $7,500 High Roller Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3137,9 +3920,12 @@
     "time": "15:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - H.O.R.S.E. Deepstack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3149,9 +3935,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3161,9 +3950,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - H.O.R.S.E.",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -3173,9 +3965,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3185,9 +3980,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3197,9 +3995,12 @@
     "time": "18:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1D $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -3209,9 +4010,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -3221,9 +4025,12 @@
     "time": "18:00:00",
     "buyIn": 7500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - High Roller NLH Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3233,9 +4040,12 @@
     "time": "18:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #7 - Grand Stack - Day 1B",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -3245,9 +4055,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3257,9 +4070,12 @@
     "time": "18:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3269,9 +4085,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #41 - DCPS 2026 #41 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -3281,9 +4100,12 @@
     "time": "18:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1D",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -3293,9 +4115,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -3305,9 +4130,12 @@
     "time": "19:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #26 - Tag Team NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -3317,9 +4145,12 @@
     "time": "19:00:00",
     "buyIn": 585,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3329,9 +4160,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -3341,9 +4175,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3353,9 +4190,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3365,9 +4205,12 @@
     "time": "21:30:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - Late Night Survivor Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "12 niveaux min",
+      "levels": "niveau de 12 min",
       "guarantee": "$3,000 Guaranteed"
     }
   },
@@ -3377,9 +4220,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -3389,9 +4235,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -3401,9 +4250,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3413,9 +4265,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3425,9 +4280,12 @@
     "time": "10:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #37 - DCPS 2026 #37 $1,100 NLH Day 2",
+    "day": 2,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -3437,9 +4295,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3449,9 +4310,12 @@
     "time": "10:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #34 - The Colossus - Day 1A",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -3461,9 +4325,12 @@
     "time": "10:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1E",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -3473,9 +4340,12 @@
     "time": "11:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1E $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -3485,9 +4355,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3497,9 +4370,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - NLH Super Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -3509,9 +4385,12 @@
     "time": "11:00:00",
     "buyIn": 800,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$200,000 Guaranteed"
     }
   },
@@ -3521,9 +4400,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #8 - Pot Limit Omaha Black Chip Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -3533,9 +4415,12 @@
     "time": "11:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3545,9 +4430,12 @@
     "time": "11:10:00",
     "buyIn": 800,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #42 - DCPS 2026 #42 $800 NLH (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$150,000 Guaranteed"
     }
   },
@@ -3557,9 +4445,12 @@
     "time": "12:00:00",
     "buyIn": 70,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Colossus Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "10 niveaux min",
+      "levels": "niveau de 10 min",
       "guarantee": null
     }
   },
@@ -3569,9 +4460,12 @@
     "time": "12:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #7 - Grand Stack",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3581,9 +4475,12 @@
     "time": "12:00:00",
     "buyIn": 3000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #32 - NLH",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3593,9 +4490,12 @@
     "time": "12:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #35 - PLO Multi-Flight - Flight A",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -3605,9 +4505,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -3617,9 +4520,12 @@
     "time": "13:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #28 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$7,500 Guaranteed"
     }
   },
@@ -3629,9 +4535,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #33 - PLO8 Championship (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3641,9 +4550,12 @@
     "time": "13:00:00",
     "buyIn": 100000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #36 - High Roller (8-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "600 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -3653,9 +4565,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3665,9 +4580,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3677,9 +4595,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3689,9 +4610,12 @@
     "time": "14:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #37 - H.O.R.S.E.",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -3701,9 +4625,12 @@
     "time": "15:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - PLO Deep Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3713,9 +4640,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3725,9 +4655,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Omaha 8/Stud 8",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -3737,9 +4670,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3749,9 +4685,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3761,9 +4700,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -3773,9 +4715,12 @@
     "time": "18:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #9, 13, 21, 26, 28, 43 - PLO 8 Nightly",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -3785,9 +4730,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3797,9 +4745,12 @@
     "time": "18:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3809,9 +4760,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #43 - DCPS 2026 #43 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -3821,9 +4775,12 @@
     "time": "18:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - The Lucky 300 - Day 1F",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$300,000 Guaranteed"
     }
   },
@@ -3833,9 +4790,12 @@
     "time": "19:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - $1,600 NLH 1F Turbo $2M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$2,500,000 Guaranteed"
     }
   },
@@ -3845,9 +4805,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -3857,9 +4820,12 @@
     "time": "19:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Limit Hold'em Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -3869,9 +4835,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -3881,9 +4850,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -3893,9 +4865,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -3905,9 +4880,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -3917,9 +4895,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3929,9 +4910,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Side Event - No Limit Hold'em - $100 Rebuys/Addons",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -3941,9 +4925,12 @@
     "time": "21:30:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - Late Night Survivor Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "12 niveaux min",
+      "levels": "niveau de 12 min",
       "guarantee": "$3,000 Guaranteed"
     }
   },
@@ -3953,9 +4940,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -3965,9 +4955,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3977,9 +4970,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -3989,9 +4985,12 @@
     "time": "09:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Satellite - NLH Turbo Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4001,9 +5000,12 @@
     "time": "09:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Seniors (50+) Weekly Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4013,9 +5015,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4025,9 +5030,12 @@
     "time": "10:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #34 - The Colossus - Day 1B",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4037,9 +5045,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #44 - DCPS 2026 #44 $1,100 NLH Seniors 1A",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -4049,9 +5060,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -4061,9 +5075,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4073,9 +5090,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Mega Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -4085,9 +5105,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #10, 17, 20, 27, 35 - Grand Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -4097,9 +5120,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #5, 9, 17, 31, 35 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -4109,9 +5135,12 @@
     "time": "11:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #34 - The Colossus",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4121,9 +5150,12 @@
     "time": "11:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4133,9 +5165,12 @@
     "time": "12:00:00",
     "buyIn": 3500,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #29 - $3,500 NLH 1A $5M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$5,000,000 Guaranteed"
     }
   },
@@ -4145,9 +5180,12 @@
     "time": "12:00:00",
     "buyIn": 70,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Colossus Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "10 niveaux min",
+      "levels": "niveau de 10 min",
       "guarantee": null
     }
   },
@@ -4157,9 +5195,12 @@
     "time": "12:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$500,000 Guaranteed"
     }
   },
@@ -4169,9 +5210,12 @@
     "time": "12:00:00",
     "buyIn": 600,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Razz Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -4181,9 +5225,12 @@
     "time": "12:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #32 - Mixed Triple Draw",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -4193,9 +5240,12 @@
     "time": "12:00:00",
     "buyIn": 3000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #32 - NLH",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -4205,9 +5255,12 @@
     "time": "12:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #35 - PLO Multi-Flight - Flight B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4217,9 +5270,12 @@
     "time": "13:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - NLH Day 2 $2M GTD",
+    "day": 2,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4229,9 +5285,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4241,9 +5300,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #33 - PLO8 Championship (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -4253,9 +5315,12 @@
     "time": "13:00:00",
     "buyIn": 100000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #36 - High Roller (8-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 60 niveaux min",
+      "levels": "Restart - niveau de 60 min",
       "guarantee": null
     }
   },
@@ -4265,9 +5330,12 @@
     "time": "13:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #37 - H.O.R.S.E.",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4277,9 +5345,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4289,9 +5360,12 @@
     "time": "14:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #Sat - $500 Milestone to $3,500 NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$35,000 Guaranteed"
     }
   },
@@ -4301,9 +5375,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4313,9 +5390,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4325,9 +5405,12 @@
     "time": "14:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #38 - Limit Hold'em Championship (7-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "60 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4337,9 +5420,12 @@
     "time": "14:10:00",
     "buyIn": 300,
     "levels": null,
+    "name": "South Point Summer Events - Restart - The Lucky 300",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4349,9 +5435,12 @@
     "time": "15:00:00",
     "buyIn": 15700,
     "levels": null,
+    "name": "2026 PGT Summer Series - Event #1 - NLH - PGT High Roller #1",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "125 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4361,9 +5450,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4373,9 +5465,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - PLO",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -4385,9 +5480,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4397,9 +5495,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4409,9 +5510,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #30 - $1,100 NLH Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -4421,9 +5525,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Nightly Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -4433,9 +5540,12 @@
     "time": "18:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #11, 30, 32, 49 - Big O Nightly",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -4445,9 +5555,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4457,9 +5570,12 @@
     "time": "18:05:00",
     "buyIn": 85,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4469,9 +5585,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #45 - DCPS 2026 #45 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -4481,9 +5600,12 @@
     "time": "18:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Deep Stack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -4493,9 +5615,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -4505,9 +5630,12 @@
     "time": "19:00:00",
     "buyIn": 585,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Seniors High Roller NLH Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4517,9 +5645,12 @@
     "time": "19:00:00",
     "buyIn": 125,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #33 - Green Chip Bounty NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -4529,9 +5660,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -4541,9 +5675,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4553,9 +5690,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4565,9 +5705,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4577,9 +5720,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Side Event - No Limit Hold'em - $100 Rebuys/Addons",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -4589,9 +5735,12 @@
     "time": "21:30:00",
     "buyIn": 120,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #21, 24, 27, 30, 34 - Late Night Survivor Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "12 niveaux min",
+      "levels": "niveau de 12 min",
       "guarantee": "$3,000 Guaranteed"
     }
   },
@@ -4601,9 +5750,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4613,9 +5765,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -4625,9 +5780,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4637,9 +5795,12 @@
     "time": "09:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4649,9 +5810,12 @@
     "time": "09:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Satellite - NLH Turbo Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4661,9 +5825,12 @@
     "time": "10:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4673,9 +5840,12 @@
     "time": "10:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #34 - The Colossus - Day 1C",
+    "day": 1,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4685,9 +5855,12 @@
     "time": "10:10:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #44 - DCPS 2026 #44 $1,100 NLH Seniors 1B",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$1,000,000 Guaranteed"
     }
   },
@@ -4697,9 +5870,12 @@
     "time": "10:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -4709,9 +5885,12 @@
     "time": "11:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4721,9 +5900,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Mega Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -4733,9 +5915,12 @@
     "time": "11:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #12, 25, 48 - Mystery Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -4745,9 +5930,12 @@
     "time": "11:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #5, 9, 17, 31, 35 - NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$15,000 Guaranteed"
     }
   },
@@ -4757,9 +5945,12 @@
     "time": "11:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #34 - The Colossus",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4769,9 +5960,12 @@
     "time": "12:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #31 - $1,100 5-Card PLO $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -4781,9 +5975,12 @@
     "time": "12:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #26 - NLH Final Table $2M GTD",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 30 niveaux min",
+      "levels": "Restart - niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4793,9 +5990,12 @@
     "time": "12:00:00",
     "buyIn": 3500,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #29 - $3,500 NLH 1B $5M GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": "$5,000,000 Guaranteed"
     }
   },
@@ -4805,9 +6005,12 @@
     "time": "12:00:00",
     "buyIn": 70,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Colossus Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "10 niveaux min",
+      "levels": "niveau de 10 min",
       "guarantee": null
     }
   },
@@ -4817,9 +6020,12 @@
     "time": "12:00:00",
     "buyIn": 1600,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$500,000 Guaranteed"
     }
   },
@@ -4829,9 +6035,12 @@
     "time": "12:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #36 - 8-Game Mix Championship",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "35 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -4841,9 +6050,12 @@
     "time": "12:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #35 - PLO Multi-Flight",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4853,9 +6065,12 @@
     "time": "12:00:00",
     "buyIn": 5000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #39 - Seniors (50+) High Roller (8-Handed)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "50 000 chip",
-      "levels": "60 niveaux min",
+      "levels": "niveau de 60 min",
       "guarantee": null
     }
   },
@@ -4865,9 +6080,12 @@
     "time": "13:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4877,9 +6095,12 @@
     "time": "13:00:00",
     "buyIn": 10000,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #38 - Limit Hold'em Championship (7-Handed)",
+    "day": null,
+    "isRestart": true,
     "structure": {
       "chips": null,
-      "levels": "Redémarrer, 40 niveaux min",
+      "levels": "Restart - niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4889,9 +6110,12 @@
     "time": "13:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4901,9 +6125,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4913,9 +6140,12 @@
     "time": "14:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -4925,9 +6155,12 @@
     "time": "14:00:00",
     "buyIn": 1500,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Event #40 - Razz",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "40 niveaux min",
+      "levels": "niveau de 40 min",
       "guarantee": null
     }
   },
@@ -4937,9 +6170,12 @@
     "time": "15:00:00",
     "buyIn": 2800,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Super High Roller Step Satellite to Super High Roller Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -4949,9 +6185,12 @@
     "time": "15:00:00",
     "buyIn": 15700,
     "levels": null,
+    "name": "2026 PGT Summer Series - Event #2 - NLH - PGT High Roller #2",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "125 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -4961,9 +6200,12 @@
     "time": "15:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4973,9 +6215,12 @@
     "time": "16:00:00",
     "buyIn": 240,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Drawmaha Mix (Drawmaha High & 2-7)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -4985,9 +6230,12 @@
     "time": "16:00:00",
     "buyIn": 400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -4997,9 +6245,12 @@
     "time": "17:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -5009,9 +6260,12 @@
     "time": "17:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #37 - Mixed Triple Draw",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -5021,9 +6275,12 @@
     "time": "18:00:00",
     "buyIn": 500,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #Sat - $500 Milestone to $3,500 NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$35,000 Guaranteed"
     }
   },
@@ -5033,9 +6290,12 @@
     "time": "18:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 Wynn Summer Classic - Event #32 - $1,100 PLO Turbo $100K GTD",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$100,000 Guaranteed"
     }
   },
@@ -5045,9 +6305,12 @@
     "time": "18:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 Orleans Summer Open - Series Event - Friday Special Monster Stack",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$30,000 Guaranteed"
     }
   },
@@ -5057,9 +6320,12 @@
     "time": "18:00:00",
     "buyIn": 25400,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - High Roller NLH Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "40 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -5069,9 +6335,12 @@
     "time": "18:00:00",
     "buyIn": 250,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Event #9, 13, 21, 26, 28, 43 - PLO 8 Nightly",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$10,000 Guaranteed"
     }
   },
@@ -5081,9 +6350,12 @@
     "time": "18:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -5093,9 +6365,12 @@
     "time": "18:10:00",
     "buyIn": 200,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - Deep Stack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "30 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$20,000 Guaranteed"
     }
   },
@@ -5105,9 +6380,12 @@
     "time": "18:10:00",
     "buyIn": 600,
     "levels": null,
+    "name": "DeepStack Championship 2026 - Event #46 - DCPS 2026 #46 $600 NLH Bounty (1Day)",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": "$40,000 Guaranteed"
     }
   },
@@ -5117,9 +6395,12 @@
     "time": "19:00:00",
     "buyIn": 300,
     "levels": null,
+    "name": "Aria Poker Classic '26 - Series Event - No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "25 000 chip",
-      "levels": "25 niveaux min",
+      "levels": "niveau de 25 min",
       "guarantee": "$25,000 Guaranteed"
     }
   },
@@ -5129,9 +6410,12 @@
     "time": "19:00:00",
     "buyIn": 1100,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Big O Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "30 niveaux min",
+      "levels": "niveau de 30 min",
       "guarantee": null
     }
   },
@@ -5141,9 +6425,12 @@
     "time": "19:00:00",
     "buyIn": 130,
     "levels": null,
+    "name": "2026 Grand Poker Series - Event #4, 8, 12, 16, 23, 29, 38, 42, 46, 55, 60, 69, 74, 78, 81, 84, 86, 89 - Turbo NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "15 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -5153,9 +6440,12 @@
     "time": "20:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,500 Guaranteed"
     }
   },
@@ -5165,9 +6455,12 @@
     "time": "20:00:00",
     "buyIn": 60,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -5177,9 +6470,12 @@
     "time": "20:00:00",
     "buyIn": 200,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Side Event - Daily Deepstack NLH",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": null
     }
   },
@@ -5189,9 +6485,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$1,000 Guaranteed"
     }
   },
@@ -5201,9 +6500,12 @@
     "time": "21:00:00",
     "buyIn": 160,
     "levels": null,
+    "name": "MGM Grand Summer Poker Festival '26 - Side Event - No Limit Hold'em - $100 Rebuys/Addons",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "20 niveaux min",
+      "levels": "niveau de 20 min",
       "guarantee": "$5,000 Guaranteed"
     }
   },
@@ -5213,9 +6515,12 @@
     "time": "22:00:00",
     "buyIn": 135,
     "levels": null,
+    "name": "2026 WSOP - World Series of Poker - Satellite - Daily Landmark Satellite",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "10 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": null
     }
   },
@@ -5225,9 +6530,12 @@
     "time": "22:10:00",
     "buyIn": 120,
     "levels": null,
+    "name": "South Point Summer Events - Series Event - NLH Turbo Bounty",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$4,000 Guaranteed"
     }
   },
@@ -5237,9 +6545,12 @@
     "time": "23:00:00",
     "buyIn": 100,
     "levels": null,
+    "name": "No Limit Hold'em",
+    "day": null,
+    "isRestart": false,
     "structure": {
       "chips": "20 000 chip",
-      "levels": "15 niveaux min",
+      "levels": "niveau de 15 min",
       "guarantee": "$1,000 Guaranteed"
     }
   }
