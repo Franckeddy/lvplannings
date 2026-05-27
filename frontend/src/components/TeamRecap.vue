@@ -143,8 +143,20 @@
                 </div>
                 <div class="time-info">
                   <span v-if="timeData.buyin" class="time-buyin">{{ formatBuyIn(timeData.buyin) }}</span>
-                  <span v-if="timeData.levels && timeData.levels !== '-'" class="time-levels">{{ timeData.levels }}</span>
+                  <span v-if="timeData.day" class="day-badge-small">Day {{ timeData.day }}</span>
+                  <span v-else-if="timeData.isRestart" class="restart-badge-small">Restart</span>
                 </div>
+              </div>
+              <div class="time-structure">
+                <span v-if="timeData.structureChips" class="structure-tag chips">
+                  <i class="pi pi-circle-fill"></i> {{ timeData.structureChips }}
+                </span>
+                <span v-if="timeData.structureLevels" class="structure-tag levels">
+                  <i class="pi pi-clock"></i> {{ timeData.structureLevels }}
+                </span>
+                <span v-else-if="timeData.levels && timeData.levels !== '-'" class="structure-tag levels">
+                  <i class="pi pi-clock"></i> {{ timeData.levels }}
+                </span>
               </div>
               <div class="time-right">
                 <div class="time-users">
@@ -435,7 +447,12 @@ const teamByDay = computed(() => {
       grouped[date].casinos[casino].times[time] = {
         users: [],
         buyin: tournament.buyin,
-        levels: tournament.levels
+        levels: tournament.levels,
+        structureChips: tournament.structureChips,
+        structureLevels: tournament.structureLevels,
+        structureGuarantee: tournament.structureGuarantee,
+        day: tournament.day,
+        isRestart: tournament.isRestart
       };
     }
 
@@ -1175,6 +1192,57 @@ onMounted(() => {
 .time-info { display: flex; align-items: center; gap: 12px; }
 .time-buyin { color: #22c55e; font-weight: 600; font-size: 0.9375rem; }
 .time-levels { color: var(--text-secondary, #94a3b8); font-size: 0.8125rem; padding: 2px 8px; background: var(--bg-primary, #0f172a); border-radius: 4px; }
+
+.time-structure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.structure-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.structure-tag i {
+  font-size: 0.5rem;
+}
+
+.structure-tag.chips {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.structure-tag.levels {
+  background: var(--bg-primary, #0f172a);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.day-badge-small {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+.restart-badge-small {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
 
 .time-right {
   display: flex;

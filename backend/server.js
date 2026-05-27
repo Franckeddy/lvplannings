@@ -78,7 +78,16 @@ app.delete('/api/users/:id', async (req, res) => {
 app.get('/api/users/:userId/tournaments', async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT id, user_id, date, time, casino, buyin, levels, user_note, scraped_tournament_id, name, day, is_restart as "isRestart" FROM tournaments WHERE user_id = $1 ORDER BY date, time',
+      `SELECT 
+        t.id, t.user_id, t.date, t.time, t.casino, t.buyin, t.levels, 
+        t.user_note, t.scraped_tournament_id, t.name, t.day, t.is_restart as "isRestart",
+        st.structure_chips as "structureChips",
+        st.structure_levels as "structureLevels",
+        st.structure_guarantee as "structureGuarantee"
+      FROM tournaments t
+      LEFT JOIN scraped_tournaments st ON t.scraped_tournament_id = st.id
+      WHERE t.user_id = $1 
+      ORDER BY t.date, t.time`,
       [req.params.userId]
     );
     res.json(result.rows);

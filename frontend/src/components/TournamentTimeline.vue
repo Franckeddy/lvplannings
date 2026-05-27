@@ -70,7 +70,15 @@
 
           <div class="tournament-card-header">
             <div class="tournament-time">{{ tournament.displayTime }}</div>
-            <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
+            <div class="tournament-badges">
+              <div v-if="tournament.day" class="day-badge-tag">
+                Day {{ tournament.day }}
+              </div>
+              <div v-else-if="tournament.isRestart" class="restart-badge-tag">
+                Restart
+              </div>
+              <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
+            </div>
           </div>
 
           <div class="tournament-card-body">
@@ -90,15 +98,14 @@
               <div class="casino-name">{{ tournament.casino }}</div>
             </div>
 
-            <div v-if="tournament.levels" class="tournament-levels">
-              <i class="pi pi-clock"></i>
-              {{ tournament.levels }}
-            </div>
-
             <div v-if="hasStructureInfo(tournament)" class="tournament-structure">
-              <div v-if="tournament.structureChips" class="structure-tag">
+              <div v-if="tournament.structureChips" class="structure-tag chips">
                 <i class="pi pi-circle-fill"></i>
                 {{ tournament.structureChips }}
+              </div>
+              <div v-if="tournament.structureLevels" class="structure-tag levels">
+                <i class="pi pi-clock"></i>
+                {{ tournament.structureLevels }}
               </div>
               <div v-if="tournament.structureGuarantee" class="structure-tag guarantee">
                 <i class="pi pi-star-fill"></i>
@@ -853,6 +860,16 @@ onMounted(async () => {
 
 .structure-tag i {
   font-size: 0.625rem;
+}
+
+.structure-tag.chips {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.structure-tag.levels {
+  background: var(--bg-primary, #0f172a);
+  color: var(--text-secondary, #94a3b8);
 }
 
 .structure-tag.guarantee {

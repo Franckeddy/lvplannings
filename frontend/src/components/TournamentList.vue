@@ -162,10 +162,24 @@
                     </div>
                   </div>
                   <span class="casino-name">{{ tournament.casino }}</span>
+                  <span v-if="tournament.day" class="day-badge-small">Day {{ tournament.day }}</span>
+                  <span v-else-if="tournament.isRestart" class="restart-badge-small">Restart</span>
                 </div>
 
-                <div v-if="tournament.levels && tournament.levels !== '-'" class="tournament-levels">
-                  {{ tournament.levels }}
+                <!-- Structure info: chips et niveaux -->
+                <div class="tournament-structure-info">
+                  <div v-if="tournament.structureChips" class="structure-tag chips">
+                    <i class="pi pi-circle-fill"></i>
+                    {{ tournament.structureChips }}
+                  </div>
+                  <div v-if="tournament.structureLevels" class="structure-tag levels">
+                    <i class="pi pi-clock"></i>
+                    {{ tournament.structureLevels }}
+                  </div>
+                  <div v-else-if="tournament.levels && tournament.levels !== '-'" class="structure-tag levels">
+                    <i class="pi pi-clock"></i>
+                    {{ tournament.levels }}
+                  </div>
                 </div>
               </div>
 
@@ -1251,7 +1265,38 @@ const deleteTournament = async () => {
   letter-spacing: 0.025em;
 }
 
-.tournament-levels {
+.tournament-structure-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.structure-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.structure-tag i {
+  font-size: 0.5rem;
+}
+
+.structure-tag.chips {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.structure-tag.levels {
+  background: var(--bg-primary, #0f172a);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.tournament-buyin {
   color: var(--text-secondary, #94a3b8);
   font-size: 0.8125rem;
   padding: 4px 10px;
