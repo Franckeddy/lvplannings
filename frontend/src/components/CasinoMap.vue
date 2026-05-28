@@ -12,10 +12,6 @@
 
       <!-- Légende -->
       <div class="map-legend">
-        <div class="legend-title">
-          <i class="pi pi-map-marker"></i>
-          {{ casinos.length }} Casinos de Poker
-        </div>
         <div class="legend-actions">
           <Button
             icon="pi pi-refresh"
@@ -79,6 +75,14 @@ let markers = [];
 // Coordonnées du centre de Las Vegas (vue globale)
 const LAS_VEGAS_CENTER = [36.10, -115.18];
 const DEFAULT_ZOOM = 11;
+
+// Adresse de la maison (point de départ pour les itinéraires)
+const HOME_LOCATION = {
+  name: "Maison",
+  address: "5111 Blue Onion Cir, North Las Vegas, NV 89031",
+  lat: 36.2693,
+  lng: -115.1241
+};
 
 // Liste des casinos de poker à Las Vegas avec leurs coordonnées
 const casinos = ref([
@@ -292,6 +296,24 @@ const createCustomIcon = (casino) => {
   });
 };
 
+// Créer l'icône de la maison avec image personnalisée
+const createHomeIcon = () => {
+  return L.icon({
+    iconUrl: '/home-icon.png',
+    iconSize: [48, 48],
+    iconAnchor: [24, 48],
+    popupAnchor: [0, -48],
+    className: 'home-marker-img'
+  });
+};
+
+// Générer le lien Google Maps pour l'itinéraire
+const getDirectionsUrl = (casino) => {
+  const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
+  const destination = `${casino.lat},${casino.lng}`;
+  return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+};
+
 // Initialiser la carte
 const initMap = async () => {
   await nextTick();
@@ -315,6 +337,27 @@ const initMap = async () => {
   // Créer un groupe pour les bounds
   const bounds = L.latLngBounds();
 
+  // Ajouter le marqueur de la maison
+  const homeMarker = L.marker([HOME_LOCATION.lat, HOME_LOCATION.lng], {
+    icon: createHomeIcon()
+  });
+
+  const homePopupContent = `
+    <div class="casino-popup home-popup">
+      <h3>🏠 ${HOME_LOCATION.name}</h3>
+      <p class="popup-address"><i class="pi pi-map-marker"></i> ${HOME_LOCATION.address}</p>
+      <p class="popup-desc">Point de départ pour les itinéraires</p>
+    </div>
+  `;
+
+  homeMarker.bindPopup(homePopupContent, {
+    maxWidth: 280,
+    className: 'casino-popup-container home-popup-container'
+  });
+
+  homeMarker.addTo(map);
+  bounds.extend([HOME_LOCATION.lat, HOME_LOCATION.lng]);
+
   // Ajouter les marqueurs pour chaque casino
   casinos.value.forEach(casino => {
     const marker = L.marker([casino.lat, casino.lng], {
@@ -324,18 +367,23 @@ const initMap = async () => {
     // Ajouter au bounds
     bounds.extend([casino.lat, casino.lng]);
 
-    // Popup avec les informations du casino
+    const directionsUrl = getDirectionsUrl(casino);
+
+    // Popup avec les informations du casino et bouton itinéraire
     const popupContent = `
       <div class="casino-popup">
         <h3>${casino.name}</h3>
         <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
         <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
         <p class="popup-desc">${casino.description}</p>
+        <a href="${directionsUrl}" target="_blank" class="directions-btn">
+          <i class="pi pi-directions"></i> Itinéraire depuis la maison
+        </a>
       </div>
     `;
 
     marker.bindPopup(popupContent, {
-      maxWidth: 280,
+      maxWidth: 300,
       className: 'casino-popup-container'
     });
 
@@ -484,6 +532,46 @@ onUnmounted(() => {
   font-size: 0.75rem;
   opacity: 0.8;
 }
+
+/* Bouton itinéraire */
+.casino-popup .directions-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.casino-popup .directions-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.casino-popup .directions-btn i {
+  font-size: 1rem;
+  opacity: 1;
+}
+
+/* Marqueur maison avec image */
+.home-marker-img {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  border-radius: 50%;
+}
+
+/* Popup maison */
+.home-popup h3 {
+  color: #ef4444 !important;
+}
 </style>
 
 <style scoped>
@@ -508,7 +596,7 @@ onUnmounted(() => {
 .map-legend {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
   background: rgba(30, 41, 59, 0.95);
   backdrop-filter: blur(8px);
   border-radius: 10px;
@@ -534,11 +622,11 @@ onUnmounted(() => {
   color: #818cf8;
 }
 
-/* Liste mobile - flottant en bas à gauche */
+/* Liste casinos - flottant à droite */
 .casino-list-mobile {
   position: absolute;
   bottom: 12px;
-  left: 12px;
+  right: 12px;
   width: fit-content;
   max-width: 280px;
   background: rgba(30, 41, 59, 0.95);
@@ -664,7 +752,7 @@ onUnmounted(() => {
     gap: 8px;
     padding: 8px 12px;
     top: 8px;
-    left: 8px;
+    right: 8px;
   }
 
   .legend-title {
@@ -672,8 +760,9 @@ onUnmounted(() => {
   }
 
   .casino-list-mobile {
-    bottom: 8px;
-    left: 8px;
+    top: 85px;
+    bottom: auto;
+    right: 8px;
     max-width: 240px;
   }
 
@@ -700,8 +789,7 @@ onUnmounted(() => {
 
   .map-legend {
     top: 6px;
-    left: 6px;
-    right: auto;
+    right: 6px;
     padding: 6px 10px;
     gap: 6px;
   }
@@ -720,8 +808,9 @@ onUnmounted(() => {
   }
 
   .casino-list-mobile {
-    bottom: 6px;
-    left: 6px;
+    top: 70px;
+    bottom: auto;
+    right: 6px;
     max-width: 180px;
   }
 
