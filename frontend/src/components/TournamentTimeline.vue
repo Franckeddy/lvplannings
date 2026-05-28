@@ -75,24 +75,22 @@
             <i class="pi pi-comment"></i>
           </div>
 
-          <div class="tournament-card-header">
-            <div class="tournament-time">{{ tournament.displayTime }}</div>
-            <div class="tournament-badges">
-              <div v-if="tournament.isManual" class="manual-badge-tag">
-                Manuel
+          <!-- Top section: Time + Buy-in + Badges -->
+          <div class="tournament-card-top">
+            <div class="card-top-left">
+              <div class="tournament-time">{{ tournament.displayTime }}</div>
+              <div class="tournament-badges">
+                <div v-if="tournament.isManual" class="manual-badge-tag">Manuel</div>
+                <div v-if="tournament.day" class="day-badge-tag">Day {{ tournament.day }}</div>
+                <div v-else-if="tournament.isRestart" class="restart-badge-tag">Restart</div>
               </div>
-              <div v-if="tournament.day" class="day-badge-tag">
-                Day {{ tournament.day }}
-              </div>
-              <div v-else-if="tournament.isRestart" class="restart-badge-tag">
-                Restart
-              </div>
-              <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
             </div>
+            <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
           </div>
 
+          <!-- Casino section -->
           <div class="tournament-card-body">
-            <div class="casino-info">
+            <div class="casino-section">
               <div class="casino-logo-wrapper">
                 <img
                   v-if="getCasinoLogo(tournament.casino)"
@@ -119,6 +117,7 @@
               </div>
             </div>
 
+            <!-- Structure info -->
             <div v-if="hasStructureInfo(tournament)" class="tournament-structure">
               <div v-if="tournament.structureChips" class="structure-tag chips">
                 <i class="pi pi-circle-fill"></i>
@@ -169,29 +168,27 @@
                 </div>
               </div>
             </div>
-
           </div>
 
+          <!-- Footer actions -->
           <div class="tournament-card-footer">
-            <div class="footer-buttons">
-              <Button
-                label="Ajouter au planning"
-                icon="pi pi-plus"
-                @click="selectTournament(tournament)"
-                class="add-button"
-                size="small"
-              />
-              <Button
-                v-if="tournament.isManual"
-                icon="pi pi-trash"
-                @click="deleteManualTournament(tournament)"
-                class="delete-button"
-                size="small"
-                severity="danger"
-                text
-                v-tooltip.top="'Supprimer ce tournoi'"
-              />
-            </div>
+            <Button
+              label="Ajouter au planning"
+              icon="pi pi-plus"
+              @click="selectTournament(tournament)"
+              class="add-button"
+              size="small"
+            />
+            <Button
+              v-if="tournament.isManual"
+              icon="pi pi-trash"
+              @click="deleteManualTournament(tournament)"
+              class="delete-button"
+              size="small"
+              severity="danger"
+              text
+              v-tooltip.top="'Supprimer ce tournoi'"
+            />
           </div>
         </div>
       </div>
@@ -1157,29 +1154,32 @@ onUnmounted(() => {
 /* Grille des tournois */
 .tournaments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
 }
 
 .tournament-card {
   background: var(--bg-secondary, #1e293b);
   border: 1px solid var(--border-color, #334155);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .tournament-card:hover {
   border-color: var(--accent-color, #818cf8);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.12), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 /* Indicateur de notes dans le coin */
 .enrolled-notes-indicator {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   width: 28px;
   height: 28px;
   background: rgba(99, 102, 241, 0.9);
@@ -1203,85 +1203,102 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.6);
 }
 
-.tournament-card-header {
+/* Top section */
+.tournament-card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(99, 102, 241, 0.08));
+  border-bottom: 1px solid var(--border-color, #334155);
 }
 
-.tournament-time {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.tournament-badges {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.day-badge-tag {
-  background: rgba(245, 158, 11, 0.9);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.restart-badge-tag {
-  background: rgba(239, 68, 68, 0.9);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.manual-badge-tag {
-  background: rgba(16, 185, 129, 0.9);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.tournament-buyin {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.tournament-card-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.casino-info {
+.card-top-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.casino-logo-wrapper {
-  width: 48px;
-  height: 48px;
+.tournament-time {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.tournament-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.day-badge-tag {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.restart-badge-tag {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.manual-badge-tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tournament-buyin {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 8px 16px;
   border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+}
+
+/* Card body */
+.tournament-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.casino-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.casino-logo-wrapper {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
   border: 2px solid var(--border-color, #334155);
   overflow: hidden;
   display: flex;
@@ -1289,6 +1306,7 @@ onUnmounted(() => {
   justify-content: center;
   background: var(--bg-primary, #0f172a);
   padding: 4px;
+  flex-shrink: 0;
 }
 
 .casino-logo {
@@ -1307,7 +1325,7 @@ onUnmounted(() => {
   color: white;
   font-weight: 700;
   font-size: 0.875rem;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .casino-name-wrapper {
@@ -1319,7 +1337,8 @@ onUnmounted(() => {
 .casino-name {
   color: var(--text-primary, #f1f5f9);
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
+  line-height: 1.3;
 }
 
 .casino-drive-time {
@@ -1435,14 +1454,18 @@ onUnmounted(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #334155);
 }
 
 .structure-tag {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  background: var(--bg-primary, #0f172a);
+  padding: 5px 10px;
+  background: transparent;
   border-radius: 6px;
   color: var(--text-secondary, #94a3b8);
   font-size: 0.8125rem;
@@ -1450,21 +1473,26 @@ onUnmounted(() => {
 }
 
 .structure-tag i {
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
 }
 
 .structure-tag.chips {
-  background: rgba(99, 102, 241, 0.15);
-  color: #818cf8;
+  color: #a5b4fc;
+}
+
+.structure-tag.chips i {
+  color: #6366f1;
 }
 
 .structure-tag.levels {
-  background: var(--bg-primary, #0f172a);
   color: var(--text-secondary, #94a3b8);
 }
 
+.structure-tag.levels i {
+  color: #64748b;
+}
+
 .structure-tag.guarantee {
-  background: rgba(245, 158, 11, 0.15);
   color: #fbbf24;
 }
 
@@ -1474,9 +1502,11 @@ onUnmounted(() => {
 
 /* Enrolled users */
 .enrolled-users {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border-color, #334155);
+  margin-top: 4px;
+  padding: 12px 14px;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 .enrolled-label {
@@ -1568,23 +1598,23 @@ onUnmounted(() => {
 }
 
 .tournament-card-footer {
-  padding: 16px;
+  padding: 14px 20px;
   border-top: 1px solid var(--border-color, #334155);
-}
-
-.footer-buttons {
   display: flex;
   align-items: center;
   gap: 8px;
+  background: rgba(15, 23, 42, 0.3);
 }
 
 .add-button {
   flex: 1;
   justify-content: center;
+  border-radius: 10px !important;
 }
 
 .delete-button {
   flex-shrink: 0;
+  border-radius: 10px !important;
 }
 
 /* Dialog */
@@ -1771,26 +1801,36 @@ onUnmounted(() => {
     font-size: 1.5rem;
   }
 
-  .tournament-card-header {
-    padding: 14px;
+  .tournament-card-header,
+  .tournament-card-top {
+    padding: 14px 16px;
   }
 
   .tournament-time {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
   }
 
   .tournament-buyin {
-    padding: 5px 12px;
-    font-size: 0.9375rem;
+    padding: 6px 12px;
+    font-size: 1rem;
   }
 
   .tournament-card-body {
     padding: 16px;
-    gap: 14px;
+    gap: 12px;
+  }
+
+  .casino-section {
+    gap: 12px;
+  }
+
+  .casino-logo-wrapper {
+    width: 42px;
+    height: 42px;
   }
 
   .casino-name {
-    font-size: 1rem;
+    font-size: 0.9375rem;
   }
 
   .route-map-container {
@@ -1935,8 +1975,9 @@ onUnmounted(() => {
     font-size: 2rem;
   }
 
-  .tournament-card-header {
-    padding: 12px;
+  .tournament-card-header,
+  .tournament-card-top {
+    padding: 12px 14px;
     flex-wrap: wrap;
     gap: 8px;
   }
@@ -1947,19 +1988,19 @@ onUnmounted(() => {
   }
 
   .tournament-time {
-    font-size: 1.125rem;
+    font-size: 1.375rem;
   }
 
   .tournament-buyin {
-    padding: 4px 10px;
-    font-size: 0.875rem;
+    padding: 6px 12px;
+    font-size: 0.9375rem;
   }
 
   .day-badge-tag,
   .restart-badge-tag,
   .manual-badge-tag {
     padding: 3px 8px;
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
   }
 
   .tournament-card-body {
@@ -1967,8 +2008,31 @@ onUnmounted(() => {
     gap: 12px;
   }
 
-  .footer-buttons {
-    flex-direction: row;
+  .casino-section {
+    gap: 10px;
+  }
+
+  .casino-logo-wrapper {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .casino-name {
+    font-size: 0.875rem;
+  }
+
+  .tournament-structure {
+    padding: 10px 12px;
+  }
+
+  .structure-tag {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .tournament-card-footer {
+    padding: 12px 14px;
   }
 
   .add-button {
@@ -2000,11 +2064,17 @@ onUnmounted(() => {
 }
 
 @media (max-width: 360px) {
-  .tournament-badges {
-    justify-content: flex-end;
+  .tournament-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
-  .footer-buttons {
+  .tournament-buyin {
+    align-self: flex-end;
+  }
+
+  .tournament-card-footer {
     flex-direction: column;
     gap: 8px;
   }
