@@ -161,7 +161,14 @@
                       {{ getCasinoInitials(tournament.casino) }}
                     </div>
                   </div>
-                  <span class="casino-name">{{ tournament.casino }}</span>
+                  <div class="casino-name-wrapper">
+                    <span class="casino-name">{{ tournament.casino }}</span>
+                    <span v-if="getRouteTime(tournament.casino)" class="casino-drive-time">
+                      <i class="pi pi-car"></i>
+                      {{ getRouteTime(tournament.casino).durationMin }} min
+                      <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
+                    </span>
+                  </div>
                   <span v-if="tournament.day" class="day-badge-small">Day {{ tournament.day }}</span>
                   <span v-else-if="tournament.isRestart" class="restart-badge-small">Restart</span>
                 </div>
@@ -405,7 +412,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
@@ -415,6 +422,7 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
+import { useCasinoRoutes } from '../composables/useCasinoRoutes';
 
 // Configuration API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -448,7 +456,35 @@ const newUserName = ref('');
 const creatingUser = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
+const { getRouteForCasino } = useCasinoRoutes();
 const toast = useToast();
+const casinoRouteTimes = ref({});
+
+// Charger les temps de trajet pour les tournois
+const loadRouteTimes = async () => {
+  if (!props.tournaments) return;
+  const uniqueCasinos = [...new Set(props.tournaments.map(t => t.casino))];
+  for (const casinoName of uniqueCasinos) {
+    if (!casinoRouteTimes.value[casinoName]) {
+      const route = await getRouteForCasino(casinoName);
+      if (route) {
+        casinoRouteTimes.value[casinoName] = route;
+      }
+    }
+  }
+};
+
+// Obtenir le temps de trajet pour un casino
+const getRouteTime = (casinoName) => {
+  return casinoRouteTimes.value[casinoName] || null;
+};
+
+// Charger les routes quand les tournois changent
+watch(() => props.tournaments, (newTournaments) => {
+  if (newTournaments && newTournaments.length > 0) {
+    loadRouteTimes();
+  }
+}, { immediate: true });
 
 // Charger les utilisateurs
 const loadUsers = async () => {
@@ -1237,10 +1273,35 @@ const deleteTournament = async () => {
   border-radius: 4px;
 }
 
+.casino-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .casino-name {
   color: var(--text-primary, #f1f5f9);
   font-weight: 500;
   font-size: 0.9375rem;
+}
+
+.casino-drive-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent-color, #818cf8);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.casino-drive-time i {
+  font-size: 0.6875rem;
+}
+
+.casino-drive-time .drive-distance {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.6875rem;
+  font-weight: 400;
 }
 
 .day-badge-small {

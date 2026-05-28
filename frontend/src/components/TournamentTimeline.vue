@@ -105,7 +105,14 @@
                   {{ getCasinoInitials(tournament.casino) }}
                 </div>
               </div>
-              <div class="casino-name">{{ tournament.casino }}</div>
+              <div class="casino-name-wrapper">
+                <div class="casino-name">{{ tournament.casino }}</div>
+                <div v-if="getRouteTime(tournament.casino)" class="casino-drive-time">
+                  <i class="pi pi-car"></i>
+                  <span>{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                  <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
+                </div>
+              </div>
             </div>
 
             <div v-if="hasStructureInfo(tournament)" class="tournament-structure">
@@ -350,11 +357,16 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
+import { useCasinoRoutes } from '../composables/useCasinoRoutes';
 
 const emit = defineEmits(['tournament-added']);
 
 // Configuration API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// Casino routes
+const { getRouteForCasino } = useCasinoRoutes();
+const casinoRouteTimes = ref({}); // cache: { casinoName: { durationMin, distanceMiles } }
 
 // État
 const loading = ref(false);
@@ -561,6 +573,26 @@ const loadAllUserTournaments = async () => {
 
 const openDay = (day) => {
   selectedDay.value = day;
+  // Charger les temps de trajet pour les casinos de ce jour
+  loadRouteTimes(day.tournaments);
+};
+
+// Charger les temps de trajet pour les tournois affichés
+const loadRouteTimes = async (tournaments) => {
+  const uniqueCasinos = [...new Set(tournaments.map(t => t.casino))];
+  for (const casinoName of uniqueCasinos) {
+    if (!casinoRouteTimes.value[casinoName]) {
+      const route = await getRouteForCasino(casinoName);
+      if (route) {
+        casinoRouteTimes.value[casinoName] = route;
+      }
+    }
+  }
+};
+
+// Obtenir le temps de trajet pour un casino
+const getRouteTime = (casinoName) => {
+  return casinoRouteTimes.value[casinoName] || null;
 };
 
 const closeDay = () => {
@@ -1116,10 +1148,35 @@ onMounted(async () => {
   border-radius: 6px;
 }
 
+.casino-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .casino-name {
   color: var(--text-primary, #f1f5f9);
   font-weight: 600;
   font-size: 1.125rem;
+}
+
+.casino-drive-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-color, #818cf8);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.casino-drive-time i {
+  font-size: 0.75rem;
+}
+
+.casino-drive-time .drive-distance {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
 .tournament-levels {

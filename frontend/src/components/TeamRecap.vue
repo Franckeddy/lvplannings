@@ -115,6 +115,11 @@
               <div class="casino-details">
                 <span class="casino-name">{{ casino }}</span>
                 <span class="casino-count">{{ casinoData.users.length }} personne{{ casinoData.users.length > 1 ? 's' : '' }}</span>
+                <span v-if="getRouteTime(casino)" class="casino-drive-time">
+                  <i class="pi pi-car"></i>
+                  {{ getRouteTime(casino).durationMin }} min
+                  <span class="drive-distance">({{ getRouteTime(casino).distanceMiles }} mi)</span>
+                </span>
               </div>
             </div>
 
@@ -357,6 +362,7 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
+import { useCasinoRoutes } from '../composables/useCasinoRoutes';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -377,6 +383,10 @@ const showNoteDialog = ref(false);
 const tournamentToEditNote = ref(null);
 const editingNote = ref('');
 const savingNote = ref(false);
+
+// Casino routes
+const { getRouteForCasino } = useCasinoRoutes();
+const casinoRouteTimes = ref({});
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -410,6 +420,28 @@ const getUserNameById = (userId) => {
 
 const selectDate = (date) => {
   selectedDate.value = date;
+  // Charger les temps de trajet pour les casinos de ce jour
+  loadRouteTimes(date);
+};
+
+// Charger les temps de trajet pour les casinos d'un jour
+const loadRouteTimes = async (date) => {
+  const dayData = teamByDay.value[date];
+  if (!dayData) return;
+  const casinoNames = Object.keys(dayData.casinos);
+  for (const casinoName of casinoNames) {
+    if (!casinoRouteTimes.value[casinoName]) {
+      const route = await getRouteForCasino(casinoName);
+      if (route) {
+        casinoRouteTimes.value[casinoName] = route;
+      }
+    }
+  }
+};
+
+// Obtenir le temps de trajet pour un casino
+const getRouteTime = (casinoName) => {
+  return casinoRouteTimes.value[casinoName] || null;
 };
 
 const availableUsersToJoin = computed(() => {
@@ -1127,6 +1159,25 @@ onMounted(() => {
 .casino-details { display: flex; flex-direction: column; gap: 2px; }
 .casino-name { color: var(--text-primary, #f1f5f9); font-weight: 600; font-size: 1.0625rem; }
 .casino-count { color: var(--text-secondary, #94a3b8); font-size: 0.8125rem; }
+
+.casino-drive-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-color, #818cf8);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.casino-drive-time i {
+  font-size: 0.6875rem;
+}
+
+.casino-drive-time .drive-distance {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.6875rem;
+  font-weight: 400;
+}
 
 /* Notes indicator in casino header */
 .casino-notes-indicator {
