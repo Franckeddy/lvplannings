@@ -560,11 +560,35 @@ body {
   padding: 2rem;
   transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 100vh;
-  background: #0f172a;
+  position: relative;
+  background-color: #0f172a;
+}
+
+.main-content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  bottom: 0;
+  background: url('/home-icon.png') center center no-repeat;
+  background-size: cover;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.main-content > * {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar.collapsed ~ .main-content {
   margin-left: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed ~ .main-content::before {
+  left: var(--sidebar-collapsed-width);
 }
 
 .main-tabs {
