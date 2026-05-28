@@ -111,6 +111,10 @@
                   <i class="pi pi-car"></i>
                   <span>{{ getRouteTime(tournament.casino).durationMin }} min</span>
                   <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
+                  <button class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
+                    <i class="pi pi-map"></i>
+                    <span class="map-link-text">Maps</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -341,11 +345,35 @@
         />
       </template>
     </Dialog>
+
+    <!-- Modale carte itinéraire -->
+    <Dialog
+      v-model:visible="showRouteMapDialog"
+      :header="`Itinéraire vers ${routeMapCasino}`"
+      :modal="true"
+      :style="{ width: '95vw', maxWidth: '900px' }"
+      :breakpoints="{ '768px': '100vw' }"
+      class="route-map-dialog"
+    >
+      <div class="route-map-container">
+        <div ref="routeMapContainer" class="route-leaflet-map"></div>
+        <div v-if="routeMapInfo" class="route-map-info-bar">
+          <div class="route-map-stat">
+            <i class="pi pi-car"></i>
+            <span>{{ routeMapInfo.durationMin }} min</span>
+          </div>
+          <div class="route-map-stat">
+            <i class="pi pi-map"></i>
+            <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
+          </div>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
@@ -358,6 +386,10 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 const emit = defineEmits(['tournament-added']);
 
@@ -365,8 +397,16 @@ const emit = defineEmits(['tournament-added']);
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 // Casino routes
-const { getRouteForCasino } = useCasinoRoutes();
+const { getRouteForCasino, getCasinoCoords, HOME_LOCATION } = useCasinoRoutes();
 const casinoRouteTimes = ref({}); // cache: { casinoName: { durationMin, distanceMiles } }
+
+// Route map modal
+const showRouteMapDialog = ref(false);
+const routeMapCasino = ref('');
+const routeMapContainer = ref(null);
+const routeMapInfo = ref(null);
+let routeMap = null;
+let routeMapControl = null;
 
 // État
 const loading = ref(false);
@@ -830,11 +870,133 @@ const hasStructureInfo = (tournament) => {
   return tournament.structureChips || tournament.structureLevels || tournament.structureGuarantee;
 };
 
+// Ouvrir la modale de carte avec itinéraire
+const openRouteMap = async (casinoName) => {
+  routeMapCasino.value = casinoName;
+  routeMapInfo.value = casinoRouteTimes.value[casinoName] || null;
+  showRouteMapDialog.value = true;
+
+  await nextTick();
+  setTimeout(() => {
+    initRouteMap(casinoName);
+  }, 200);
+};
+
+// Initialiser la carte d'itinéraire
+const initRouteMap = async (casinoName) => {
+  if (!routeMapContainer.value) return;
+
+  // Nettoyer la carte précédente
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+  }
+
+  const casinoCoords = await getCasinoCoords(casinoName);
+  if (!casinoCoords) return;
+
+  // Créer la carte
+  routeMap = L.map(routeMapContainer.value, {
+    center: [36.15, -115.15],
+    zoom: 12,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19
+  }).addTo(routeMap);
+
+  // Marqueur maison
+  const homeIcon = L.icon({
+    iconUrl: '/home-icon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+    className: 'home-marker-img'
+  });
+
+  L.marker([HOME_LOCATION.lat, HOME_LOCATION.lng], { icon: homeIcon })
+    .addTo(routeMap)
+    .bindPopup('<b>🏠 Maison</b>');
+
+  // Marqueur casino
+  const casinoIcon = L.divIcon({
+    className: 'custom-casino-marker',
+    html: `<div class="marker-container" style="background: #6366f1"><span class="marker-initial">${casinoName.charAt(0)}</span></div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
+
+  L.marker([casinoCoords.lat, casinoCoords.lng], { icon: casinoIcon })
+    .addTo(routeMap)
+    .bindPopup(`<b>${casinoName}</b>`);
+
+  // Ajouter l'itinéraire
+  routeMapControl = L.Routing.control({
+    waypoints: [
+      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(casinoCoords.lat, casinoCoords.lng)
+    ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives: false,
+    createMarker: () => null,
+    lineOptions: {
+      styles: [
+        { color: '#6366f1', opacity: 0.9, weight: 6 },
+        { color: '#818cf8', opacity: 0.4, weight: 12 }
+      ]
+    },
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
+      profile: 'driving'
+    })
+  }).addTo(routeMap);
+
+  routeMapControl.on('routesfound', (e) => {
+    const route = e.routes[0];
+    routeMapInfo.value = {
+      durationMin: Math.round(route.summary.totalTime / 60),
+      distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
+      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1)
+    };
+  });
+
+  // Fit bounds
+  setTimeout(() => {
+    if (routeMap) {
+      routeMap.invalidateSize();
+    }
+  }, 300);
+};
+
+// Nettoyer la carte quand la modale se ferme
+watch(showRouteMapDialog, (val) => {
+  if (!val && routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+    routeMapInfo.value = null;
+  }
+});
+
 // Lifecycle
 onMounted(async () => {
   loadTimeline();
   await loadUsers();
   await loadAllUserTournaments();
+});
+
+onUnmounted(() => {
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+  }
 });
 </script>
 
@@ -1177,6 +1339,83 @@ onMounted(async () => {
   color: var(--text-secondary, #94a3b8);
   font-size: 0.75rem;
   font-weight: 400;
+}
+
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  color: #818cf8;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.map-link-btn i {
+  font-size: 0.625rem;
+}
+
+.map-link-btn:hover {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  transform: scale(1.05);
+}
+
+.map-link-text {
+  display: inline;
+}
+
+/* Route map modal */
+.route-map-container {
+  width: 100%;
+  height: 55vh;
+  min-height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #0f172a;
+}
+
+.route-leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+.route-map-info-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid #6366f1;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  z-index: 1000;
+}
+
+.route-map-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.route-map-stat i {
+  color: #818cf8;
+  font-size: 0.875rem;
 }
 
 .tournament-levels {
@@ -1554,6 +1793,26 @@ onMounted(async () => {
     font-size: 1rem;
   }
 
+  .route-map-container {
+    height: 50vh;
+    min-height: 280px;
+  }
+
+  .route-map-info-bar {
+    bottom: auto;
+    top: 12px;
+    gap: 14px;
+    padding: 8px 16px;
+  }
+
+  .route-map-stat {
+    font-size: 0.8125rem;
+  }
+
+  .map-link-text {
+    display: none;
+  }
+
   /* Show mobile notes, hide desktop tooltips */
   .mobile-notes {
     display: block;
@@ -1767,6 +2026,29 @@ onMounted(async () => {
     font-size: 0.75rem;
     padding: 2px 8px;
   }
+}
+
+/* Route map dialog */
+:deep(.route-map-dialog .p-dialog-content) {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+:deep(.route-map-dialog .p-dialog-header) {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0.75rem 1rem;
+}
+
+:deep(.route-map-dialog .p-dialog-title) {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Cacher le panneau d'instructions de Leaflet Routing Machine */
+:deep(.leaflet-routing-container) {
+  display: none !important;
 }
 
 /* Dialog responsive */
