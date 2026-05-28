@@ -1841,8 +1841,12 @@ onUnmounted(() => {
   .route-map-info-bar {
     bottom: auto;
     top: 12px;
-    gap: 14px;
-    padding: 8px 16px;
+    left: 12px;
+    transform: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
   }
 
   .route-map-stat {
