@@ -347,6 +347,22 @@ body {
   min-height: 100vh;
   display: flex;
   transition: background-color 0.3s ease;
+  position: relative;
+}
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)),
+    url('/home-icon.png') center center no-repeat;
+  background-size: cover, cover;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Sidebar Styles */
@@ -356,7 +372,9 @@ body {
   top: 0;
   height: 100vh;
   width: var(--sidebar-width);
-  background: var(--sidebar-bg);
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-right: 1px solid var(--border-color);
   box-shadow: var(--sidebar-shadow);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -561,25 +579,6 @@ body {
   transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 100vh;
   position: relative;
-  background-color: #0f172a;
-}
-
-.main-content::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: var(--sidebar-width);
-  right: 0;
-  bottom: 0;
-  background: url('/home-icon.png') center center no-repeat;
-  background-size: cover;
-  opacity: 0.15;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.main-content > * {
-  position: relative;
   z-index: 1;
 }
 
@@ -587,9 +586,6 @@ body {
   margin-left: var(--sidebar-collapsed-width);
 }
 
-.sidebar.collapsed ~ .main-content::before {
-  left: var(--sidebar-collapsed-width);
-}
 
 .main-tabs {
   background: var(--bg-secondary);
