@@ -31,7 +31,6 @@ async function initializeTables() {
         buyin INTEGER,
         levels TEXT NOT NULL,
         user_note TEXT,
-        scraped_tournament_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
 
@@ -69,37 +68,21 @@ async function initializeTables() {
 // Migration pour ajouter la colonne user_note
 async function migrateUserNoteColumn(client) {
   try {
-    // Migration user_note
-    const checkUserNote = await client.query(`
+    const checkColumn = await client.query(`
       SELECT column_name 
       FROM information_schema.columns 
       WHERE table_name = 'tournaments' AND column_name = 'user_note'
     `);
 
-    if (checkUserNote.rows.length === 0) {
+    if (checkColumn.rows.length === 0) {
       await client.query(`
         ALTER TABLE tournaments 
         ADD COLUMN user_note TEXT
       `);
       console.log('✓ Migration: colonne user_note ajoutée');
     }
-
-    // Migration scraped_tournament_id
-    const checkScrapedId = await client.query(`
-      SELECT column_name 
-      FROM information_schema.columns 
-      WHERE table_name = 'tournaments' AND column_name = 'scraped_tournament_id'
-    `);
-
-    if (checkScrapedId.rows.length === 0) {
-      await client.query(`
-        ALTER TABLE tournaments 
-        ADD COLUMN scraped_tournament_id INTEGER
-      `);
-      console.log('✓ Migration: colonne scraped_tournament_id ajoutée');
-    }
   } catch (error) {
-    console.error('Erreur lors de la migration:', error);
+    console.error('Erreur lors de la migration user_note:', error);
   }
 }
 

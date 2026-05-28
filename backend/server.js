@@ -363,7 +363,8 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
         structure_guarantee as "structureGuarantee",
         name,
         day,
-        is_restart as "isRestart"
+        is_restart as "isRestart",
+        is_manual as "isManual"
       FROM scraped_tournaments
       WHERE 1=1
     `;
@@ -405,6 +406,73 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
 
     res.json(timeline);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST créer un tournoi manuel dans scraped_tournaments
+app.post('/api/scraped-tournaments/manual', async (req, res) => {
+  try {
+    const { date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual } = req.body;
+
+    if (!date || !time || !casino) {
+      return res.status(400).json({
+        error: 'Les champs date, time et casino sont requis'
+      });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO scraped_tournaments 
+        (date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+       RETURNING 
+        id, casino, date, time, 
+        buyin as "buyIn", 
+        levels, 
+        SUBSTRING(time FROM 1 FOR 5) as "displayTime",
+        structure_levels as "structureLevels",
+        structure_chips as "structureChips",
+        is_manual as "isManual"`,
+      [date, time, casino, buyin || null, levels || '-', structure_levels || null, structure_chips || null, is_manual || true]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Erreur création tournoi manuel:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE supprimer un tournoi de scraped_tournaments (uniquement les manuels)
+app.delete('/api/scraped-tournaments/:id', async (req, res) => {
+  try {
+    const tournamentId = req.params.id;
+
+    // Vérifier si c'est un tournoi manuel
+    const checkResult = await pool.query(
+      'SELECT is_manual FROM scraped_tournaments WHERE id = $1',
+      [tournamentId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Tournoi non trouvé' });
+    }
+
+    // Supprimer aussi les références dans la table tournaments des utilisateurs
+    await pool.query(
+      'DELETE FROM tournaments WHERE scraped_tournament_id = $1',
+      [tournamentId]
+    );
+
+    // Supprimer le tournoi
+    await pool.query(
+      'DELETE FROM scraped_tournaments WHERE id = $1',
+      [tournamentId]
+    );
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Erreur suppression tournoi:', error);
     res.status(500).json({ error: error.message });
   }
 });

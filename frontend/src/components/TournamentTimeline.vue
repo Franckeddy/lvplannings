@@ -51,6 +51,13 @@
           <h2>{{ formatDateFull(selectedDay.date) }}</h2>
           <span class="tournament-badge">{{ selectedDay.count }} tournois disponibles</span>
         </div>
+        <Button
+          icon="pi pi-plus"
+          label="Ajouter un tournoi"
+          @click="openManualTournamentDialog"
+          class="add-manual-button"
+          severity="success"
+        />
       </div>
 
       <div class="tournaments-grid">
@@ -71,6 +78,9 @@
           <div class="tournament-card-header">
             <div class="tournament-time">{{ tournament.displayTime }}</div>
             <div class="tournament-badges">
+              <div v-if="tournament.isManual" class="manual-badge-tag">
+                Manuel
+              </div>
               <div v-if="tournament.day" class="day-badge-tag">
                 Day {{ tournament.day }}
               </div>
@@ -152,13 +162,25 @@
           </div>
 
           <div class="tournament-card-footer">
-            <Button
-              label="Ajouter au planning"
-              icon="pi pi-plus"
-              @click="selectTournament(tournament)"
-              class="add-button"
-              size="small"
-            />
+            <div class="footer-buttons">
+              <Button
+                label="Ajouter au planning"
+                icon="pi pi-plus"
+                @click="selectTournament(tournament)"
+                class="add-button"
+                size="small"
+              />
+              <Button
+                v-if="tournament.isManual"
+                icon="pi pi-trash"
+                @click="deleteManualTournament(tournament)"
+                class="delete-button"
+                size="small"
+                severity="danger"
+                text
+                v-tooltip.top="'Supprimer ce tournoi'"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -216,15 +238,114 @@
         />
       </template>
     </Dialog>
+
+    <!-- Dialogue d'ajout manuel de tournoi -->
+    <Dialog
+      v-model:visible="showManualDialog"
+      header="Ajouter un tournoi"
+      :modal="true"
+      :style="{ width: '500px' }"
+      class="add-dialog"
+    >
+      <div class="manual-dialog-content">
+        <div class="manual-date-info">
+          <i class="pi pi-calendar"></i>
+          <span>{{ selectedDay ? formatDateFull(selectedDay.date) : '' }}</span>
+        </div>
+
+        <div class="form-group">
+          <label>Nom du Casino <span class="required">*</span></label>
+          <InputText
+            v-model="manualTournament.casino"
+            placeholder="Ex: Bellagio, Wynn..."
+            class="input-full"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label>Buy-in ($) <span class="required">*</span></label>
+            <InputNumber
+              v-model="manualTournament.buyin"
+              :min="0"
+              placeholder="Ex: 500"
+              class="input-full"
+              mode="currency"
+              currency="USD"
+              locale="en-US"
+            />
+          </div>
+          <div class="form-group half">
+            <label>Heure <span class="required">*</span></label>
+            <DatePicker
+              v-model="manualTournament.timeDate"
+              timeOnly
+              hourFormat="24"
+              class="input-full"
+              placeholder="Sélectionner l'heure"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Niveau (durée en minutes) <span class="required">*</span></label>
+          <InputNumber
+            v-model="manualTournament.levelMinutes"
+            :min="1"
+            :max="120"
+            placeholder="Ex: 20"
+            class="input-full"
+            suffix=" min"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Stack de départ (facultatif)</label>
+          <InputNumber
+            v-model="manualTournament.startingStack"
+            :min="0"
+            placeholder="Ex: 25000"
+            class="input-full"
+            :useGrouping="true"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Note (optionnel)</label>
+          <Textarea
+            v-model="manualTournament.note"
+            rows="2"
+            placeholder="Ajouter une note personnelle..."
+            class="input-full"
+            autoResize
+          />
+        </div>
+      </div>
+
+      <template #footer>
+        <Button label="Annuler" @click="showManualDialog = false" severity="secondary" text />
+        <Button
+          label="Ajouter"
+          @click="addManualTournament"
+          :disabled="!isManualFormValid || addingManual"
+          :loading="addingManual"
+          icon="pi pi-check"
+          severity="success"
+        />
+      </template>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
+import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
+import DatePicker from 'primevue/datepicker';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -246,6 +367,34 @@ const users = ref([]);
 const adding = ref(false);
 const userNote = ref('');
 const allUserTournaments = ref([]);
+
+// État pour l'ajout manuel
+const showManualDialog = ref(false);
+const addingManual = ref(false);
+const manualTournament = ref({
+  casino: '',
+  buyin: null,
+  timeDate: null,
+  levelMinutes: null,
+  startingStack: null,
+  note: ''
+});
+
+// Validation du formulaire manuel
+const isManualFormValid = computed(() => {
+  return manualTournament.value.casino &&
+         manualTournament.value.buyin !== null &&
+         manualTournament.value.timeDate !== null &&
+         manualTournament.value.levelMinutes !== null;
+});
+
+// Formater l'heure depuis Date vers HH:MM
+const formatTimeFromDate = (date) => {
+  if (!date) return '';
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -473,6 +622,141 @@ const addToPlanning = async () => {
     console.error('Erreur lors de l\'ajout du tournoi:', error);
   } finally {
     adding.value = false;
+  }
+};
+
+// Ouvrir la modale d'ajout manuel
+const openManualTournamentDialog = () => {
+  manualTournament.value = {
+    casino: '',
+    buyin: null,
+    timeDate: null,
+    levelMinutes: null,
+    startingStack: null,
+    note: ''
+  };
+  showManualDialog.value = true;
+};
+
+// Ajouter un tournoi manuel
+const addManualTournament = async () => {
+  if (!selectedDay.value || !isManualFormValid.value) return;
+
+  addingManual.value = true;
+
+  const timeString = formatTimeFromDate(manualTournament.value.timeDate);
+
+  // Formater le stack de départ si présent
+  const structureChips = manualTournament.value.startingStack
+    ? `${manualTournament.value.startingStack.toLocaleString('fr-FR')} chip`
+    : null;
+
+  // Créer le tournoi dans scraped_tournaments d'abord
+  const scrapedTournamentData = {
+    date: selectedDay.value.date,
+    time: timeString,
+    casino: manualTournament.value.casino,
+    buyin: manualTournament.value.buyin,
+    levels: `niveau de ${manualTournament.value.levelMinutes} min`,
+    structure_levels: `niveau de ${manualTournament.value.levelMinutes} min`,
+    structure_chips: structureChips,
+    is_manual: true
+  };
+
+  try {
+    // Créer le tournoi scrapé
+    const scrapedResponse = await fetch(`${API_URL}/scraped-tournaments/manual`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(scrapedTournamentData)
+    });
+
+    if (scrapedResponse.ok) {
+      const newScrapedTournament = await scrapedResponse.json();
+
+      // Ajouter le tournoi à la timeline locale
+      const newTournament = {
+        ...newScrapedTournament,
+        displayTime: timeString,
+        buyIn: manualTournament.value.buyin,
+        structureLevels: `niveau de ${manualTournament.value.levelMinutes} min`,
+        structureChips: structureChips
+      };
+
+      selectedDay.value.tournaments.push(newTournament);
+      selectedDay.value.count = selectedDay.value.tournaments.length;
+
+      // Trier par heure
+      selectedDay.value.tournaments.sort((a, b) => {
+        return a.time.localeCompare(b.time);
+      });
+
+      showManualDialog.value = false;
+
+      toast.add({
+        severity: 'success',
+        summary: 'Tournoi créé',
+        detail: `Le tournoi a été ajouté pour le ${formatDateFull(selectedDay.value.date)}`,
+        life: 3000
+      });
+
+      // Recharger la timeline pour avoir les données à jour
+      await loadTimeline();
+      // Reprendre le jour sélectionné
+      const updatedDay = timeline.value.find(d => d.date === selectedDay.value.date);
+      if (updatedDay) {
+        selectedDay.value = updatedDay;
+      }
+    }
+  } catch (error) {
+    console.error('Erreur lors de la création du tournoi manuel:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Impossible de créer le tournoi',
+      life: 3000
+    });
+  } finally {
+    addingManual.value = false;
+  }
+};
+
+// Supprimer un tournoi manuel
+const deleteManualTournament = async (tournament) => {
+  if (!confirm(`Supprimer le tournoi "${tournament.casino}" à ${tournament.displayTime} ?`)) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/scraped-tournaments/${tournament.id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      // Retirer le tournoi de la liste locale
+      const index = selectedDay.value.tournaments.findIndex(t => t.id === tournament.id);
+      if (index > -1) {
+        selectedDay.value.tournaments.splice(index, 1);
+        selectedDay.value.count = selectedDay.value.tournaments.length;
+      }
+
+      toast.add({
+        severity: 'success',
+        summary: 'Tournoi supprimé',
+        detail: `Le tournoi a été supprimé`,
+        life: 3000
+      });
+    } else {
+      throw new Error('Erreur lors de la suppression');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la suppression:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Impossible de supprimer le tournoi',
+      life: 3000
+    });
   }
 };
 
@@ -767,6 +1051,17 @@ onMounted(async () => {
   letter-spacing: 0.025em;
 }
 
+.manual-badge-tag {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
 .tournament-buyin {
   background: rgba(255, 255, 255, 0.2);
   color: white;
@@ -981,9 +1276,19 @@ onMounted(async () => {
   border-top: 1px solid var(--border-color, #334155);
 }
 
+.footer-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .add-button {
-  width: 100%;
+  flex: 1;
   justify-content: center;
+}
+
+.delete-button {
+  flex-shrink: 0;
 }
 
 /* Dialog */
@@ -1040,12 +1345,67 @@ onMounted(async () => {
 
 .form-group label {
   font-weight: 600;
-  color: var(--text-primary, #1e293b);
   font-size: 0.9375rem;
 }
 
 .input-full {
   width: 100%;
+}
+
+:deep(.p-inputtext),
+:deep(.p-inputnumber),
+:deep(.p-inputnumber-input),
+:deep(.p-select),
+:deep(.p-textarea),
+:deep(.p-datepicker) {
+  width: 100%;
+}
+
+:deep(.p-datepicker-input) {
+  width: 100%;
+}
+
+/* Bouton d'ajout manuel */
+.add-manual-button {
+  margin-left: auto;
+}
+
+/* Styles pour la modale d'ajout manuel */
+.manual-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.manual-date-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  padding: 14px 18px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.manual-date-info i {
+  font-size: 1.125rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.required {
+  color: #ef4444;
 }
 
 /* Responsive */
@@ -1106,6 +1466,11 @@ onMounted(async () => {
     margin-bottom: 24px;
   }
 
+  .add-manual-button {
+    width: 100%;
+    margin-left: 0;
+  }
+
   .day-detail-title h2 {
     font-size: 1.5rem;
   }
@@ -1139,6 +1504,12 @@ onMounted(async () => {
 
   .desktop-only {
     display: none !important;
+  }
+
+  /* Form row responsive */
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
   }
 }
 
@@ -1250,6 +1621,13 @@ onMounted(async () => {
 
   .tournament-card-header {
     padding: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tournament-badges {
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .tournament-time {
@@ -1261,9 +1639,76 @@ onMounted(async () => {
     font-size: 0.875rem;
   }
 
+  .day-badge-tag,
+  .restart-badge-tag,
+  .manual-badge-tag {
+    padding: 3px 8px;
+    font-size: 0.6875rem;
+  }
+
   .tournament-card-body {
     padding: 14px;
     gap: 12px;
+  }
+
+  .footer-buttons {
+    flex-direction: row;
+  }
+
+  .add-button {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .delete-button {
+    padding: 0.5rem;
+  }
+
+  /* Modale responsive */
+  .manual-dialog-content {
+    gap: 16px;
+  }
+
+  .manual-date-info {
+    padding: 12px 14px;
+    font-size: 0.875rem;
+  }
+
+  .manual-date-info i {
+    font-size: 1rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .tournament-badges {
+    justify-content: flex-end;
+  }
+
+  .footer-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-button,
+  .delete-button {
+    width: 100%;
+  }
+
+  .delete-button {
+    justify-content: center;
+  }
+
+  .day-detail-title h2 {
+    font-size: 1.125rem;
+  }
+
+  .tournament-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
   }
 }
 
@@ -1273,6 +1718,24 @@ onMounted(async () => {
   max-width: calc(100vw - 2rem);
 }
 
+:deep(.p-dialog-header) {
+  padding: 1rem 1.25rem;
+}
+
+:deep(.p-dialog-content) {
+  padding: 0 1.25rem 1.25rem;
+}
+
+:deep(.p-dialog-footer) {
+  padding: 1rem 1.25rem;
+}
+
+@media (max-width: 768px) {
+  :deep(.p-dialog) {
+    width: calc(100vw - 2rem) !important;
+  }
+}
+
 @media (max-width: 480px) {
   :deep(.p-dialog) {
     width: calc(100vw - 1rem) !important;
@@ -1280,8 +1743,28 @@ onMounted(async () => {
     margin: 0.5rem;
   }
 
-  .selection-dialog-content {
-    gap: 18px;
+  :deep(.p-dialog-header) {
+    padding: 0.875rem 1rem;
+  }
+
+  :deep(.p-dialog-content) {
+    padding: 0 1rem 1rem;
+  }
+
+  :deep(.p-dialog-footer) {
+    padding: 0.875rem 1rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  :deep(.p-dialog-footer button) {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .selection-dialog-content,
+  .manual-dialog-content {
+    gap: 16px;
     padding: 4px 0;
   }
 
@@ -1305,10 +1788,6 @@ onMounted(async () => {
   }
 
   .summary-date {
-    font-size: 0.875rem;
-  }
-
-  .form-group label {
     font-size: 0.875rem;
   }
 }
