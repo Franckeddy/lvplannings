@@ -490,8 +490,6 @@ onUnmounted(() => {
 .map-container {
   position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   height: 70vh;
   min-height: 400px;
   max-height: calc(100vh - 120px);
@@ -502,8 +500,7 @@ onUnmounted(() => {
 
 .leaflet-map {
   width: 100%;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
   z-index: 1;
 }
 
@@ -537,34 +534,37 @@ onUnmounted(() => {
   color: #818cf8;
 }
 
-/* Liste mobile - maintenant en position relative en bas */
+/* Liste mobile - flottant en bas à gauche */
 .casino-list-mobile {
-  position: relative;
-  flex-shrink: 0;
-  background: rgba(30, 41, 59, 0.98);
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: fit-content;
+  max-width: 280px;
+  background: rgba(30, 41, 59, 0.95);
   backdrop-filter: blur(8px);
-  border-radius: 0;
+  border-radius: 10px;
   z-index: 1000;
-  max-height: 45%;
+  max-height: 50%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid #334155;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .casino-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 12px 16px;
   cursor: pointer;
   color: #f1f5f9;
   font-weight: 600;
   font-size: 0.9375rem;
-  border-bottom: 1px solid #334155;
-  background: rgba(30, 41, 59, 0.95);
-  border: 1px solid #334155;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  white-space: nowrap;
 }
 
 .casino-list-header i {
@@ -572,7 +572,8 @@ onUnmounted(() => {
 }
 
 .casino-list-header:hover {
-  background: #334155;
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 10px;
 }
 
 .casino-list-items {
@@ -651,8 +652,8 @@ onUnmounted(() => {
 /* Responsive */
 @media (max-width: 768px) {
   .map-container {
-    height: calc(100vh - 80px);
-    max-height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
     min-height: 300px;
     border-radius: 0;
   }
@@ -668,6 +669,12 @@ onUnmounted(() => {
 
   .legend-title {
     font-size: 0.8125rem;
+  }
+
+  .casino-list-mobile {
+    bottom: 8px;
+    left: 8px;
+    max-width: 240px;
   }
 
   .casino-list-header {
@@ -686,8 +693,8 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .map-container {
-    height: calc(100vh - 70px);
-    max-height: calc(100vh - 70px);
+    height: calc(100vh - 50px);
+    max-height: calc(100vh - 50px);
     min-height: 280px;
   }
 
@@ -712,9 +719,16 @@ onUnmounted(() => {
     padding: 0.3rem 0.5rem;
   }
 
+  .casino-list-mobile {
+    bottom: 6px;
+    left: 6px;
+    max-width: 180px;
+  }
+
   .casino-list-header {
     padding: 6px 10px;
     font-size: 0.75rem;
+    gap: 8px;
   }
 
   .casino-list-items {

@@ -507,7 +507,7 @@ body {
   gap: 0.5rem;
   width: 100%;
   padding: 0.875rem 1rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: #6366f1;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -520,8 +520,6 @@ body {
 
 .map-link-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-  opacity: 0.95;
 }
 
 .map-link-button i {
