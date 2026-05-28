@@ -167,6 +167,10 @@
                       <i class="pi pi-car"></i>
                       {{ getRouteTime(tournament.casino).durationMin }} min
                       <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
+                      <button class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
+                        <i class="pi pi-map"></i>
+                        <span class="map-link-text">Maps</span>
+                      </button>
                     </span>
                   </div>
                   <span v-if="tournament.day" class="day-badge-small">Day {{ tournament.day }}</span>
@@ -190,9 +194,6 @@
                 </div>
               </div>
 
-              <div class="tournament-buyin">
-                {{ formatBuyIn(tournament.buyin) }}
-              </div>
 
               <div class="tournament-actions">
                 <Button
@@ -408,11 +409,35 @@
         </div>
       </div>
     </Dialog>
+
+    <!-- Modale carte itinéraire -->
+    <Dialog
+      v-model:visible="showRouteMapDialog"
+      :header="`Itinéraire vers ${routeMapCasino}`"
+      :modal="true"
+      :style="{ width: '95vw', maxWidth: '900px' }"
+      :breakpoints="{ '768px': '100vw' }"
+      class="route-map-dialog"
+    >
+      <div class="route-map-container">
+        <div ref="routeMapContainer" class="route-leaflet-map"></div>
+        <div v-if="routeMapInfo" class="route-map-info-bar">
+          <div class="route-map-stat">
+            <i class="pi pi-car"></i>
+            <span>{{ routeMapInfo.durationMin }} min</span>
+          </div>
+          <div class="route-map-stat">
+            <i class="pi pi-map"></i>
+            <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
+          </div>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
@@ -423,6 +448,10 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 // Configuration API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -456,9 +485,17 @@ const newUserName = ref('');
 const creatingUser = ref(false);
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
-const { getRouteForCasino } = useCasinoRoutes();
+const { getRouteForCasino, getCasinoCoords, HOME_LOCATION } = useCasinoRoutes();
 const toast = useToast();
 const casinoRouteTimes = ref({});
+
+// Route map modal
+const showRouteMapDialog = ref(false);
+const routeMapCasino = ref('');
+const routeMapContainer = ref(null);
+const routeMapInfo = ref(null);
+let routeMap = null;
+let routeMapControl = null;
 
 // Charger les temps de trajet pour les tournois
 const loadRouteTimes = async () => {
@@ -829,6 +866,118 @@ const deleteTournament = async () => {
     deleting.value = false;
   }
 };
+
+// Ouvrir la modale de carte avec itinéraire
+const openRouteMap = async (casinoName) => {
+  routeMapCasino.value = casinoName;
+  routeMapInfo.value = casinoRouteTimes.value[casinoName] || null;
+  showRouteMapDialog.value = true;
+
+  await nextTick();
+  setTimeout(() => {
+    initRouteMap(casinoName);
+  }, 200);
+};
+
+const initRouteMap = async (casinoName) => {
+  if (!routeMapContainer.value) return;
+
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+  }
+
+  const casinoCoords = await getCasinoCoords(casinoName);
+  if (!casinoCoords) return;
+
+  routeMap = L.map(routeMapContainer.value, {
+    center: [36.15, -115.15],
+    zoom: 12,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19
+  }).addTo(routeMap);
+
+  const homeIcon = L.icon({
+    iconUrl: '/home-icon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+    className: 'home-marker-img'
+  });
+
+  L.marker([HOME_LOCATION.lat, HOME_LOCATION.lng], { icon: homeIcon })
+    .addTo(routeMap)
+    .bindPopup('<b>🏠 Maison</b>');
+
+  const casinoIcon = L.divIcon({
+    className: 'custom-casino-marker',
+    html: `<div class="marker-container" style="background: #6366f1"><span class="marker-initial">${casinoName.charAt(0)}</span></div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
+
+  L.marker([casinoCoords.lat, casinoCoords.lng], { icon: casinoIcon })
+    .addTo(routeMap)
+    .bindPopup(`<b>${casinoName}</b>`);
+
+  routeMapControl = L.Routing.control({
+    waypoints: [
+      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(casinoCoords.lat, casinoCoords.lng)
+    ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives: false,
+    createMarker: () => null,
+    lineOptions: {
+      styles: [
+        { color: '#6366f1', opacity: 0.9, weight: 6 },
+        { color: '#818cf8', opacity: 0.4, weight: 12 }
+      ]
+    },
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
+      profile: 'driving'
+    })
+  }).addTo(routeMap);
+
+  routeMapControl.on('routesfound', (e) => {
+    const route = e.routes[0];
+    routeMapInfo.value = {
+      durationMin: Math.round(route.summary.totalTime / 60),
+      distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
+      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1)
+    };
+  });
+
+  setTimeout(() => {
+    if (routeMap) routeMap.invalidateSize();
+  }, 300);
+};
+
+watch(showRouteMapDialog, (val) => {
+  if (!val && routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+    routeMapInfo.value = null;
+  }
+});
+
+onUnmounted(() => {
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+  }
+});
 </script>
 
 <style scoped>
@@ -1031,23 +1180,24 @@ const deleteTournament = async () => {
 
 /* Day Card */
 .day-card {
-  background: var(--bg-primary, #0f172a);
+  background: var(--bg-secondary, #1e293b);
   border: 1px solid var(--border-color, #334155);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .day-card:hover {
-  border-color: rgba(129, 140, 248, 0.5);
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .day-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
+  padding: 18px 22px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(99, 102, 241, 0.06));
   border-bottom: 1px solid var(--border-color, #334155);
 }
 
@@ -1058,57 +1208,63 @@ const deleteTournament = async () => {
 }
 
 .day-badge {
-  min-width: 56px;
-  padding: 8px 12px;
+  min-width: 54px;
+  padding: 10px 14px;
   background: linear-gradient(135deg, #3b82f6, #6366f1);
-  border-radius: 10px;
+  border-radius: 12px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
 .day-number {
   display: block;
   color: white;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1;
 }
 
 .day-month {
   display: block;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  margin-top: 2px;
+  letter-spacing: 0.08em;
+  margin-top: 3px;
+  text-transform: uppercase;
 }
 
 .day-details {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .day-name {
   color: var(--text-primary, #f1f5f9);
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: capitalize;
 }
 
 .day-stats {
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .day-stats .separator {
   margin: 0 6px;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .day-total {
-  color: #22c55e;
-  font-size: 1.25rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 1rem;
   font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
 }
 
 /* Notes indicator in day header */
@@ -1141,24 +1297,24 @@ const deleteTournament = async () => {
 
 /* Day Tournaments */
 .day-tournaments {
-  padding: 8px 0;
+  padding: 6px 0;
 }
 
 .tournament-row {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px 20px;
+  padding: 14px 22px;
   transition: background 0.15s ease;
   position: relative;
 }
 
 .tournament-row:hover {
-  background: rgba(99, 102, 241, 0.05);
+  background: rgba(99, 102, 241, 0.04);
 }
 
 .tournament-row:not(:last-child) {
-  border-bottom: 1px solid var(--border-color, #334155);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
 }
 
 /* Note indicator in corner */
@@ -1217,14 +1373,15 @@ const deleteTournament = async () => {
   align-items: center;
   gap: 8px;
   min-width: 80px;
-  color: var(--accent-color, #818cf8);
-  font-weight: 600;
-  font-size: 0.9375rem;
+  color: var(--text-primary, #f1f5f9);
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .tournament-time-slot i {
-  font-size: 0.875rem;
-  opacity: 0.7;
+  font-size: 0.75rem;
+  color: var(--accent-color, #818cf8);
+  opacity: 0.8;
 }
 
 .tournament-info {
@@ -1241,15 +1398,15 @@ const deleteTournament = async () => {
 }
 
 .casino-logo-wrapper {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   border: 1px solid var(--border-color, #334155);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-secondary, #1e293b);
+  background: var(--bg-primary, #0f172a);
   padding: 3px;
   flex-shrink: 0;
 }
@@ -1281,7 +1438,7 @@ const deleteTournament = async () => {
 
 .casino-name {
   color: var(--text-primary, #f1f5f9);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9375rem;
 }
 
@@ -1290,46 +1447,146 @@ const deleteTournament = async () => {
   align-items: center;
   gap: 5px;
   color: var(--accent-color, #818cf8);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 500;
 }
 
 .casino-drive-time i {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
 }
 
 .casino-drive-time .drive-distance {
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 400;
 }
 
-.day-badge-small {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 2px 8px;
-  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  color: #818cf8;
+  font-size: 0.625rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.map-link-btn i {
+  font-size: 0.5625rem;
+}
+
+.map-link-btn:hover {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  transform: scale(1.05);
+}
+
+.map-link-text {
+  display: inline;
+}
+
+/* Route map modal */
+.route-map-container {
+  width: 100%;
+  height: 55vh;
+  min-height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #0f172a;
+}
+
+.route-leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+.route-map-info-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid #6366f1;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  z-index: 1000;
+}
+
+.route-map-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.route-map-stat i {
+  color: #818cf8;
+  font-size: 0.875rem;
+}
+
+:deep(.route-map-dialog .p-dialog-content) {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+:deep(.route-map-dialog .p-dialog-header) {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0.75rem 1rem;
+}
+
+:deep(.route-map-dialog .p-dialog-title) {
+  color: #f1f5f9;
   font-weight: 700;
-  font-size: 0.6875rem;
+  font-size: 1rem;
+}
+
+:deep(.leaflet-routing-container) {
+  display: none !important;
+}
+
+.day-badge-small {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .restart-badge-small {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  padding: 2px 8px;
-  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  padding: 3px 8px;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .tournament-structure-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-top: 6px;
 }
 
@@ -1337,58 +1594,51 @@ const deleteTournament = async () => {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.6875rem;
   font-weight: 500;
 }
 
 .structure-tag i {
-  font-size: 0.5rem;
+  font-size: 0.4375rem;
 }
 
 .structure-tag.chips {
-  background: rgba(99, 102, 241, 0.15);
-  color: #818cf8;
+  background: rgba(99, 102, 241, 0.1);
+  color: #a5b4fc;
 }
 
 .structure-tag.levels {
-  background: var(--bg-primary, #0f172a);
+  background: rgba(51, 65, 85, 0.5);
   color: var(--text-secondary, #94a3b8);
-}
-
-.tournament-buyin {
-  color: var(--text-secondary, #94a3b8);
-  font-size: 0.8125rem;
-  padding: 4px 10px;
-  background: var(--bg-secondary, #1e293b);
-  border-radius: 4px;
 }
 
 .tournament-buyin {
   color: #22c55e;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  min-width: 70px;
+  font-weight: 700;
+  font-size: 1rem;
+  min-width: 75px;
   text-align: right;
+  letter-spacing: -0.01em;
 }
 
 .delete-btn {
-  color: #ef4444 !important;
+  color: #f87171 !important;
   transition: all 0.2s ease;
 }
 
 .delete-btn:hover {
-  background: rgba(239, 68, 68, 0.15) !important;
+  background: rgba(239, 68, 68, 0.12) !important;
 }
 
 .join-btn {
-  color: #22c55e !important;
+  color: #34d399 !important;
   transition: all 0.2s ease;
 }
 
 .join-btn:hover {
-  background: rgba(34, 197, 94, 0.15) !important;
+  background: rgba(34, 197, 94, 0.12) !important;
 }
 
 .edit-note-btn {
@@ -1396,13 +1646,14 @@ const deleteTournament = async () => {
 }
 
 .edit-note-btn:hover {
-  background: rgba(99, 102, 241, 0.15) !important;
-  color: #6366f1 !important;
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #818cf8 !important;
 }
 
 .tournament-actions {
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  align-items: center;
 }
 
 /* Join Dialog */
@@ -1681,6 +1932,26 @@ const deleteTournament = async () => {
     padding: 12px;
   }
 
+  .route-map-container {
+    height: 50vh;
+    min-height: 280px;
+  }
+
+  .route-map-info-bar {
+    top: 12px;
+    bottom: auto;
+    gap: 14px;
+    padding: 8px 16px;
+  }
+
+  .route-map-stat {
+    font-size: 0.8125rem;
+  }
+
+  .map-link-text {
+    display: none;
+  }
+
   /* Show mobile notes, hide desktop elements */
   .mobile-note-display {
     display: flex;
@@ -1872,7 +2143,8 @@ const deleteTournament = async () => {
   }
 
   .day-total {
-    font-size: 1.125rem;
+    font-size: 0.875rem;
+    padding: 6px 10px;
   }
 
   .casino-name {
@@ -1880,7 +2152,7 @@ const deleteTournament = async () => {
   }
 
   .tournament-buyin {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   .tournament-time-slot {
@@ -1892,7 +2164,16 @@ const deleteTournament = async () => {
   }
 
   .day-card {
-    border-radius: 10px;
+    border-radius: 12px;
+  }
+
+  .day-card-header {
+    padding: 14px 16px;
+  }
+
+  .tournament-row {
+    padding: 12px 16px;
+    gap: 12px;
   }
 
   .days-list {

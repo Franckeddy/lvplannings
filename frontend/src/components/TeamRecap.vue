@@ -119,6 +119,10 @@
                   <i class="pi pi-car"></i>
                   {{ getRouteTime(casino).durationMin }} min
                   <span class="drive-distance">({{ getRouteTime(casino).distanceMiles }} mi)</span>
+                  <button class="map-link-btn" @click.stop="openRouteMap(casino)">
+                    <i class="pi pi-map"></i>
+                    <span class="map-link-text">Maps</span>
+                  </button>
                 </span>
               </div>
             </div>
@@ -141,18 +145,19 @@
               :key="time"
               class="time-slot"
             >
-              <div class="time-left">
+              <!-- Ligne 1: Heure + Buy-in + Badges -->
+              <div class="time-slot-top">
                 <div class="time-badge">
                   <i class="pi pi-clock"></i>
                   {{ time }}
                 </div>
-                <div class="time-info">
-                  <span v-if="timeData.buyin" class="time-buyin">{{ formatBuyIn(timeData.buyin) }}</span>
-                  <span v-if="timeData.day" class="day-badge-small">Day {{ timeData.day }}</span>
-                  <span v-else-if="timeData.isRestart" class="restart-badge-small">Restart</span>
-                </div>
+                <span v-if="timeData.buyin" class="time-buyin">{{ formatBuyIn(timeData.buyin) }}</span>
+                <span v-if="timeData.day" class="day-badge-small">Day {{ timeData.day }}</span>
+                <span v-else-if="timeData.isRestart" class="restart-badge-small">Restart</span>
               </div>
-              <div class="time-structure">
+
+              <!-- Ligne 2: Structure -->
+              <div v-if="timeData.structureChips || timeData.structureLevels || (timeData.levels && timeData.levels !== '-')" class="time-slot-structure">
                 <span v-if="timeData.structureChips" class="structure-tag chips">
                   <i class="pi pi-circle-fill"></i> {{ timeData.structureChips }}
                 </span>
@@ -163,7 +168,9 @@
                   <i class="pi pi-clock"></i> {{ timeData.levels }}
                 </span>
               </div>
-              <div class="time-right">
+
+              <!-- Ligne 3: Utilisateurs + Rejoindre -->
+              <div class="time-slot-bottom">
                 <div class="time-users">
                   <div
                     v-for="user in timeData.users"
@@ -186,17 +193,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- Notes visibles sur mobile -->
-                <div class="mobile-user-notes" v-if="timeData.users.some(u => u.user_note)">
-                  <div
-                    v-for="user in timeData.users.filter(u => u.user_note)"
-                    :key="'note-' + user.tournamentId"
-                    class="mobile-user-note-item"
-                  >
-                    <span class="mobile-note-user">{{ user.name }}:</span>
-                    <span class="mobile-note-text">{{ user.user_note }}</span>
-                  </div>
-                </div>
                 <Button
                   label="Rejoindre"
                   icon="pi pi-user-plus"
@@ -205,6 +201,18 @@
                   size="small"
                   class="join-btn"
                 />
+              </div>
+
+              <!-- Notes visibles sur mobile -->
+              <div class="mobile-user-notes" v-if="timeData.users.some(u => u.user_note)">
+                <div
+                  v-for="user in timeData.users.filter(u => u.user_note)"
+                  :key="'note-' + user.tournamentId"
+                  class="mobile-user-note-item"
+                >
+                  <span class="mobile-note-user">{{ user.name }}:</span>
+                  <span class="mobile-note-text">{{ user.user_note }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -348,11 +356,35 @@
         </div>
       </div>
     </Dialog>
+
+    <!-- Modale carte itinéraire -->
+    <Dialog
+      v-model:visible="showRouteMapDialog"
+      :header="`Itinéraire vers ${routeMapCasino}`"
+      :modal="true"
+      :style="{ width: '95vw', maxWidth: '900px' }"
+      :breakpoints="{ '768px': '100vw' }"
+      class="route-map-dialog"
+    >
+      <div class="route-map-container">
+        <div ref="routeMapContainer" class="route-leaflet-map"></div>
+        <div v-if="routeMapInfo" class="route-map-info-bar">
+          <div class="route-map-stat">
+            <i class="pi pi-car"></i>
+            <span>{{ routeMapInfo.durationMin }} min</span>
+          </div>
+          <div class="route-map-stat">
+            <i class="pi pi-map"></i>
+            <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
+          </div>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
@@ -363,6 +395,10 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -385,8 +421,16 @@ const editingNote = ref('');
 const savingNote = ref(false);
 
 // Casino routes
-const { getRouteForCasino } = useCasinoRoutes();
+const { getRouteForCasino, getCasinoCoords, HOME_LOCATION } = useCasinoRoutes();
 const casinoRouteTimes = ref({});
+
+// Route map modal
+const showRouteMapDialog = ref(false);
+const routeMapCasino = ref('');
+const routeMapContainer = ref(null);
+const routeMapInfo = ref(null);
+let routeMap = null;
+let routeMapControl = null;
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
@@ -509,7 +553,26 @@ const teamByDay = computed(() => {
   const sortedDates = Object.keys(grouped).sort();
   const sorted = {};
   sortedDates.forEach(date => {
-    sorted[date] = grouped[date];
+    // Trier les casinos par l'heure la plus tôt de leurs tournois
+    const casinos = grouped[date].casinos;
+    const sortedCasinos = Object.entries(casinos).sort((a, b) => {
+      const firstTimeA = Object.keys(a[1].times).sort()[0] || '99:99';
+      const firstTimeB = Object.keys(b[1].times).sort()[0] || '99:99';
+      return firstTimeA.localeCompare(firstTimeB);
+    });
+
+    // Reconstruire l'objet casinos trié, avec les times triés aussi
+    const sortedCasinosObj = {};
+    sortedCasinos.forEach(([casinoName, casinoData]) => {
+      const sortedTimes = Object.keys(casinoData.times).sort();
+      const sortedTimesObj = {};
+      sortedTimes.forEach(time => {
+        sortedTimesObj[time] = casinoData.times[time];
+      });
+      sortedCasinosObj[casinoName] = { ...casinoData, times: sortedTimesObj };
+    });
+
+    sorted[date] = { ...grouped[date], casinos: sortedCasinosObj };
   });
 
   return sorted;
@@ -819,8 +882,120 @@ const saveNote = async () => {
   }
 };
 
+// Ouvrir la modale de carte avec itinéraire
+const openRouteMap = async (casinoName) => {
+  routeMapCasino.value = casinoName;
+  routeMapInfo.value = casinoRouteTimes.value[casinoName] || null;
+  showRouteMapDialog.value = true;
+
+  await nextTick();
+  setTimeout(() => {
+    initRouteMap(casinoName);
+  }, 200);
+};
+
+const initRouteMap = async (casinoName) => {
+  if (!routeMapContainer.value) return;
+
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+  }
+
+  const casinoCoords = await getCasinoCoords(casinoName);
+  if (!casinoCoords) return;
+
+  routeMap = L.map(routeMapContainer.value, {
+    center: [36.15, -115.15],
+    zoom: 12,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 19
+  }).addTo(routeMap);
+
+  const homeIcon = L.icon({
+    iconUrl: '/home-icon.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+    className: 'home-marker-img'
+  });
+
+  L.marker([HOME_LOCATION.lat, HOME_LOCATION.lng], { icon: homeIcon })
+    .addTo(routeMap)
+    .bindPopup('<b>🏠 Maison</b>');
+
+  const casinoIcon = L.divIcon({
+    className: 'custom-casino-marker',
+    html: `<div class="marker-container" style="background: #6366f1"><span class="marker-initial">${casinoName.charAt(0)}</span></div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
+
+  L.marker([casinoCoords.lat, casinoCoords.lng], { icon: casinoIcon })
+    .addTo(routeMap)
+    .bindPopup(`<b>${casinoName}</b>`);
+
+  routeMapControl = L.Routing.control({
+    waypoints: [
+      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(casinoCoords.lat, casinoCoords.lng)
+    ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives: false,
+    createMarker: () => null,
+    lineOptions: {
+      styles: [
+        { color: '#6366f1', opacity: 0.9, weight: 6 },
+        { color: '#818cf8', opacity: 0.4, weight: 12 }
+      ]
+    },
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
+      profile: 'driving'
+    })
+  }).addTo(routeMap);
+
+  routeMapControl.on('routesfound', (e) => {
+    const route = e.routes[0];
+    routeMapInfo.value = {
+      durationMin: Math.round(route.summary.totalTime / 60),
+      distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
+      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1)
+    };
+  });
+
+  setTimeout(() => {
+    if (routeMap) routeMap.invalidateSize();
+  }, 300);
+};
+
+watch(showRouteMapDialog, (val) => {
+  if (!val && routeMap) {
+    routeMap.remove();
+    routeMap = null;
+    routeMapControl = null;
+    routeMapInfo.value = null;
+  }
+});
+
 onMounted(() => {
   loadAllData();
+});
+
+onUnmounted(() => {
+  if (routeMap) {
+    routeMap.remove();
+    routeMap = null;
+  }
 });
 </script>
 
@@ -1100,8 +1275,8 @@ onMounted(() => {
 
 /* Casinos List */
 .casinos-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -1110,14 +1285,20 @@ onMounted(() => {
   border: 1px solid var(--border-color, #334155);
   border-radius: 16px;
   overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.casino-card:hover {
+  border-color: rgba(129, 140, 248, 0.4);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .casino-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background: rgba(99, 102, 241, 0.05);
+  padding: 18px 22px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(99, 102, 241, 0.06));
   border-bottom: 1px solid var(--border-color, #334155);
 }
 
@@ -1128,16 +1309,16 @@ onMounted(() => {
 }
 
 .casino-logo-wrapper {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color, #334155);
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 2px solid var(--border-color, #334155);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-primary, #0f172a);
-  padding: 6px;
+  padding: 4px;
   flex-shrink: 0;
 }
 
@@ -1151,13 +1332,13 @@ onMounted(() => {
   justify-content: center;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.75rem;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-.casino-details { display: flex; flex-direction: column; gap: 2px; }
-.casino-name { color: var(--text-primary, #f1f5f9); font-weight: 600; font-size: 1.0625rem; }
+.casino-details { display: flex; flex-direction: column; gap: 3px; }
+.casino-name { color: var(--text-primary, #f1f5f9); font-weight: 700; font-size: 1.0625rem; }
 .casino-count { color: var(--text-secondary, #94a3b8); font-size: 0.8125rem; }
 
 .casino-drive-time {
@@ -1170,7 +1351,7 @@ onMounted(() => {
 }
 
 .casino-drive-time i {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
 }
 
 .casino-drive-time .drive-distance {
@@ -1179,126 +1360,231 @@ onMounted(() => {
   font-weight: 400;
 }
 
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  color: #818cf8;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.map-link-btn i {
+  font-size: 0.625rem;
+}
+
+.map-link-btn:hover {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  transform: scale(1.05);
+}
+
+.map-link-text {
+  display: inline;
+}
+
+/* Route map modal */
+.route-map-container {
+  width: 100%;
+  height: 55vh;
+  min-height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #0f172a;
+}
+
+.route-leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+.route-map-info-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid #6366f1;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  z-index: 1000;
+}
+
+.route-map-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.route-map-stat i {
+  color: #818cf8;
+  font-size: 0.875rem;
+}
+
+:deep(.route-map-dialog .p-dialog-content) {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+:deep(.route-map-dialog .p-dialog-header) {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0.75rem 1rem;
+}
+
+:deep(.route-map-dialog .p-dialog-title) {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+:deep(.leaflet-routing-container) {
+  display: none !important;
+}
+
 /* Notes indicator in casino header */
 .casino-notes-indicator {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(99, 102, 241, 0.15);
-  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-left: auto;
 }
 
 .casino-notes-indicator i {
-  font-size: 0.875rem;
-  color: #6366f1;
+  font-size: 0.8125rem;
+  color: #818cf8;
 }
 
 .casino-notes-indicator .notes-count {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6366f1;
+  color: #818cf8;
 }
 
 .casino-notes-indicator:hover {
-  background: rgba(99, 102, 241, 0.25);
-  transform: scale(1.05);
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: scale(1.03);
 }
 
 /* Time Slots */
-.time-slots { padding: 8px 0; }
+.time-slots { padding: 6px 0; }
 
 .time-slot {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 22px;
   transition: background 0.15s ease;
 }
 
-.time-slot:hover { background: rgba(99, 102, 241, 0.03); }
-.time-slot:not(:last-child) { border-bottom: 1px solid var(--border-color, #334155); }
+.time-slot:hover { background: rgba(99, 102, 241, 0.04); }
+.time-slot:not(:last-child) { border-bottom: 1px solid rgba(51, 65, 85, 0.5); }
 
-.time-left {
+/* Ligne 1: Heure + Buy-in + Badges */
+.time-slot-top {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .time-badge {
   display: flex;
   align-items: center;
   gap: 6px;
-  min-width: 80px;
-  color: var(--accent-color, #818cf8);
-  font-weight: 600;
-  font-size: 0.9375rem;
+  color: var(--text-primary, #f1f5f9);
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-.time-badge i { font-size: 0.75rem; opacity: 0.7; }
+.time-badge i { font-size: 0.75rem; color: var(--accent-color, #818cf8); opacity: 0.8; }
 
-.time-info { display: flex; align-items: center; gap: 12px; }
-.time-buyin { color: #22c55e; font-weight: 600; font-size: 0.9375rem; }
-.time-levels { color: var(--text-secondary, #94a3b8); font-size: 0.8125rem; padding: 2px 8px; background: var(--bg-primary, #0f172a); border-radius: 4px; }
+.time-buyin { color: #22c55e; font-weight: 700; font-size: 1rem; }
 
-.time-structure {
+/* Ligne 2: Structure */
+.time-slot-structure {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-left: 16px;
+  gap: 6px;
+  padding-left: 2px;
 }
 
 .structure-tag {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.6875rem;
   font-weight: 500;
 }
 
 .structure-tag i {
-  font-size: 0.5rem;
+  font-size: 0.4375rem;
 }
 
 .structure-tag.chips {
-  background: rgba(99, 102, 241, 0.15);
-  color: #818cf8;
+  background: rgba(99, 102, 241, 0.1);
+  color: #a5b4fc;
 }
 
 .structure-tag.levels {
-  background: var(--bg-primary, #0f172a);
+  background: rgba(51, 65, 85, 0.5);
   color: var(--text-secondary, #94a3b8);
 }
 
+/* Ligne 3: Utilisateurs + Rejoindre */
+.time-slot-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.time-users { display: flex; flex-wrap: wrap; gap: 8px; }
+
 .day-badge-small {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-  padding: 2px 8px;
-  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  padding: 3px 8px;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .restart-badge-small {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  padding: 2px 8px;
-  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  padding: 3px 8px;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
-}
-
-.time-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .time-users { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1322,11 +1608,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .user-chip:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .user-note-icon {
@@ -1394,7 +1681,7 @@ onMounted(() => {
 .user-chip.small { padding: 4px 10px; font-size: 0.75rem; }
 
 .join-btn {
-  color: var(--text-secondary, #94a3b8) !important;
+  color: #34d399 !important;
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
@@ -1513,17 +1800,41 @@ onMounted(() => {
 /* Responsive */
 @media (max-width: 1024px) {
   .dates-grid { grid-template-columns: repeat(2, 1fr); }
+  .casinos-list { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
   .team-container { padding: 16px; }
   .dates-grid { grid-template-columns: 1fr; gap: 16px; }
+  .casinos-list { grid-template-columns: 1fr; }
   .team-header { flex-direction: column; align-items: flex-start; gap: 16px; }
   .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
   .detail-stats { flex-wrap: wrap; gap: 12px; }
-  .time-slot { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 16px; }
-  .time-right { width: 100%; justify-content: space-between; flex-direction: column; gap: 10px; }
-  .time-left { width: 100%; flex-wrap: wrap; }
+
+  .route-map-container {
+    height: 50vh;
+    min-height: 280px;
+  }
+
+  .route-map-info-bar {
+    top: 12px;
+    bottom: auto;
+    gap: 14px;
+    padding: 8px 16px;
+  }
+
+  .route-map-stat {
+    font-size: 0.8125rem;
+  }
+
+  .map-link-text {
+    display: none;
+  }
+
+  .time-slot { padding: 14px 16px; gap: 10px; }
+  .time-slot-top { flex-wrap: wrap; }
+  .time-slot-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .time-users { width: 100%; }
 
   /* Show mobile notes, hide desktop elements */
   .mobile-user-notes {
@@ -1695,7 +2006,6 @@ onMounted(() => {
   }
 
   .time-badge {
-    min-width: 70px;
     font-size: 0.875rem;
   }
 
@@ -1703,14 +2013,12 @@ onMounted(() => {
     font-size: 0.875rem;
   }
 
-  .time-levels {
-    font-size: 0.75rem;
+  .time-slot {
+    padding: 12px 14px;
   }
 
-  .time-right {
-    gap: 10px;
-    align-items: flex-start;
-    width: 100%;
+  .time-slot-bottom {
+    gap: 8px;
   }
 
   .time-users {
