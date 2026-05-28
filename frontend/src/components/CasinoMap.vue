@@ -1044,11 +1044,14 @@ onUnmounted(() => {
   }
 
   .route-info-panel {
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    max-width: none;
-    padding: 12px 14px;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    max-width: 320px;
+    width: calc(100% - 32px);
+    padding: 16px;
   }
 
   .route-info-header {
@@ -1126,10 +1129,14 @@ onUnmounted(() => {
   }
 
   .route-info-panel {
-    bottom: 6px;
-    left: 6px;
-    right: 6px;
-    padding: 10px 12px;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    max-width: 290px;
+    width: calc(100% - 24px);
+    padding: 12px 14px;
     border-radius: 10px;
   }
 
@@ -1154,7 +1161,7 @@ onUnmounted(() => {
   }
 
   .external-nav-buttons {
-    flex-direction: column;
+    flex-direction: row;
     gap: 6px;
     margin-bottom: 8px;
   }
