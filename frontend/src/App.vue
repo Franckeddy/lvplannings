@@ -39,6 +39,14 @@
           </div>
         </div>
 
+        <button
+            class="map-link-button"
+            @click="showCasinoMap = true"
+        >
+          <i class="pi pi-map"></i>
+          CARTE DES CASINOS
+        </button>
+
         <div class="divider"></div>
 
         <nav class="sidebar-nav">
@@ -87,6 +95,9 @@
       </div>
     </aside>
 
+    <!-- Carte des Casinos -->
+    <CasinoMap v-model="showCasinoMap" />
+
     <!-- Main Content -->
     <main class="main-content">
       <!-- Planning View -->
@@ -130,6 +141,7 @@ import UserSelector from './components/UserSelector.vue';
 import TournamentList from './components/TournamentList.vue';
 import TournamentTimeline from './components/TournamentTimeline.vue';
 import TeamRecap from './components/TeamRecap.vue';
+import CasinoMap from './components/CasinoMap.vue';
 import Button from 'primevue/button';
 
 const users = ref([]);
@@ -141,6 +153,7 @@ const summary = ref(null);
 const loading = ref(false);
 const currentView = ref('planning');
 const windowWidth = ref(window.innerWidth);
+const showCasinoMap = ref(false);
 
 // Computed pour détecter si on est sur mobile
 const isMobile = computed(() => windowWidth.value <= 768);
@@ -482,6 +495,37 @@ body {
 .sidebar-external-link {
   margin-top: auto;
   padding-bottom: 3em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map-link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.map-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  opacity: 0.95;
+}
+
+.map-link-button i {
+  font-size: 0.875rem;
 }
 
 .external-link-button {
