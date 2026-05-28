@@ -653,7 +653,7 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .map-container {
     height: calc(100vh - 60px);
-    max-height: calc(100vh - 60px);
+    max-height: calc(80vh - 60px);
     min-height: 300px;
     border-radius: 0;
   }
