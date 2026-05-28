@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    header="Casinos de Poker - Las Vegas"
+    header="Casinos - Las Vegas"
     :modal="true"
     :style="{ width: '95vw', maxWidth: '1200px' }"
     :breakpoints="{ '768px': '100vw' }"
@@ -9,6 +9,53 @@
   >
     <div class="map-container">
       <div ref="mapContainer" class="leaflet-map"></div>
+
+      <!-- Infos de l'itinéraire actif -->
+      <div v-if="routeInfo" class="route-info-panel">
+        <div class="route-info-header">
+          <i class="pi pi-car"></i>
+          <span>Itinéraire vers {{ routeInfo.casino }}</span>
+        </div>
+        <div class="route-info-details">
+          <div class="route-stat">
+            <i class="pi pi-map"></i>
+            <span>{{ routeInfo.distanceMiles }} mi ({{ routeInfo.distanceKm }} km)</span>
+          </div>
+          <div class="route-stat">
+            <i class="pi pi-clock"></i>
+            <span>{{ routeInfo.durationMin }} min</span>
+          </div>
+        </div>
+
+        <!-- Boutons pour ouvrir dans une app externe -->
+        <div class="external-nav-buttons">
+          <a
+            :href="getGoogleMapsUrl(routeInfo.casinoData)"
+            target="_blank"
+            class="nav-btn google-maps-btn"
+          >
+            <i class="pi pi-map"></i>
+            <span>Google Maps</span>
+          </a>
+          <a
+            :href="getAppleMapsUrl(routeInfo.casinoData)"
+            target="_blank"
+            class="nav-btn apple-maps-btn mobile-only"
+          >
+            <i class="pi pi-apple"></i>
+            <span>Apple Maps</span>
+          </a>
+        </div>
+
+        <Button
+          icon="pi pi-times"
+          label="Fermer l'itinéraire"
+          size="small"
+          severity="secondary"
+          @click="clearRoute"
+          class="route-close-btn"
+        />
+      </div>
 
       <!-- Légende -->
       <div class="map-legend">
@@ -56,6 +103,8 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 const props = defineProps({
   modelValue: {
@@ -69,8 +118,11 @@ const emit = defineEmits(['update:modelValue']);
 const visible = ref(props.modelValue);
 const mapContainer = ref(null);
 const showCasinoList = ref(false);
+const activeRoute = ref(null);
+const routeInfo = ref(null);
 let map = null;
 let markers = [];
+let routingControl = null;
 
 // Coordonnées du centre de Las Vegas (vue globale)
 const LAS_VEGAS_CENTER = [36.10, -115.18];
@@ -308,10 +360,88 @@ const createHomeIcon = () => {
 };
 
 // Générer le lien Google Maps pour l'itinéraire
-const getDirectionsUrl = (casino) => {
+const getGoogleMapsUrl = (casino) => {
   const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
   const destination = `${casino.lat},${casino.lng}`;
   return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+};
+
+// Générer le lien Apple Maps pour l'itinéraire
+const getAppleMapsUrl = (casino) => {
+  const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
+  const destination = `${casino.lat},${casino.lng}`;
+  return `https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=d`;
+};
+
+// Alias pour compatibilité avec le code existant
+const getDirectionsUrl = getGoogleMapsUrl;
+
+// Afficher l'itinéraire sur la carte
+const showRoute = (casino) => {
+  if (!map) return;
+
+  // Supprimer l'itinéraire précédent
+  clearRoute();
+
+  activeRoute.value = casino.name;
+
+  // Créer le contrôle de routage
+  routingControl = L.Routing.control({
+    waypoints: [
+      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(casino.lat, casino.lng)
+    ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives: false,
+    createMarker: () => null, // On garde nos propres marqueurs
+    lineOptions: {
+      styles: [
+        { color: '#6366f1', opacity: 0.9, weight: 6 },
+        { color: '#818cf8', opacity: 0.5, weight: 10 }
+      ],
+      extendToWaypoints: true,
+      missingRouteTolerance: 0
+    },
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
+      profile: 'driving'
+    })
+  }).addTo(map);
+
+  // Écouter le calcul de la route pour récupérer les infos
+  routingControl.on('routesfound', (e) => {
+    const route = e.routes[0];
+    const distanceKm = (route.summary.totalDistance / 1000).toFixed(1);
+    const distanceMiles = (route.summary.totalDistance / 1609.34).toFixed(1);
+    const durationMin = Math.round(route.summary.totalTime / 60);
+
+    routeInfo.value = {
+      casino: casino.name,
+      casinoData: casino,
+      distanceKm,
+      distanceMiles,
+      durationMin
+    };
+  });
+
+  routingControl.on('routingerror', (e) => {
+    console.error('Erreur de routage:', e);
+    // Fallback vers Google Maps si erreur
+    window.open(getDirectionsUrl(casino), '_blank');
+  });
+};
+
+// Effacer l'itinéraire
+const clearRoute = () => {
+  if (routingControl && map) {
+    map.removeControl(routingControl);
+    routingControl = null;
+  }
+  activeRoute.value = null;
+  routeInfo.value = null;
 };
 
 // Initialiser la carte
@@ -368,6 +498,7 @@ const initMap = async () => {
     bounds.extend([casino.lat, casino.lng]);
 
     const directionsUrl = getDirectionsUrl(casino);
+    const casinoIndex = casinos.value.findIndex(c => c.name === casino.name);
 
     // Popup avec les informations du casino et bouton itinéraire
     const popupContent = `
@@ -376,15 +507,30 @@ const initMap = async () => {
         <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
         <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
         <p class="popup-desc">${casino.description}</p>
-        <a href="${directionsUrl}" target="_blank" class="directions-btn">
-          <i class="pi pi-directions"></i> Itinéraire depuis la maison
-        </a>
+        <div class="popup-actions">
+          <button class="directions-btn" data-casino-index="${casinoIndex}">
+            <i class="pi pi-car"></i> Itinéraire
+          </button>
+        </div>
       </div>
     `;
 
     marker.bindPopup(popupContent, {
       maxWidth: 300,
       className: 'casino-popup-container'
+    });
+
+    // Ajouter l'écouteur d'événement pour le bouton d'itinéraire
+    marker.on('popupopen', () => {
+      setTimeout(() => {
+        const btn = document.querySelector(`.directions-btn[data-casino-index="${casinoIndex}"]`);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            showRoute(casino);
+            marker.closePopup();
+          });
+        }
+      }, 10);
     });
 
     marker.addTo(map);
@@ -436,11 +582,17 @@ watch(() => props.modelValue, (newVal) => {
     setTimeout(() => {
       initMap();
     }, 100);
+  } else {
+    // Nettoyer l'itinéraire quand on ferme
+    clearRoute();
   }
 });
 
 watch(visible, (newVal) => {
   emit('update:modelValue', newVal);
+  if (!newVal) {
+    clearRoute();
+  }
 });
 
 onMounted(() => {
@@ -450,6 +602,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  clearRoute();
   if (map) {
     map.remove();
     map = null;
@@ -534,21 +687,29 @@ onUnmounted(() => {
 }
 
 /* Bouton itinéraire */
+.casino-popup .popup-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 .casino-popup .directions-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 10px 16px;
+  gap: 6px;
+  padding: 10px 14px;
   background: linear-gradient(135deg, #3b82f6, #6366f1);
   color: white;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  border: none;
+  cursor: pointer;
 }
 
 .casino-popup .directions-btn:hover {
@@ -557,9 +718,36 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
-.casino-popup .directions-btn i {
-  font-size: 1rem;
+.casino-popup .gmaps-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: #334155;
+  color: #94a3b8;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  border: 1px solid #475569;
+}
+
+.casino-popup .gmaps-btn:hover {
+  background: #475569;
+  color: #f1f5f9;
+}
+
+.casino-popup .directions-btn i,
+.casino-popup .gmaps-btn i {
+  font-size: 0.875rem;
   opacity: 1;
+}
+
+/* Cacher le panneau par défaut de Leaflet Routing Machine */
+.leaflet-routing-container {
+  display: none !important;
 }
 
 /* Marqueur maison avec image */
@@ -590,6 +778,115 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+/* Panneau d'info de l'itinéraire */
+.route-info-panel {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(30, 41, 59, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 14px 18px;
+  z-index: 1000;
+  border: 1px solid #6366f1;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  max-width: 280px;
+}
+
+.route-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #818cf8;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-bottom: 12px;
+}
+
+.route-info-header i {
+  font-size: 1.125rem;
+}
+
+.route-info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.route-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.route-stat i {
+  color: #6366f1;
+  width: 18px;
+  text-align: center;
+}
+
+/* Boutons de navigation externe */
+.external-nav-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  transition: all 0.2s ease;
+}
+
+.nav-btn i {
+  font-size: 1rem;
+}
+
+.google-maps-btn {
+  background: linear-gradient(135deg, #34a853, #4285f4);
+  color: white;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.google-maps-btn:hover {
+  background: linear-gradient(135deg, #2d9248, #3b78e7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.apple-maps-btn {
+  background: linear-gradient(135deg, #555555, #333333);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.apple-maps-btn:hover {
+  background: linear-gradient(135deg, #666666, #444444);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Apple Maps caché sur desktop, visible uniquement sur mobile */
+.mobile-only {
+  display: none;
+}
+
+.route-close-btn {
+  width: 100%;
 }
 
 /* Légende */
@@ -746,6 +1043,47 @@ onUnmounted(() => {
     border-radius: 0;
   }
 
+  .route-info-panel {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    max-width: none;
+    padding: 12px 14px;
+  }
+
+  .route-info-header {
+    font-size: 0.875rem;
+    margin-bottom: 10px;
+  }
+
+  .route-info-details {
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 12px;
+  }
+
+  .route-stat {
+    font-size: 0.875rem;
+  }
+
+  .external-nav-buttons {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .nav-btn {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+
+  .nav-btn i {
+    font-size: 0.875rem;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
   .map-legend {
     flex-direction: column;
     align-items: flex-start;
@@ -785,6 +1123,50 @@ onUnmounted(() => {
     height: calc(100vh - 50px);
     max-height: calc(100vh - 50px);
     min-height: 280px;
+  }
+
+  .route-info-panel {
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .route-info-header {
+    font-size: 0.8125rem;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .route-info-header i {
+    font-size: 1rem;
+  }
+
+  .route-info-details {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .route-stat {
+    font-size: 0.8125rem;
+    gap: 6px;
+  }
+
+  .external-nav-buttons {
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .nav-btn {
+    padding: 8px;
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+
+  .nav-btn i {
+    font-size: 0.875rem;
   }
 
   .map-legend {
