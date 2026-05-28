@@ -76,9 +76,9 @@ const showCasinoList = ref(false);
 let map = null;
 let markers = [];
 
-// Coordonnées du centre de Las Vegas (Strip)
-const LAS_VEGAS_CENTER = [36.1147, -115.1728];
-const DEFAULT_ZOOM = 13;
+// Coordonnées du centre de Las Vegas (vue globale)
+const LAS_VEGAS_CENTER = [36.10, -115.18];
+const DEFAULT_ZOOM = 11;
 
 // Liste des casinos de poker à Las Vegas avec leurs coordonnées
 const casinos = ref([
@@ -312,11 +312,17 @@ const initMap = async () => {
     maxZoom: 19
   }).addTo(map);
 
+  // Créer un groupe pour les bounds
+  const bounds = L.latLngBounds();
+
   // Ajouter les marqueurs pour chaque casino
   casinos.value.forEach(casino => {
     const marker = L.marker([casino.lat, casino.lng], {
       icon: createCustomIcon(casino)
     });
+
+    // Ajouter au bounds
+    bounds.extend([casino.lat, casino.lng]);
 
     // Popup avec les informations du casino
     const popupContent = `
@@ -337,18 +343,24 @@ const initMap = async () => {
     markers.push(marker);
   });
 
-  // Ajuster la vue pour montrer tous les marqueurs
+  // Ajuster la vue pour montrer tous les casinos
   setTimeout(() => {
     if (map) {
       map.invalidateSize();
+      // Fit bounds avec un peu de padding pour bien voir tous les marqueurs
+      map.fitBounds(bounds, { padding: [30, 30] });
     }
   }, 300);
 };
 
-// Recentrer la carte
+// Recentrer la carte pour voir tous les casinos
 const resetMapView = () => {
-  if (map) {
-    map.setView(LAS_VEGAS_CENTER, DEFAULT_ZOOM);
+  if (map && casinos.value.length > 0) {
+    const bounds = L.latLngBounds();
+    casinos.value.forEach(casino => {
+      bounds.extend([casino.lat, casino.lng]);
+    });
+    map.fitBounds(bounds, { padding: [30, 30] });
   }
 };
 
@@ -478,8 +490,11 @@ onUnmounted(() => {
 .map-container {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   height: 70vh;
   min-height: 400px;
+  max-height: calc(100vh - 120px);
   border-radius: 12px;
   overflow: hidden;
   background: #0f172a;
@@ -487,7 +502,8 @@ onUnmounted(() => {
 
 .leaflet-map {
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   z-index: 1;
 }
 
@@ -521,17 +537,15 @@ onUnmounted(() => {
   color: #818cf8;
 }
 
-/* Liste mobile */
+/* Liste mobile - maintenant en position relative en bas */
 .casino-list-mobile {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  flex-shrink: 0;
   background: rgba(30, 41, 59, 0.98);
   backdrop-filter: blur(8px);
-  border-radius: 16px 16px 0 0;
+  border-radius: 0;
   z-index: 1000;
-  max-height: 50%;
+  max-height: 45%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -542,11 +556,19 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 20px;
+  padding: 12px 16px;
   cursor: pointer;
   color: #f1f5f9;
   font-weight: 600;
+  font-size: 0.9375rem;
   border-bottom: 1px solid #334155;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid #334155;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.casino-list-header i {
+  color: #818cf8;
 }
 
 .casino-list-header:hover {
@@ -556,7 +578,7 @@ onUnmounted(() => {
 .casino-list-items {
   overflow-y: auto;
   padding: 8px;
-  max-height: 300px;
+  max-height: 200px;
 }
 
 .casino-list-item {
@@ -574,15 +596,15 @@ onUnmounted(() => {
 }
 
 .casino-item-icon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   flex-shrink: 0;
 }
 
@@ -594,7 +616,7 @@ onUnmounted(() => {
 .casino-item-name {
   color: #f1f5f9;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -602,7 +624,7 @@ onUnmounted(() => {
 
 .casino-item-address {
   color: #94a3b8;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -617,52 +639,133 @@ onUnmounted(() => {
 :deep(.casino-map-dialog .p-dialog-header) {
   background: #1e293b;
   border-bottom: 1px solid #334155;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
 }
 
 :deep(.casino-map-dialog .p-dialog-title) {
   color: #f1f5f9;
   font-weight: 700;
+  font-size: 1rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .map-container {
-    height: 80vh;
+    height: calc(100vh - 80px);
+    max-height: calc(100vh - 80px);
+    min-height: 300px;
+    border-radius: 0;
   }
 
   .map-legend {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    padding: 10px 14px;
-  }
-
-  .legend-title {
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .map-container {
-    height: 85vh;
-    min-height: 350px;
-  }
-
-  .map-legend {
+    gap: 8px;
+    padding: 8px 12px;
     top: 8px;
     left: 8px;
-    right: 8px;
-    padding: 8px 12px;
   }
 
   .legend-title {
     font-size: 0.8125rem;
   }
 
-  :deep(.p-button.p-button-sm) {
+  .casino-list-header {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+
+  :deep(.casino-map-dialog .p-dialog-header) {
+    padding: 0.625rem 1rem;
+  }
+
+  :deep(.casino-map-dialog .p-dialog-title) {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-container {
+    height: calc(100vh - 70px);
+    max-height: calc(100vh - 70px);
+    min-height: 280px;
+  }
+
+  .map-legend {
+    top: 6px;
+    left: 6px;
+    right: auto;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .legend-title {
     font-size: 0.75rem;
-    padding: 0.4rem 0.75rem;
+  }
+
+  .legend-actions {
+    display: flex;
+  }
+
+  :deep(.p-button.p-button-sm) {
+    font-size: 0.6875rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .casino-list-header {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .casino-list-items {
+    max-height: 180px;
+    padding: 6px;
+  }
+
+  .casino-list-item {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .casino-item-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .casino-item-name {
+    font-size: 0.8125rem;
+  }
+
+  .casino-item-address {
+    font-size: 0.625rem;
+  }
+
+  :deep(.casino-map-dialog .p-dialog-header) {
+    padding: 0.5rem 0.75rem;
+  }
+
+  :deep(.casino-map-dialog .p-dialog-title) {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .map-container {
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
+  }
+
+  .casino-list-items {
+    max-height: 120px;
+  }
+
+  .map-legend {
+    padding: 5px 8px;
+  }
+
+  .legend-title {
+    font-size: 0.6875rem;
   }
 }
 </style>
