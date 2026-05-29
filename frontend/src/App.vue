@@ -151,7 +151,7 @@ const selectedUser = ref(null);
 const tournaments = ref([]);
 const summary = ref(null);
 const loading = ref(false);
-const currentView = ref('planning');
+const currentView = ref('timeline');
 const windowWidth = ref(window.innerWidth);
 const showCasinoMap = ref(false);
 
@@ -207,6 +207,7 @@ const loadUserData = async (userId) => {
 const handleUserSelected = (user) => {
   selectedUser.value = user;
   loadUserData(user.id);
+  currentView.value = 'planning';
   if (isMobile.value) {
     sidebarCollapsed.value = true;
   }
