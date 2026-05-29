@@ -783,7 +783,7 @@ body {
 
   .floating-sheets-btn {
     top: 0.75rem;
-    right: 4rem;
+    right: 1rem;
     width: 44px;
     height: 44px;
   }
