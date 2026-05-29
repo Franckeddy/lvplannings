@@ -69,10 +69,18 @@
           />
           <Button
             :icon="showBusLines ? 'pi pi-eye-slash' : 'pi pi-directions'"
-            :label="showBusLines ? 'Masquer Bus' : 'Bus RTC'"
+            :label="showBusLines ? 'Masquer' : 'Bus RTC'"
             size="small"
             :severity="showBusLines ? 'info' : 'secondary'"
             @click="toggleBusLines"
+          />
+          <Button
+            :icon="showMonorail ? 'pi pi-eye-slash' : 'pi pi-arrows-h'"
+            :label="showMonorail ? 'Masquer' : 'Monorail'"
+            size="small"
+            :severity="showMonorail ? 'warning' : 'secondary'"
+            @click="toggleMonorail"
+            class="monorail-btn"
           />
         </div>
       </div>
@@ -80,7 +88,7 @@
       <!-- Liste des lignes de bus -->
       <div class="casino-list-mobile">
         <div class="casino-list-header" @click="toggleCasinoList">
-          <span>{{ showBusLines ? 'Lignes de bus RTC' : 'Lignes de bus' }}</span>
+          <span>{{ showBusLines ? 'Transports' : 'Lignes de Bus / Monorail' }}</span>
           <i :class="['pi', showCasinoList ? 'pi-chevron-down' : 'pi-chevron-up']"></i>
         </div>
         <div v-if="showCasinoList" class="casino-list-items">
@@ -100,10 +108,11 @@
             :key="line.id"
             class="casino-list-item bus-line-item"
             :class="{ 'selected': selectedBusLine === line.id }"
-            @click="focusBusLine(line); showBusLines || toggleBusLines()"
+            @click="activateAndFocusLine(line)"
           >
-            <div class="bus-line-icon" :style="{ background: line.color }">
-              <span class="bus-line-number">{{ line.name }}</span>
+            <div class="bus-line-icon" :class="{ 'monorail': line.isMonorail }" :style="{ background: line.isMonorail ? '#fff' : line.color }">
+              <img v-if="line.isMonorail" src="https://www.lvmonorail.com/wp-content/uploads/2016/11/LVM-LOGO-VERT-2c.jpg" alt="Monorail" class="monorail-icon-logo" />
+              <span v-else class="bus-line-number">{{ line.name }}</span>
             </div>
             <div class="casino-item-info">
               <div class="casino-item-name">{{ line.name }}</div>
@@ -116,15 +125,28 @@
             <i v-if="selectedBusLine === line.id" class="pi pi-check selected-check"></i>
           </div>
 
-          <!-- Lien vers Transit App -->
-          <a
-            href="https://transitapp.com/fr/region/las-vegas/rtc/bus-deuce"
-            target="_blank"
-            class="transit-app-link"
-          >
-            <i class="pi pi-external-link"></i>
-            Ouvrir Transit App
-          </a>
+          <!-- Liens externes -->
+          <div class="external-links-container">
+            <!-- Lien vers Transit App -->
+            <a
+              href="https://transitapp.com/fr/region/las-vegas/rtc/bus-deuce"
+              target="_blank"
+              class="transit-app-link"
+            >
+              <i class="pi pi-external-link"></i>
+              Transit App
+            </a>
+
+            <!-- Lien vers Monorail Tickets -->
+            <a
+              href="https://tix.lvmonorail.com/purchase"
+              target="_blank"
+              class="monorail-ticket-link"
+            >
+              <img src="https://www.lvmonorail.com/wp-content/uploads/2016/11/LVM-LOGO-VERT-2c.jpg" alt="Monorail" class="monorail-logo" />
+              Tickets
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -155,6 +177,7 @@ const showCasinoList = ref(false);
 const activeRoute = ref(null);
 const routeInfo = ref(null);
 const showBusLines = ref(false);
+const showMonorail = ref(false);
 const selectedBusLine = ref(null);
 let map = null;
 let markers = [];
@@ -641,6 +664,26 @@ const busLines = ref([
       { name: 'Stewart & Eastern', lat: 36.1730, lng: -115.1190 },
       { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 }
     ]
+  },
+  {
+    id: 'monorail',
+    name: 'MONORAIL',
+    description: 'Las Vegas Monorail',
+    color: '#232d6a',
+    frequency: '4-8 min',
+    hours: '7h - 00h (2h ven-dim)',
+    fare: '$5 / $13 (24h)',
+    link: 'https://www.lvmonorail.com/route-map/',
+    isMonorail: true,
+    stops: [
+      { name: 'MGM Grand Station', lat: 36.1019, lng: -115.1656 },
+      { name: 'Bally\'s/Paris Station', lat: 36.1118, lng: -115.1685 },
+      { name: 'Flamingo/Caesars Palace Station', lat: 36.1163, lng: -115.1695 },
+      { name: 'Harrah\'s/The LINQ Station', lat: 36.1198, lng: -115.1688 },
+      { name: 'Las Vegas Convention Center Station', lat: 36.1280, lng: -115.1530 },
+      { name: 'Westgate Station', lat: 36.1350, lng: -115.1530 },
+      { name: 'SAHARA Las Vegas Station', lat: 36.1445, lng: -115.1566 }
+    ]
   }
 ]);
 
@@ -899,15 +942,28 @@ const toggleCasinoList = () => {
   showCasinoList.value = !showCasinoList.value;
 };
 
-// Toggle affichage des lignes de bus
+// Toggle affichage des lignes de bus (sans monorail)
 const toggleBusLines = () => {
   showBusLines.value = !showBusLines.value;
-  if (showBusLines.value) {
+  redrawTransitLines();
+};
+
+// Toggle affichage du monorail
+const toggleMonorail = () => {
+  showMonorail.value = !showMonorail.value;
+  redrawTransitLines();
+};
+
+// Redessiner les lignes de transport selon les filtres actifs
+const redrawTransitLines = () => {
+  clearBusLines();
+  selectedBusLine.value = null;
+
+  if (showBusLines.value || showMonorail.value) {
     drawBusLines();
+    setCasinoMarkersOpacity(0.3);
   } else {
-    clearBusLines();
-    selectedBusLine.value = null;
-    setCasinoMarkersOpacity(1); // Restaurer l'opacité des casinos
+    setCasinoMarkersOpacity(1);
   }
 };
 
@@ -918,25 +974,46 @@ const drawBusLines = (highlightLineId = null) => {
   // Nettoyer les lignes existantes
   clearBusLines();
 
-  busLines.value.forEach(line => {
-    const isHighlighted = highlightLineId === null || highlightLineId === line.id;
-    const opacity = isHighlighted ? 0.9 : 0.15;
-    const weight = isHighlighted ? 6 : 3;
+  // Filtrer les lignes selon les boutons actifs ET la sélection individuelle
+  let linesToDraw = busLines.value.filter(line => {
+    if (line.isMonorail) {
+      return showMonorail.value;
+    } else {
+      return showBusLines.value;
+    }
+  });
+
+  // Si une ligne spécifique est sélectionnée, n'afficher que celle-ci
+  if (highlightLineId !== null) {
+    linesToDraw = linesToDraw.filter(line => line.id === highlightLineId);
+  }
+
+  linesToDraw.forEach(line => {
+    const isHighlighted = true; // Toujours en évidence puisqu'on ne montre que les lignes sélectionnées
+    const opacity = 0.9;
+    const weight = 6;
+    const isMonorail = line.isMonorail === true;
 
     // Créer la polyline pour la ligne de bus
     const coordinates = line.stops.map(stop => [stop.lat, stop.lng]);
 
+    // Le monorail a une ligne continue, les bus ont des pointillés
+    const dashArray = isMonorail
+      ? null
+      : (isHighlighted ? '10, 10' : '5, 5');
+
     const polyline = L.polyline(coordinates, {
       color: line.color,
-      weight: weight,
+      weight: isMonorail ? weight + 2 : weight,
       opacity: opacity,
-      dashArray: isHighlighted ? '10, 10' : '5, 5',
+      dashArray: dashArray,
       lineId: line.id
     }).addTo(map);
 
+    const icon = isMonorail ? '🚝' : '🚌';
     polyline.bindPopup(`
       <div class="bus-popup">
-        <h3 style="color: ${line.color}">🚌 ${line.name}</h3>
+        <h3 style="color: ${line.color}">${icon} ${line.name}</h3>
         <p>${line.description}</p>
         <p><strong>Fréquence:</strong> ${line.frequency}</p>
         <p><strong>Horaires:</strong> ${line.hours}</p>
@@ -996,6 +1073,20 @@ const clearBusLines = () => {
   busStopMarkers = [];
 };
 
+// Activer le toggle approprié et focus sur la ligne
+const activateAndFocusLine = (line) => {
+  if (line.isMonorail) {
+    if (!showMonorail.value) {
+      showMonorail.value = true;
+    }
+  } else {
+    if (!showBusLines.value) {
+      showBusLines.value = true;
+    }
+  }
+  focusBusLine(line);
+};
+
 // Focus sur une ligne de bus
 const focusBusLine = (line) => {
   if (!map || !line.stops.length) return;
@@ -1045,7 +1136,7 @@ const setCasinoMarkersOpacity = (opacity) => {
 // Réinitialiser la sélection de ligne
 const clearBusLineSelection = () => {
   selectedBusLine.value = null;
-  if (showBusLines.value) {
+  if (showBusLines.value || showMonorail.value) {
     drawBusLines(null);
   }
   setCasinoMarkersOpacity(1); // Restaurer l'opacité des casinos
@@ -1063,6 +1154,7 @@ watch(() => props.modelValue, (newVal) => {
     clearRoute();
     clearBusLines();
     showBusLines.value = false;
+    showMonorail.value = false;
   }
 });
 
@@ -1072,6 +1164,7 @@ watch(visible, (newVal) => {
     clearRoute();
     clearBusLines();
     showBusLines.value = false;
+    showMonorail.value = false;
   }
 });
 
@@ -1637,6 +1730,18 @@ onUnmounted(() => {
   text-transform: uppercase;
 }
 
+.bus-line-icon.monorail {
+  border: 2px solid #232d6a;
+  padding: 2px;
+}
+
+.bus-line-icon .monorail-icon-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
 .bus-line-details {
   display: flex;
   gap: 10px;
@@ -1655,18 +1760,24 @@ onUnmounted(() => {
   font-size: 0.5rem;
 }
 
+.external-links-container {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+}
+
 .transit-app-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  margin: 8px;
+  gap: 6px;
+  padding: 10px 14px;
+  flex: 1;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   text-decoration: none;
   border-radius: 8px;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   transition: all 0.2s ease;
 }
@@ -1677,12 +1788,51 @@ onUnmounted(() => {
 }
 
 .transit-app-link i {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+}
+
+.monorail-ticket-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  flex: 1;
+  background: #ffffff;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid #232d6a;
+}
+
+.monorail-ticket-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(35, 45, 106, 0.4);
+  background: #e8eaf6;
+}
+
+.monorail-logo {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
 }
 
 .legend-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.monorail-btn {
+  background: linear-gradient(135deg, #232d6a, #1a2150) !important;
+  border-color: #232d6a !important;
+}
+
+.monorail-btn:hover {
+  background: linear-gradient(135deg, #2a3680, #232d6a) !important;
 }
 
 /* Dialog styles */
