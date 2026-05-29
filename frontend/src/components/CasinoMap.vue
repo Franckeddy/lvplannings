@@ -67,30 +67,64 @@
             severity="secondary"
             @click="resetMapView"
           />
+          <Button
+            :icon="showBusLines ? 'pi pi-eye-slash' : 'pi pi-directions'"
+            :label="showBusLines ? 'Masquer Bus' : 'Bus RTC'"
+            size="small"
+            :severity="showBusLines ? 'info' : 'secondary'"
+            @click="toggleBusLines"
+          />
         </div>
       </div>
 
-      <!-- Liste des casinos (mobile) -->
+      <!-- Liste des lignes de bus -->
       <div class="casino-list-mobile">
         <div class="casino-list-header" @click="toggleCasinoList">
-          <span>Liste des casinos</span>
+          <span>{{ showBusLines ? 'Lignes de bus RTC' : 'Lignes de bus' }}</span>
           <i :class="['pi', showCasinoList ? 'pi-chevron-down' : 'pi-chevron-up']"></i>
         </div>
         <div v-if="showCasinoList" class="casino-list-items">
+          <!-- Bouton pour voir toutes les lignes -->
           <div
-            v-for="casino in casinos"
-            :key="casino.name"
-            class="casino-list-item"
-            @click="focusCasino(casino)"
+            v-if="selectedBusLine && showBusLines"
+            class="show-all-lines-btn"
+            @click="clearBusLineSelection"
           >
-            <div class="casino-item-icon" :style="{ background: getCasinoColor(casino.type) }">
-              {{ casino.name.charAt(0) }}
+            <i class="pi pi-eye"></i>
+            <span>Voir toutes les lignes</span>
+          </div>
+
+          <!-- Lignes de bus -->
+          <div
+            v-for="line in busLines"
+            :key="line.id"
+            class="casino-list-item bus-line-item"
+            :class="{ 'selected': selectedBusLine === line.id }"
+            @click="focusBusLine(line); showBusLines || toggleBusLines()"
+          >
+            <div class="bus-line-icon" :style="{ background: line.color }">
+              <span class="bus-line-number">{{ line.name }}</span>
             </div>
             <div class="casino-item-info">
-              <div class="casino-item-name">{{ casino.name }}</div>
-              <div class="casino-item-address">{{ casino.address }}</div>
+              <div class="casino-item-name">{{ line.name }}</div>
+              <div class="casino-item-address">{{ line.description }}</div>
+              <div class="bus-line-details">
+                <span><i class="pi pi-clock"></i> {{ line.frequency }}</span>
+                <span><i class="pi pi-dollar"></i> {{ line.fare }}</span>
+              </div>
             </div>
+            <i v-if="selectedBusLine === line.id" class="pi pi-check selected-check"></i>
           </div>
+
+          <!-- Lien vers Transit App -->
+          <a
+            href="https://transitapp.com/fr/region/las-vegas/rtc/bus-deuce"
+            target="_blank"
+            class="transit-app-link"
+          >
+            <i class="pi pi-external-link"></i>
+            Ouvrir Transit App
+          </a>
         </div>
       </div>
     </div>
@@ -120,9 +154,13 @@ const mapContainer = ref(null);
 const showCasinoList = ref(false);
 const activeRoute = ref(null);
 const routeInfo = ref(null);
+const showBusLines = ref(false);
+const selectedBusLine = ref(null);
 let map = null;
 let markers = [];
 let routingControl = null;
+let busLinesLayers = [];
+let busStopMarkers = [];
 
 // Coordonnées du centre de Las Vegas (vue globale)
 const LAS_VEGAS_CENTER = [36.10, -115.18];
@@ -317,6 +355,292 @@ const casinos = ref([
     type: "standard",
     rooms: "Excalibur Poker Room",
     description: "Low stakes - Débutants friendly"
+  }
+]);
+
+// Lignes de bus RTC Las Vegas
+const busLines = ref([
+  {
+    id: 'deuce',
+    name: 'DEUCE',
+    description: 'Strip & Downtown Express',
+    color: '#e53935',
+    frequency: '15-20 min',
+    hours: '24h/24',
+    fare: '$6 (2h) / $8 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-deuce',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Fremont Street Experience', lat: 36.1699, lng: -115.1424 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'SLS Las Vegas', lat: 36.1410, lng: -115.1620 },
+      { name: 'Circus Circus', lat: 36.1364, lng: -115.1640 },
+      { name: 'Resorts World', lat: 36.1284, lng: -115.1658 },
+      { name: 'Wynn / Encore', lat: 36.1263, lng: -115.1627 },
+      { name: 'Fashion Show Mall', lat: 36.1269, lng: -115.1703 },
+      { name: 'Treasure Island', lat: 36.1247, lng: -115.1717 },
+      { name: 'Venetian / Palazzo', lat: 36.1212, lng: -115.1696 },
+      { name: 'Harrah\'s / The LINQ', lat: 36.1186, lng: -115.1708 },
+      { name: 'Flamingo / Caesars', lat: 36.1162, lng: -115.1720 },
+      { name: 'Bellagio / Bally\'s', lat: 36.1129, lng: -115.1740 },
+      { name: 'Paris / Planet Hollywood', lat: 36.1095, lng: -115.1708 },
+      { name: 'CityCenter / Aria', lat: 36.1073, lng: -115.1765 },
+      { name: 'Park MGM / T-Mobile Arena', lat: 36.1050, lng: -115.1740 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Tropicana', lat: 36.1005, lng: -115.1720 },
+      { name: 'Excalibur', lat: 36.0989, lng: -115.1754 },
+      { name: 'Luxor', lat: 36.0955, lng: -115.1760 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: 'sdx',
+    name: 'SDX',
+    description: 'Strip & Downtown Express (Limited)',
+    color: '#1e88e5',
+    frequency: '12-15 min',
+    hours: '9h - 00h',
+    fare: '$6 (2h) / $8 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-sdx',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Bonneville Transit Center', lat: 36.1648, lng: -115.1535 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'Fashion Show Mall', lat: 36.1269, lng: -115.1703 },
+      { name: 'Flamingo / Caesars', lat: 36.1162, lng: -115.1720 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: '101',
+    name: '101',
+    description: 'Rainbow Blvd',
+    color: '#7b1fa2',
+    frequency: '30 min',
+    hours: '5h - 22h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-101',
+    stops: [
+      { name: 'Centennial Hills Transit Center', lat: 36.2680, lng: -115.2490 },
+      { name: 'Rainbow & Lake Mead', lat: 36.2150, lng: -115.2420 },
+      { name: 'Rainbow & Cheyenne', lat: 36.2050, lng: -115.2420 },
+      { name: 'Rainbow & Smoke Ranch', lat: 36.1850, lng: -115.2420 },
+      { name: 'Rainbow & Charleston', lat: 36.1580, lng: -115.2420 },
+      { name: 'Rainbow & Sahara', lat: 36.1445, lng: -115.2420 },
+      { name: 'Rainbow & Spring Mountain', lat: 36.1260, lng: -115.2420 },
+      { name: 'Rainbow & Flamingo', lat: 36.1150, lng: -115.2420 },
+      { name: 'Rainbow & Tropicana', lat: 36.1000, lng: -115.2420 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: '102',
+    name: '102',
+    description: 'Lake Mead Blvd',
+    color: '#00897b',
+    frequency: '30 min',
+    hours: '5h - 22h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-102',
+    stops: [
+      { name: 'Centennial Hills Transit Center', lat: 36.2680, lng: -115.2490 },
+      { name: 'Lake Mead & Rancho', lat: 36.2150, lng: -115.2200 },
+      { name: 'Lake Mead & Decatur', lat: 36.2150, lng: -115.2050 },
+      { name: 'Lake Mead & Jones', lat: 36.2150, lng: -115.1900 },
+      { name: 'Lake Mead & MLK', lat: 36.2150, lng: -115.1700 },
+      { name: 'Lake Mead & Civic Center', lat: 36.2150, lng: -115.1500 },
+      { name: 'Lake Mead & Las Vegas Blvd', lat: 36.2150, lng: -115.1400 },
+      { name: 'Lake Mead & Nellis', lat: 36.2150, lng: -115.0620 }
+    ]
+  },
+  {
+    id: '103',
+    name: '103',
+    description: 'Decatur Blvd',
+    color: '#5e35b1',
+    frequency: '20-30 min',
+    hours: '5h - 22h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-103',
+    stops: [
+      { name: 'Decatur & Lake Mead', lat: 36.2150, lng: -115.2050 },
+      { name: 'Decatur & Cheyenne', lat: 36.2050, lng: -115.2050 },
+      { name: 'Decatur & Vegas Dr', lat: 36.1850, lng: -115.2050 },
+      { name: 'Decatur & Charleston', lat: 36.1580, lng: -115.2050 },
+      { name: 'Decatur & Sahara', lat: 36.1445, lng: -115.2050 },
+      { name: 'Decatur & Spring Mountain', lat: 36.1260, lng: -115.2050 },
+      { name: 'Decatur & Flamingo', lat: 36.1150, lng: -115.2050 },
+      { name: 'Decatur & Tropicana', lat: 36.1000, lng: -115.2050 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: '104',
+    name: '104',
+    description: 'Rancho Dr',
+    color: '#ef6c00',
+    frequency: '30 min',
+    hours: '5h - 21h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-104',
+    stops: [
+      { name: 'Rancho & Lake Mead', lat: 36.2150, lng: -115.2200 },
+      { name: 'Rancho & Cheyenne', lat: 36.2050, lng: -115.2200 },
+      { name: 'Rancho & Vegas Dr', lat: 36.1850, lng: -115.2200 },
+      { name: 'Rancho & US-95', lat: 36.1700, lng: -115.2100 },
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 }
+    ]
+  },
+  {
+    id: '105',
+    name: '105',
+    description: 'Martin L. King Blvd',
+    color: '#c62828',
+    frequency: '30 min',
+    hours: '5h - 21h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-105',
+    stops: [
+      { name: 'MLK & Lake Mead', lat: 36.2150, lng: -115.1700 },
+      { name: 'MLK & Carey', lat: 36.2000, lng: -115.1700 },
+      { name: 'MLK & Cheyenne', lat: 36.2050, lng: -115.1700 },
+      { name: 'MLK & Vegas Dr', lat: 36.1850, lng: -115.1700 },
+      { name: 'Bonneville Transit Center', lat: 36.1648, lng: -115.1535 }
+    ]
+  },
+  {
+    id: '106',
+    name: '106',
+    description: 'Charleston Blvd',
+    color: '#d81b60',
+    frequency: '15-20 min',
+    hours: '5h - 23h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-106',
+    stops: [
+      { name: 'Red Rock Casino', lat: 36.1734, lng: -115.3090 },
+      { name: 'Charleston & 215', lat: 36.1580, lng: -115.2800 },
+      { name: 'Charleston & Rainbow', lat: 36.1580, lng: -115.2420 },
+      { name: 'Charleston & Decatur', lat: 36.1580, lng: -115.2050 },
+      { name: 'Charleston & Rancho', lat: 36.1580, lng: -115.2200 },
+      { name: 'Bonneville Transit Center', lat: 36.1648, lng: -115.1535 },
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Charleston & Eastern', lat: 36.1580, lng: -115.1190 },
+      { name: 'Charleston & Nellis', lat: 36.1580, lng: -115.0620 },
+      { name: 'Nellis AFB', lat: 36.2350, lng: -115.0340 }
+    ]
+  },
+  {
+    id: '108',
+    name: '108',
+    description: 'Paradise Rd',
+    color: '#0288d1',
+    frequency: '30 min',
+    hours: '5h - 22h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-108',
+    stops: [
+      { name: 'Convention Center', lat: 36.1280, lng: -115.1530 },
+      { name: 'Paradise & Sahara', lat: 36.1445, lng: -115.1530 },
+      { name: 'Paradise & Desert Inn', lat: 36.1350, lng: -115.1530 },
+      { name: 'Paradise & Flamingo', lat: 36.1150, lng: -115.1530 },
+      { name: 'Paradise & Tropicana', lat: 36.1000, lng: -115.1530 },
+      { name: 'Harry Reid Airport T1', lat: 36.0840, lng: -115.1537 },
+      { name: 'Harry Reid Airport T3', lat: 36.0860, lng: -115.1480 }
+    ]
+  },
+  {
+    id: '109',
+    name: '109',
+    description: 'Maryland Pkwy',
+    color: '#43a047',
+    frequency: '15-20 min',
+    hours: '5h - 23h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-109',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Maryland & Fremont', lat: 36.1680, lng: -115.1190 },
+      { name: 'Maryland & Charleston', lat: 36.1580, lng: -115.1190 },
+      { name: 'Maryland & Sahara', lat: 36.1445, lng: -115.1190 },
+      { name: 'Maryland & UNLV', lat: 36.1100, lng: -115.1400 },
+      { name: 'Maryland & Tropicana', lat: 36.1000, lng: -115.1190 },
+      { name: 'Maryland & Russell', lat: 36.0850, lng: -115.1190 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: '110',
+    name: '110',
+    description: 'Eastern Ave',
+    color: '#8e24aa',
+    frequency: '30 min',
+    hours: '5h - 22h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-110',
+    stops: [
+      { name: 'Eastern & Lake Mead', lat: 36.2150, lng: -115.1190 },
+      { name: 'Eastern & Charleston', lat: 36.1580, lng: -115.1190 },
+      { name: 'Eastern & Sahara', lat: 36.1445, lng: -115.1190 },
+      { name: 'Eastern & Flamingo', lat: 36.1150, lng: -115.1190 },
+      { name: 'Eastern & Tropicana', lat: 36.1000, lng: -115.1190 },
+      { name: 'Sunset Station', lat: 36.0600, lng: -115.1190 }
+    ]
+  },
+  {
+    id: '111',
+    name: '111',
+    description: 'Nellis Blvd',
+    color: '#6d4c41',
+    frequency: '30 min',
+    hours: '5h - 21h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-111',
+    stops: [
+      { name: 'Nellis AFB', lat: 36.2350, lng: -115.0340 },
+      { name: 'Nellis & Lake Mead', lat: 36.2150, lng: -115.0620 },
+      { name: 'Nellis & Charleston', lat: 36.1580, lng: -115.0620 },
+      { name: 'Nellis & Sahara', lat: 36.1445, lng: -115.0620 },
+      { name: 'Nellis & Desert Inn', lat: 36.1350, lng: -115.0620 },
+      { name: 'Nellis & Flamingo', lat: 36.1150, lng: -115.0620 },
+      { name: 'Nellis & Tropicana', lat: 36.1000, lng: -115.0620 }
+    ]
+  },
+  {
+    id: '113',
+    name: '113',
+    description: 'Las Vegas Blvd South',
+    color: '#fdd835',
+    frequency: '30 min',
+    hours: '5h - 21h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-113',
+    stops: [
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 },
+      { name: 'Las Vegas Blvd & Cactus', lat: 36.0600, lng: -115.1730 },
+      { name: 'Las Vegas Blvd & Windmill', lat: 36.0400, lng: -115.1730 },
+      { name: 'South Point Casino', lat: 36.0117, lng: -115.1739 },
+      { name: 'Las Vegas Blvd & Silverado Ranch', lat: 35.9900, lng: -115.1730 }
+    ]
+  },
+  {
+    id: '115',
+    name: '115',
+    description: 'Nellis / Stewart',
+    color: '#546e7a',
+    frequency: '30-40 min',
+    hours: '6h - 20h',
+    fare: '$2 / $5 (24h)',
+    link: 'https://transitapp.com/fr/region/las-vegas/rtc/bus-115',
+    stops: [
+      { name: 'Nellis & Lake Mead', lat: 36.2150, lng: -115.0620 },
+      { name: 'Nellis & Cheyenne', lat: 36.2050, lng: -115.0620 },
+      { name: 'Stewart & Eastern', lat: 36.1730, lng: -115.1190 },
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 }
+    ]
   }
 ]);
 
@@ -575,6 +899,158 @@ const toggleCasinoList = () => {
   showCasinoList.value = !showCasinoList.value;
 };
 
+// Toggle affichage des lignes de bus
+const toggleBusLines = () => {
+  showBusLines.value = !showBusLines.value;
+  if (showBusLines.value) {
+    drawBusLines();
+  } else {
+    clearBusLines();
+    selectedBusLine.value = null;
+    setCasinoMarkersOpacity(1); // Restaurer l'opacité des casinos
+  }
+};
+
+// Dessiner les lignes de bus sur la carte
+const drawBusLines = (highlightLineId = null) => {
+  if (!map) return;
+
+  // Nettoyer les lignes existantes
+  clearBusLines();
+
+  busLines.value.forEach(line => {
+    const isHighlighted = highlightLineId === null || highlightLineId === line.id;
+    const opacity = isHighlighted ? 0.9 : 0.15;
+    const weight = isHighlighted ? 6 : 3;
+
+    // Créer la polyline pour la ligne de bus
+    const coordinates = line.stops.map(stop => [stop.lat, stop.lng]);
+
+    const polyline = L.polyline(coordinates, {
+      color: line.color,
+      weight: weight,
+      opacity: opacity,
+      dashArray: isHighlighted ? '10, 10' : '5, 5',
+      lineId: line.id
+    }).addTo(map);
+
+    polyline.bindPopup(`
+      <div class="bus-popup">
+        <h3 style="color: ${line.color}">🚌 ${line.name}</h3>
+        <p>${line.description}</p>
+        <p><strong>Fréquence:</strong> ${line.frequency}</p>
+        <p><strong>Horaires:</strong> ${line.hours}</p>
+        <p><strong>Tarif:</strong> ${line.fare}</p>
+        <a href="${line.link}" target="_blank" class="bus-link">Plus d'infos →</a>
+      </div>
+    `);
+
+    // Clic sur la ligne pour la sélectionner
+    polyline.on('click', () => {
+      focusBusLine(line);
+    });
+
+    busLinesLayers.push({ layer: polyline, lineId: line.id });
+
+    // Ajouter les marqueurs pour les arrêts (seulement si la ligne est mise en évidence ou aucune sélection)
+    if (isHighlighted) {
+      line.stops.forEach((stop, index) => {
+        const isTerminal = index === 0 || index === line.stops.length - 1;
+
+        const stopIcon = L.divIcon({
+          className: 'bus-stop-marker',
+          html: `
+            <div class="bus-stop-icon ${isTerminal ? 'terminal' : ''}" style="background: ${line.color}; opacity: ${opacity}">
+              <span>${isTerminal ? '●' : '○'}</span>
+            </div>
+          `,
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+
+        const stopMarker = L.marker([stop.lat, stop.lng], { icon: stopIcon })
+          .addTo(map)
+          .bindPopup(`
+            <div class="bus-stop-popup">
+              <h4>${stop.name}</h4>
+              <p style="color: ${line.color}"><strong>${line.name}</strong> - ${line.description}</p>
+            </div>
+          `);
+
+        busStopMarkers.push({ marker: stopMarker, lineId: line.id });
+      });
+    }
+  });
+};
+
+// Effacer les lignes de bus de la carte
+const clearBusLines = () => {
+  busLinesLayers.forEach(item => {
+    if (map) map.removeLayer(item.layer || item);
+  });
+  busLinesLayers = [];
+
+  busStopMarkers.forEach(item => {
+    if (map) map.removeLayer(item.marker || item);
+  });
+  busStopMarkers = [];
+};
+
+// Focus sur une ligne de bus
+const focusBusLine = (line) => {
+  if (!map || !line.stops.length) return;
+
+  // Si on clique sur la même ligne déjà sélectionnée, on désélectionne
+  if (selectedBusLine.value === line.id) {
+    selectedBusLine.value = null;
+    drawBusLines(null); // Redessiner toutes les lignes normalement
+    setCasinoMarkersOpacity(1); // Restaurer l'opacité des casinos
+
+    // Ajuster la vue pour montrer toutes les lignes
+    const allBounds = L.latLngBounds();
+    busLines.value.forEach(l => {
+      l.stops.forEach(stop => {
+        allBounds.extend([stop.lat, stop.lng]);
+      });
+    });
+    map.fitBounds(allBounds, { padding: [50, 50] });
+  } else {
+    // Sélectionner la nouvelle ligne
+    selectedBusLine.value = line.id;
+
+    // Redessiner avec la ligne mise en évidence
+    drawBusLines(line.id);
+    setCasinoMarkersOpacity(0.2); // Rendre les casinos transparents
+
+    // Zoom sur la ligne sélectionnée
+    const bounds = L.latLngBounds();
+    line.stops.forEach(stop => {
+      bounds.extend([stop.lat, stop.lng]);
+    });
+    map.fitBounds(bounds, { padding: [50, 50] });
+  }
+};
+
+// Modifier l'opacité des marqueurs de casinos
+const setCasinoMarkersOpacity = (opacity) => {
+  markers.forEach(marker => {
+    const element = marker.getElement();
+    if (element) {
+      element.style.opacity = opacity;
+      element.style.transition = 'opacity 0.3s ease';
+    }
+  });
+};
+
+// Réinitialiser la sélection de ligne
+const clearBusLineSelection = () => {
+  selectedBusLine.value = null;
+  if (showBusLines.value) {
+    drawBusLines(null);
+  }
+  setCasinoMarkersOpacity(1); // Restaurer l'opacité des casinos
+};
+
 // Watcher pour la visibilité
 watch(() => props.modelValue, (newVal) => {
   visible.value = newVal;
@@ -583,8 +1059,10 @@ watch(() => props.modelValue, (newVal) => {
       initMap();
     }, 100);
   } else {
-    // Nettoyer l'itinéraire quand on ferme
+    // Nettoyer l'itinéraire et les lignes de bus quand on ferme
     clearRoute();
+    clearBusLines();
+    showBusLines.value = false;
   }
 });
 
@@ -592,6 +1070,8 @@ watch(visible, (newVal) => {
   emit('update:modelValue', newVal);
   if (!newVal) {
     clearRoute();
+    clearBusLines();
+    showBusLines.value = false;
   }
 });
 
@@ -759,6 +1239,80 @@ onUnmounted(() => {
 /* Popup maison */
 .home-popup h3 {
   color: #ef4444 !important;
+}
+
+/* Styles des lignes de bus */
+.bus-stop-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.bus-stop-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+}
+
+.bus-stop-icon.terminal {
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+}
+
+/* Popup bus */
+.bus-popup {
+  padding: 4px;
+}
+
+.bus-popup h3 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bus-popup p {
+  margin: 4px 0;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+}
+
+.bus-popup .bus-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #6366f1;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.bus-popup .bus-link:hover {
+  background: #4f46e5;
+}
+
+.bus-stop-popup h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+}
+
+.bus-stop-popup p {
+  margin: 0;
+  font-size: 0.8rem;
 }
 </style>
 
@@ -1014,6 +1568,121 @@ onUnmounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Styles pour les lignes de bus */
+.bus-line-item {
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.bus-line-item:hover {
+  border-left-color: currentColor;
+}
+
+.bus-line-item.selected {
+  background: rgba(99, 102, 241, 0.2);
+  border-left-color: #6366f1;
+  border-left-width: 4px;
+}
+
+.bus-line-item .selected-check {
+  color: #22c55e;
+  font-size: 1rem;
+  margin-left: auto;
+}
+
+.show-all-lines-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin: 8px;
+  margin-bottom: 4px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px dashed #6366f1;
+  border-radius: 8px;
+  color: #818cf8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.show-all-lines-btn:hover {
+  background: rgba(99, 102, 241, 0.25);
+  color: #a5b4fc;
+}
+
+.show-all-lines-btn i {
+  font-size: 0.875rem;
+}
+
+.bus-line-icon {
+  width: 36px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.bus-line-icon .bus-line-number {
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bus-line-details {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 0.625rem;
+  color: #64748b;
+}
+
+.bus-line-details span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bus-line-details i {
+  font-size: 0.5rem;
+}
+
+.transit-app-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.transit-app-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.transit-app-link i {
+  font-size: 0.875rem;
+}
+
+.legend-actions {
+  display: flex;
+  gap: 8px;
 }
 
 /* Dialog styles */
