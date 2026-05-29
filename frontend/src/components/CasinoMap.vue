@@ -2195,7 +2195,6 @@ onUnmounted(() => {
 .bus-stop-popup h4 {
   margin: 0 0 4px 0;
   font-size: 0.9rem;
-  color: #f1f5f9;
 }
 
 .bus-stop-popup p {
