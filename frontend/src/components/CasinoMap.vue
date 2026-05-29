@@ -110,17 +110,19 @@
         <div class="legend-actions">
           <Button
             icon="pi pi-refresh"
-            label="Recentrer"
+            :label="isMobile ? '' : 'Recentrer'"
             size="small"
             severity="secondary"
             @click="resetMapView"
+            v-tooltip.bottom="'Recentrer'"
           />
           <Button
             :icon="geolocating ? 'pi pi-spin pi-spinner' : 'pi pi-compass'"
-            :label="userLocation ? 'Ma position' : 'Me localiser'"
+            :label="isMobile ? '' : (userLocation ? 'Ma position' : 'Me localiser')"
             size="small"
             :severity="userLocation ? 'success' : 'secondary'"
             @click="geolocateUser"
+            v-tooltip.bottom="'Me localiser'"
           />
           <Button
             :icon="showBusLines ? 'pi pi-eye-slash' : 'pi pi-directions'"
@@ -238,6 +240,7 @@ const routeMode = ref('driving'); // 'driving' ou 'transit'
 const routeFrom = ref('home'); // 'home' ou 'location'
 const userLocation = ref(null);
 const geolocating = ref(false);
+const isMobile = ref(window.innerWidth <= 768);
 let map = null;
 let markers = [];
 let routingControl = null;
@@ -1432,27 +1435,28 @@ const initMap = async () => {
     const casinoIndex = casinos.value.findIndex(c => c.name === casino.name);
 
     // Popup avec les informations du casino et bouton itinéraire
+    const mobileClass = isMobile.value ? ' mobile' : '';
     const popupContent = `
-      <div class="casino-popup">
+      <div class="casino-popup${mobileClass}">
         <h3>${casino.name}</h3>
         <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
         <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
         <p class="popup-desc">${casino.description}</p>
-        <p class="popup-route-label">Itinéraire depuis :</p>
+        <p class="popup-route-label">${isMobile.value ? '' : 'Itinéraire depuis :'}</p>
         <div class="popup-actions">
           <button class="directions-btn directions-home-btn" data-casino-index="${casinoIndex}" data-from="home">
-            <i class="pi pi-home"></i> Maison
+            <i class="pi pi-home"></i>${isMobile.value ? '' : ' Maison'}
           </button>
           <button class="directions-btn directions-loc-btn" data-casino-index="${casinoIndex}" data-from="location">
-            <i class="pi pi-compass"></i> Ma position
+            <i class="pi pi-compass"></i>${isMobile.value ? '' : ' Ma position'}
           </button>
         </div>
         <div class="popup-actions popup-mode-actions">
           <button class="directions-btn directions-car-btn" data-casino-index="${casinoIndex}" data-mode="driving">
-            <i class="pi pi-car"></i> Voiture
+            <i class="pi pi-car"></i>${isMobile.value ? '' : ' Voiture'}
           </button>
           <button class="directions-btn directions-bus-btn" data-casino-index="${casinoIndex}" data-mode="transit">
-            <i class="pi pi-directions"></i> Bus
+            <i class="pi pi-directions"></i>${isMobile.value ? '' : ' Bus'}
           </button>
         </div>
       </div>
@@ -1858,9 +1862,15 @@ onMounted(() => {
   if (visible.value) {
     initMap();
   }
+  window.addEventListener('resize', handleResize);
 });
 
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
 onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
   clearRoute();
   if (map) {
     map.remove();
@@ -2017,6 +2027,38 @@ onUnmounted(() => {
 
 .casino-popup .popup-mode-actions {
   margin-top: 6px;
+}
+
+/* Mobile popup compact */
+.casino-popup.mobile h3 {
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.casino-popup.mobile .popup-address,
+.casino-popup.mobile .popup-rooms {
+  font-size: 0.6875rem;
+  margin: 2px 0;
+}
+
+.casino-popup.mobile .popup-desc {
+  font-size: 0.625rem;
+  margin: 4px 0;
+}
+
+.casino-popup.mobile .popup-route-label {
+  display: none;
+}
+
+.casino-popup.mobile .popup-actions {
+  gap: 6px;
+}
+
+.casino-popup.mobile .directions-btn {
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  min-width: 36px;
+  justify-content: center;
 }
 
 .casino-popup .gmaps-btn {
@@ -2844,29 +2886,37 @@ onUnmounted(() => {
   }
 
   .route-info-panel {
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    max-width: 320px;
-    width: calc(100% - 32px);
-    padding: 16px;
+    top: auto;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    transform: none;
+    max-width: none;
+    width: auto;
+    padding: 10px 12px;
+    border-radius: 10px;
   }
 
   .route-info-header {
+    font-size: 0.8125rem;
+    margin-bottom: 6px;
+    gap: 6px;
+  }
+
+  .route-info-header i {
     font-size: 0.875rem;
-    margin-bottom: 10px;
   }
 
   .route-info-details {
     flex-direction: row;
-    justify-content: space-around;
-    margin-bottom: 12px;
+    justify-content: flex-start;
+    gap: 16px;
+    margin-bottom: 8px;
   }
 
   .route-stat {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    gap: 6px;
   }
 
   .external-nav-buttons {
@@ -2888,23 +2938,35 @@ onUnmounted(() => {
   }
 
   .map-legend {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 8px 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
     top: 8px;
     right: 8px;
+    left: 8px;
+    max-width: none;
+    border-radius: 8px;
+  }
+
+  .legend-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
   }
 
   .legend-title {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
+    display: none;
   }
 
   .casino-list-mobile {
-    top: 85px;
-    bottom: auto;
-    right: 8px;
-    max-width: 240px;
+    top: auto;
+    bottom: 12px;
+    left: 8px;
+    right: auto;
+    max-width: 200px;
   }
 
   .casino-list-header {
@@ -2929,35 +2991,82 @@ onUnmounted(() => {
   }
 
   .route-info-panel {
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    max-width: 290px;
-    width: calc(100% - 24px);
-    padding: 12px 14px;
-    border-radius: 10px;
+    top: auto;
+    left: 6px;
+    right: 6px;
+    bottom: 130px;
+    transform: none;
+    max-width: none;
+    width: auto;
+    padding: 8px 10px;
+    border-radius: 8px;
   }
 
   .route-info-header {
-    font-size: 0.8125rem;
-    gap: 8px;
-    margin-bottom: 8px;
+    font-size: 0.75rem;
+    gap: 6px;
+    margin-bottom: 4px;
   }
 
   .route-info-header i {
-    font-size: 1rem;
+    font-size: 0.8125rem;
   }
 
   .route-info-details {
-    gap: 6px;
-    margin-bottom: 10px;
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 6px;
   }
 
   .route-stat {
-    font-size: 0.8125rem;
-    gap: 6px;
+    font-size: 0.75rem;
+    gap: 5px;
+  }
+
+  .route-stat i {
+    width: 14px;
+    font-size: 0.6875rem;
+  }
+
+  .route-mode-toggle {
+    margin-bottom: 6px;
+  }
+
+  .mode-btn {
+    padding: 4px 8px;
+    font-size: 0.6875rem;
+  }
+
+  .transit-details {
+    padding: 6px;
+    margin-bottom: 6px;
+  }
+
+  .transit-steps-simple {
+    gap: 4px;
+  }
+
+  .segment-time, .segment-label {
+    font-size: 0.625rem;
+  }
+
+  .segment-line-badge {
+    font-size: 0.5625rem;
+    padding: 2px 5px;
+  }
+
+  .segment-arrow {
+    font-size: 0.5rem;
+  }
+
+  .transit-stops-info {
+    font-size: 0.625rem;
+    gap: 4px;
+  }
+
+  .route-close-btn {
+    font-size: 0.6875rem !important;
+    padding: 4px 8px !important;
   }
 
   .external-nav-buttons {
@@ -2977,30 +3086,37 @@ onUnmounted(() => {
   }
 
   .map-legend {
+    width: fit-content;
     top: 6px;
-    right: 6px;
-    padding: 6px 10px;
-    gap: 6px;
+    left: unset;
+    right: 4px;
+    padding: 5px 6px;
+    gap: 4px;
+    border-radius: 8px;
   }
 
   .legend-title {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
+    display: none;
   }
 
   .legend-actions {
     display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
   }
 
   :deep(.p-button.p-button-sm) {
     font-size: 0.6875rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0.4rem;
   }
 
   .casino-list-mobile {
-    top: 70px;
-    bottom: auto;
-    right: 6px;
-    max-width: 180px;
+    top: auto;
+    bottom: 8px;
+    left: 6px;
+    right: auto;
+    max-width: 160px;
   }
 
   .casino-list-header {
