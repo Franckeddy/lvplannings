@@ -235,6 +235,7 @@ const showBusLines = ref(false);
 const showMonorail = ref(false);
 const selectedBusLine = ref(null);
 const routeMode = ref('driving'); // 'driving' ou 'transit'
+const routeFrom = ref('home'); // 'home' ou 'location'
 const userLocation = ref(null);
 const geolocating = ref(false);
 let map = null;
@@ -828,7 +829,7 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-                                                                              ²²// Trouver le meilleur itinéraire en bus/monorail
+// Trouver le meilleur itinéraire en bus/monorail
 // Départ toujours depuis Centennial Hills Transit Center (ligne 102)
 const findBestTransitRoute = (casino) => {
   const results = [];
@@ -986,6 +987,94 @@ const findBestTransitRoute = (casino) => {
   return results.length > 0 ? [results[0]] : [];
 };
 
+// Trouver un itinéraire transit depuis une position quelconque (géolocalisation)
+const findTransitFromLocation = (casino, fromLat, fromLng) => {
+  const results = [];
+  const MAX_TRANSFER_DIST = 1.5;
+
+  // Chercher les lignes directes depuis la position
+  busLines.value.forEach(line => {
+    let nearest = null, nearestDist = Infinity, nearestIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(fromLat, fromLng, stop.lat, stop.lng);
+      if (dist < nearestDist) { nearestDist = dist; nearest = stop; nearestIdx = idx; }
+    });
+
+    let casinoStop = null, casinoDist = Infinity, casinoIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+      if (dist < casinoDist) { casinoDist = dist; casinoStop = stop; casinoIdx = idx; }
+    });
+
+    if (nearest && casinoStop && nearestIdx !== casinoIdx) {
+      const startIdx = Math.min(nearestIdx, casinoIdx), endIdx = Math.max(nearestIdx, casinoIdx);
+      let busDistance = 0; const busStops = [];
+      for (let i = startIdx; i <= endIdx; i++) { busStops.push(line.stops[i]); if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i+1].lat, line.stops[i+1].lng); }
+
+      results.push({
+        line, nearestToHome: nearest, nearestToHomeDist: nearestDist, nearestToHomeIdx: nearestIdx,
+        nearestToCasino: casinoStop, nearestToCasinoDist: casinoDist, nearestToCasinoIdx: casinoIdx,
+        busStops, busDistance, totalWalkDist: nearestDist + casinoDist,
+        totalDist: nearestDist + casinoDist + busDistance,
+        nbStops: Math.abs(casinoIdx - nearestIdx), isTransfer: false
+      });
+    }
+  });
+
+  // Chercher aussi avec 1 correspondance
+  for (let i = 0; i < busLines.value.length; i++) {
+    const line1 = busLines.value[i];
+    let home1 = null, home1Dist = Infinity, home1Idx = -1;
+    line1.stops.forEach((stop, idx) => {
+      const dist = getDistance(fromLat, fromLng, stop.lat, stop.lng);
+      if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
+    });
+    if (home1Dist > 5) continue;
+
+    for (let j = 0; j < busLines.value.length; j++) {
+      if (i === j) continue;
+      const line2 = busLines.value[j];
+
+      let casino2 = null, casino2Dist = Infinity, casino2Idx = -1;
+      line2.stops.forEach((stop, idx) => {
+        const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+        if (dist < casino2Dist) { casino2Dist = dist; casino2 = stop; casino2Idx = idx; }
+      });
+
+      let bestTDist = Infinity, t1Idx = -1, t2Idx = -1, tStop1 = null, tStop2 = null;
+      line1.stops.forEach((s1, idx1) => {
+        line2.stops.forEach((s2, idx2) => {
+          const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (dist < bestTDist) { bestTDist = dist; t1Idx = idx1; t2Idx = idx2; tStop1 = s1; tStop2 = s2; }
+        });
+      });
+      if (bestTDist > MAX_TRANSFER_DIST || t1Idx === home1Idx || t2Idx === casino2Idx) continue;
+
+      const s1Start = Math.min(home1Idx, t1Idx), s1End = Math.max(home1Idx, t1Idx);
+      let dist1 = 0; const stops1 = [];
+      for (let k = s1Start; k <= s1End; k++) { stops1.push(line1.stops[k]); if (k < s1End) dist1 += getDistance(line1.stops[k].lat, line1.stops[k].lng, line1.stops[k+1].lat, line1.stops[k+1].lng); }
+
+      const s2Start = Math.min(t2Idx, casino2Idx), s2End = Math.max(t2Idx, casino2Idx);
+      let dist2 = 0; const stops2 = [];
+      for (let k = s2Start; k <= s2End; k++) { stops2.push(line2.stops[k]); if (k < s2End) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k+1].lat, line2.stops[k+1].lng); }
+
+      const totalWalkDist = home1Dist + bestTDist + casino2Dist;
+      results.push({
+        line: line1, line2, isTransfer: true,
+        nearestToHome: home1, nearestToHomeDist: home1Dist, nearestToHomeIdx: home1Idx,
+        transferStop102: tStop1, transferStopLine: tStop2, transferDist: bestTDist,
+        nearestToCasino: casino2, nearestToCasinoDist: casino2Dist, nearestToCasinoIdx: casino2Idx,
+        busStops: stops1, busStops2: stops2, busDistance: dist1 + dist2,
+        totalWalkDist, totalDist: totalWalkDist + dist1 + dist2,
+        nbStops: (s1End - s1Start) + (s2End - s2Start)
+      });
+    }
+  }
+
+  results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
+  return results.length > 0 ? [results[0]] : [];
+};
+
 // Nettoyer les layers de transit
 const clearTransitLayers = () => {
   transitLayers.forEach(layer => {
@@ -995,10 +1084,16 @@ const clearTransitLayers = () => {
 };
 
 // Afficher l'itinéraire en transport en commun sur la carte
-const showTransitRoute = (casino) => {
+const showTransitRoute = (casino, startLat = null, startLng = null) => {
   if (!map) return;
 
-  const routes = findBestTransitRoute(casino);
+  const fromLat = startLat || HOME_LOCATION.lat;
+  const fromLng = startLng || HOME_LOCATION.lng;
+  const isFromHome = (fromLat === HOME_LOCATION.lat && fromLng === HOME_LOCATION.lng);
+
+  // Si depuis la maison, utiliser l'algo avec la 102
+  // Sinon, chercher la ligne la plus proche de la position
+  const routes = isFromHome ? findBestTransitRoute(casino) : findTransitFromLocation(casino, fromLat, fromLng);
   if (routes.length === 0) {
     routeInfo.value = {
       casino: casino.name,
@@ -1020,13 +1115,22 @@ const showTransitRoute = (casino) => {
 const drawTransitOnMap = (casino, best) => {
   clearTransitLayers();
 
-
   const line = best.line;
   const allBusCoords = [];
 
-  // Dessiner la marche maison → arrêt de bus
+  // Point de départ (maison ou position)
+  let startLat, startLng;
+  if (routeFrom.value === 'location' && userLocation.value) {
+    startLat = userLocation.value.lat;
+    startLng = userLocation.value.lng;
+  } else {
+    startLat = HOME_LOCATION.lat;
+    startLng = HOME_LOCATION.lng;
+  }
+
+  // Dessiner la marche départ → arrêt de bus
   const walkToStop = L.polyline(
-    [[HOME_LOCATION.lat, HOME_LOCATION.lng], [best.nearestToHome.lat, best.nearestToHome.lng]],
+    [[startLat, startLng], [best.nearestToHome.lat, best.nearestToHome.lng]],
     { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
   ).addTo(map);
   transitLayers.push(walkToStop);
@@ -1139,7 +1243,7 @@ const drawTransitOnMap = (casino, best) => {
 
   // Ajuster la vue
   const bounds = L.latLngBounds([
-    [HOME_LOCATION.lat, HOME_LOCATION.lng],
+    [startLat, startLng],
     [casino.lat, casino.lng],
     ...allBusCoords
   ]);
@@ -1185,6 +1289,16 @@ const drawTransitOnMap = (casino, best) => {
 const showRoute = (casino, mode = 'driving') => {
   if (!map) return;
 
+  // Déterminer le point de départ
+  let startLat, startLng;
+  if (routeFrom.value === 'location' && userLocation.value) {
+    startLat = userLocation.value.lat;
+    startLng = userLocation.value.lng;
+  } else {
+    startLat = HOME_LOCATION.lat;
+    startLng = HOME_LOCATION.lng;
+  }
+
   // Supprimer l'itinéraire précédent
   clearRoute();
 
@@ -1192,14 +1306,14 @@ const showRoute = (casino, mode = 'driving') => {
   activeRoute.value = casino.name;
 
   if (mode === 'transit') {
-    showTransitRoute(casino);
+    showTransitRoute(casino, startLat, startLng);
     return;
   }
 
   // Mode voiture - utiliser OSRM
   routingControl = L.Routing.control({
     waypoints: [
-      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(startLat, startLng),
       L.latLng(casino.lat, casino.lng)
     ],
     routeWhileDragging: false,
@@ -1324,7 +1438,16 @@ const initMap = async () => {
         <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
         <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
         <p class="popup-desc">${casino.description}</p>
+        <p class="popup-route-label">Itinéraire depuis :</p>
         <div class="popup-actions">
+          <button class="directions-btn directions-home-btn" data-casino-index="${casinoIndex}" data-from="home">
+            <i class="pi pi-home"></i> Maison
+          </button>
+          <button class="directions-btn directions-loc-btn" data-casino-index="${casinoIndex}" data-from="location">
+            <i class="pi pi-compass"></i> Ma position
+          </button>
+        </div>
+        <div class="popup-actions popup-mode-actions">
           <button class="directions-btn directions-car-btn" data-casino-index="${casinoIndex}" data-mode="driving">
             <i class="pi pi-car"></i> Voiture
           </button>
@@ -1343,8 +1466,33 @@ const initMap = async () => {
     // Ajouter l'écouteur d'événement pour les boutons d'itinéraire
     marker.on('popupopen', () => {
       setTimeout(() => {
+        const homeBtn = document.querySelector(`.directions-home-btn[data-casino-index="${casinoIndex}"]`);
+        const locBtn = document.querySelector(`.directions-loc-btn[data-casino-index="${casinoIndex}"]`);
         const carBtn = document.querySelector(`.directions-car-btn[data-casino-index="${casinoIndex}"]`);
         const busBtn = document.querySelector(`.directions-bus-btn[data-casino-index="${casinoIndex}"]`);
+
+        // Gérer la sélection du point de départ
+        if (homeBtn) {
+          homeBtn.classList.add('active');
+          homeBtn.addEventListener('click', () => {
+            routeFrom.value = 'home';
+            homeBtn.classList.add('active');
+            if (locBtn) locBtn.classList.remove('active');
+          });
+        }
+        if (locBtn) {
+          locBtn.addEventListener('click', () => {
+            if (!userLocation.value) {
+              // Demander la géoloc d'abord
+              geolocateUser();
+              return;
+            }
+            routeFrom.value = 'location';
+            locBtn.classList.add('active');
+            if (homeBtn) homeBtn.classList.remove('active');
+          });
+        }
+
         if (carBtn) {
           carBtn.addEventListener('click', () => {
             showRoute(casino, 'driving');
@@ -1837,6 +1985,38 @@ onUnmounted(() => {
 .casino-popup .directions-bus-btn:hover {
   background: linear-gradient(135deg, #15803d, #16a34a);
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.casino-popup .directions-home-btn {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.3);
+}
+
+.casino-popup .directions-home-btn.active {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.casino-popup .directions-loc-btn {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.3);
+}
+
+.casino-popup .directions-loc-btn.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.casino-popup .popup-route-label {
+  color: #64748b;
+  font-size: 0.7rem;
+  margin: 8px 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.casino-popup .popup-mode-actions {
+  margin-top: 6px;
 }
 
 .casino-popup .gmaps-btn {
