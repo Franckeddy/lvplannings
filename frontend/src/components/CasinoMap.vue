@@ -2964,9 +2964,6 @@ onUnmounted(() => {
   .casino-list-mobile {
     top: auto;
     bottom: 12px;
-    left: 8px;
-    right: auto;
-    max-width: 200px;
   }
 
   .casino-list-header {
@@ -2986,7 +2983,7 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   .map-container {
     height: calc(100vh - 50px);
-    max-height: calc(100vh - 50px);
+    max-height: calc(85vh - 50px);
     min-height: 280px;
   }
 
@@ -3114,9 +3111,6 @@ onUnmounted(() => {
   .casino-list-mobile {
     top: auto;
     bottom: 8px;
-    left: 6px;
-    right: auto;
-    max-width: 160px;
   }
 
   .casino-list-header {
