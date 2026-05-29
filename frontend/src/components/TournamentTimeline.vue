@@ -354,14 +354,43 @@
     >
       <div class="route-map-container">
         <div ref="routeMapContainer" class="route-leaflet-map"></div>
-        <div v-if="routeMapInfo" class="route-map-info-bar">
-          <div class="route-map-stat">
-            <i class="pi pi-car"></i>
-            <span>{{ routeMapInfo.durationMin }} min</span>
+
+        <!-- Barre d'info et liens navigation -->
+        <div class="route-map-bottom-bar">
+          <div v-if="routeMapInfo" class="route-map-info">
+            <div class="route-map-stat">
+              <i class="pi pi-car"></i>
+              <span>{{ routeMapInfo.durationMin }} min</span>
+            </div>
+            <div class="route-map-stat">
+              <i class="pi pi-map"></i>
+              <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
+            </div>
           </div>
-          <div class="route-map-stat">
-            <i class="pi pi-map"></i>
-            <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
+
+          <!-- Liens navigation externe -->
+          <div class="route-nav-links">
+            <!-- Google Maps (Desktop + Android) -->
+            <a
+              :href="getGoogleMapsUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-link-btn google-maps"
+            >
+              <i class="pi pi-map"></i>
+              <span class="nav-link-label">Google Maps</span>
+            </a>
+
+            <!-- Apple Maps (iOS uniquement) -->
+            <a
+              :href="getAppleMapsUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-link-btn apple-maps mobile-only"
+            >
+              <i class="pi pi-apple"></i>
+              <span class="nav-link-label">Apple Maps</span>
+            </a>
           </div>
         </div>
       </div>
@@ -893,6 +922,9 @@ const initRouteMap = async (casinoName) => {
   const casinoCoords = await getCasinoCoords(casinoName);
   if (!casinoCoords) return;
 
+  // Sauvegarder les coordonnées pour les liens de navigation
+  currentCasinoCoords.value = casinoCoords;
+
   // Créer la carte
   routeMap = L.map(routeMapContainer.value, {
     center: [36.15, -115.15],
@@ -962,6 +994,14 @@ const initRouteMap = async (casinoName) => {
       distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
       distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1)
     };
+
+    // Dézoomer pour avoir une meilleure vue d'ensemble
+    setTimeout(() => {
+      if (routeMap) {
+        const currentZoom = routeMap.getZoom();
+        routeMap.setZoom(currentZoom - 1.5);
+      }
+    }, 100);
   });
 
   // Fit bounds
@@ -970,6 +1010,27 @@ const initRouteMap = async (casinoName) => {
       routeMap.invalidateSize();
     }
   }, 300);
+};
+
+// Coordonnées du casino actuel pour les liens de navigation
+const currentCasinoCoords = ref(null);
+
+// Générer l'URL Google Maps pour l'itinéraire
+const getGoogleMapsUrl = () => {
+  const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
+  const destination = currentCasinoCoords.value
+    ? `${currentCasinoCoords.value.lat},${currentCasinoCoords.value.lng}`
+    : routeMapCasino.value;
+  return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+};
+
+// Générer l'URL Apple Maps pour l'itinéraire
+const getAppleMapsUrl = () => {
+  const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
+  const destination = currentCasinoCoords.value
+    ? `${currentCasinoCoords.value.lat},${currentCasinoCoords.value.lng}`
+    : routeMapCasino.value;
+  return `https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=d`;
 };
 
 // Nettoyer la carte quand la modale se ferme
@@ -1417,21 +1478,31 @@ onUnmounted(() => {
   height: 100%;
 }
 
-.route-map-info-bar {
+/* Barre inférieure avec info et liens navigation */
+.route-map-bottom-bar {
+  align-items: center;
   position: absolute;
   bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.route-map-info {
+  width: fit-content;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
   padding: 10px 20px;
   background: rgba(30, 41, 59, 0.95);
   backdrop-filter: blur(8px);
-  border-radius: 24px;
+  border-radius: 12px;
   border: 1px solid #6366f1;
   box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
-  z-index: 1000;
 }
 
 .route-map-stat {
@@ -1446,6 +1517,62 @@ onUnmounted(() => {
 .route-map-stat i {
   color: #818cf8;
   font-size: 0.875rem;
+}
+
+/* Liens de navigation externe */
+.route-nav-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.nav-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+  max-width: 200px;
+}
+
+.nav-link-btn i {
+  font-size: 1.125rem;
+}
+
+.nav-link-btn.google-maps {
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: white;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.nav-link-btn.google-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.5);
+}
+
+.nav-link-btn.apple-maps {
+  background: linear-gradient(135deg, #333333, #000000);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.nav-link-btn.apple-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-link-label {
+  white-space: nowrap;
+}
+
+/* Apple Maps visible uniquement sur mobile (iOS) */
+.route-nav-links .mobile-only {
+  display: none;
 }
 
 .tournament-levels {
@@ -1849,19 +1976,32 @@ onUnmounted(() => {
     min-height: 280px;
   }
 
-  .route-map-info-bar {
-    bottom: auto;
-    top: 12px;
-    left: 12px;
-    transform: none;
-    flex-direction: column;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 12px;
+  .route-map-bottom-bar {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .route-map-info {
+    padding: 8px 14px;
+    gap: 12px;
   }
 
   .route-map-stat {
     font-size: 0.8125rem;
+  }
+
+  .route-nav-links .mobile-only {
+    display: flex;
+  }
+
+  .nav-link-btn {
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+  }
+
+  .nav-link-btn i {
+    font-size: 1rem;
   }
 
   .map-link-text {
