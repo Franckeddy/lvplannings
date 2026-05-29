@@ -13,9 +13,29 @@
       <!-- Infos de l'itinéraire actif -->
       <div v-if="routeInfo" class="route-info-panel">
         <div class="route-info-header">
-          <i class="pi pi-car"></i>
-          <span>Itinéraire vers {{ routeInfo.casino }}</span>
+          <i :class="['pi', routeMode === 'driving' ? 'pi-car' : 'pi-directions']"></i>
+          <span>{{ routeMode === 'driving' ? 'Voiture' : 'Bus' }} → {{ routeInfo.casino }}</span>
         </div>
+
+        <!-- Toggle voiture / bus -->
+        <div class="route-mode-toggle">
+          <button
+            class="mode-btn"
+            :class="{ active: routeMode === 'driving' }"
+            @click="switchRouteMode('driving')"
+          >
+            <i class="pi pi-car"></i> Voiture
+          </button>
+          <button
+            class="mode-btn"
+            :class="{ active: routeMode === 'transit' }"
+            @click="switchRouteMode('transit')"
+          >
+            <i class="pi pi-directions"></i> Bus
+          </button>
+        </div>
+
+
         <div class="route-info-details">
           <div class="route-stat">
             <i class="pi pi-map"></i>
@@ -23,28 +43,56 @@
           </div>
           <div class="route-stat">
             <i class="pi pi-clock"></i>
-            <span>{{ routeInfo.durationMin }} min</span>
+            <span>~{{ routeInfo.durationMin }} min</span>
           </div>
         </div>
 
-        <!-- Boutons pour ouvrir dans une app externe -->
-        <div class="external-nav-buttons">
-          <a
-            :href="getGoogleMapsUrl(routeInfo.casinoData)"
-            target="_blank"
-            class="nav-btn google-maps-btn"
-          >
-            <i class="pi pi-map"></i>
-            <span>Google Maps</span>
-          </a>
-          <a
-            :href="getAppleMapsUrl(routeInfo.casinoData)"
-            target="_blank"
-            class="nav-btn apple-maps-btn mobile-only"
-          >
-            <i class="pi pi-apple"></i>
-            <span>Apple Maps</span>
-          </a>
+        <!-- Détails du trajet en bus/monorail -->
+        <div v-if="routeMode === 'transit' && routeInfo.transitDetails" class="transit-details">
+          <div class="transit-steps-simple">
+            <div class="transit-segment walk-segment">
+              <span class="segment-time">{{ routeInfo.transitDetails.walkToStop }}'</span>
+              <span class="segment-label">à pied</span>
+            </div>
+            <i class="pi pi-chevron-right segment-arrow"></i>
+            <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line.color }">
+              <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line.color }">{{ routeInfo.transitDetails.line.name }}</span>
+            </div>
+            <!-- 1ère correspondance -->
+            <template v-if="routeInfo.transitDetails.isTransfer && routeInfo.transitDetails.line2">
+              <i class="pi pi-chevron-right segment-arrow"></i>
+              <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line2.color }">
+                <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line2.color }">{{ routeInfo.transitDetails.line2.name }}</span>
+              </div>
+            </template>
+            <!-- 2ème correspondance -->
+            <template v-if="routeInfo.transitDetails.isDoubleTransfer && routeInfo.transitDetails.line3">
+              <i class="pi pi-chevron-right segment-arrow"></i>
+              <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line3.color }">
+                <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line3.color }">{{ routeInfo.transitDetails.line3.name }}</span>
+              </div>
+            </template>
+            <i class="pi pi-chevron-right segment-arrow"></i>
+            <div class="transit-segment walk-segment">
+              <span class="segment-time">{{ routeInfo.transitDetails.walkFromStop }}'</span>
+              <span class="segment-label">à pied</span>
+            </div>
+          </div>
+          <div class="transit-stops-info">
+            <span class="stop-name">{{ routeInfo.transitDetails.boardStop }}</span>
+            <i class="pi pi-arrow-right"></i>
+            <span v-if="routeInfo.transitDetails.transferStop" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop }}</span>
+            <i v-if="routeInfo.transitDetails.transferStop" class="pi pi-arrow-right"></i>
+            <span v-if="routeInfo.transitDetails.transferStop2" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop2 }}</span>
+            <i v-if="routeInfo.transitDetails.transferStop2" class="pi pi-arrow-right"></i>
+            <span class="stop-name">{{ routeInfo.transitDetails.alightStop }}</span>
+          </div>
+        </div>
+
+        <!-- Message si aucune route transit trouvée -->
+        <div v-if="routeMode === 'transit' && routeInfo.noRoute" class="transit-no-route">
+          <i class="pi pi-info-circle"></i>
+          <span>Aucune ligne de bus/monorail ne dessert directement ce casino</span>
         </div>
 
         <Button
@@ -66,6 +114,13 @@
             size="small"
             severity="secondary"
             @click="resetMapView"
+          />
+          <Button
+            :icon="geolocating ? 'pi pi-spin pi-spinner' : 'pi pi-compass'"
+            :label="userLocation ? 'Ma position' : 'Me localiser'"
+            size="small"
+            :severity="userLocation ? 'success' : 'secondary'"
+            @click="geolocateUser"
           />
           <Button
             :icon="showBusLines ? 'pi pi-eye-slash' : 'pi pi-directions'"
@@ -179,9 +234,14 @@ const routeInfo = ref(null);
 const showBusLines = ref(false);
 const showMonorail = ref(false);
 const selectedBusLine = ref(null);
+const routeMode = ref('driving'); // 'driving' ou 'transit'
+const userLocation = ref(null);
+const geolocating = ref(false);
 let map = null;
 let markers = [];
 let routingControl = null;
+let transitLayers = []; // Layers pour l'itinéraire transit
+let userLocationMarker = null;
 let busLinesLayers = [];
 let busStopMarkers = [];
 
@@ -740,19 +800,488 @@ const getAppleMapsUrl = (casino) => {
   return `https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=d`;
 };
 
+// Générer le lien Google Maps pour l'itinéraire en transport en commun
+const getGoogleMapsTransitUrl = (casino) => {
+  const origin = `${HOME_LOCATION.lat},${HOME_LOCATION.lng}`;
+  const destination = `${casino.lat},${casino.lng}`;
+  return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=transit`;
+};
+
 // Alias pour compatibilité avec le code existant
 const getDirectionsUrl = getGoogleMapsUrl;
 
+// Basculer le mode d'itinéraire (voiture <-> bus)
+const switchRouteMode = (mode) => {
+  if (routeMode.value === mode || !routeInfo.value) return;
+  routeMode.value = mode;
+  showRoute(routeInfo.value.casinoData, mode);
+};
+
+// Calculer la distance entre deux points (en km)
+const getDistance = (lat1, lng1, lat2, lng2) => {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+// Trouver le meilleur itinéraire en bus/monorail (privilégier le moins de marche)
+const findBestTransitRoute = (casino) => {
+  const results = [];
+  const MAX_WALK_TO_STOP = 5; // km max pour marcher vers un arrêt
+  const MAX_TRANSFER_DIST = 0.8; // km max entre arrêts pour correspondance
+
+  // --- 1. Itinéraires directs (une seule ligne) ---
+  busLines.value.forEach(line => {
+    let nearestToHome = null, nearestToHomeDist = Infinity, nearestToHomeIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < nearestToHomeDist) { nearestToHomeDist = dist; nearestToHome = stop; nearestToHomeIdx = idx; }
+    });
+
+    let nearestToCasino = null, nearestToCasinoDist = Infinity, nearestToCasinoIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+      if (dist < nearestToCasinoDist) { nearestToCasinoDist = dist; nearestToCasino = stop; nearestToCasinoIdx = idx; }
+    });
+
+    if (nearestToHome && nearestToCasino && nearestToHomeIdx !== nearestToCasinoIdx) {
+      const startIdx = Math.min(nearestToHomeIdx, nearestToCasinoIdx);
+      const endIdx = Math.max(nearestToHomeIdx, nearestToCasinoIdx);
+      let busDistance = 0;
+      const busStops = [];
+      for (let i = startIdx; i <= endIdx; i++) {
+        busStops.push(line.stops[i]);
+        if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng);
+      }
+
+      const totalWalkDist = nearestToHomeDist + nearestToCasinoDist;
+      if (nearestToHomeDist < MAX_WALK_TO_STOP && nearestToCasinoDist < MAX_WALK_TO_STOP) {
+        results.push({
+          line, nearestToHome, nearestToHomeDist, nearestToHomeIdx,
+          nearestToCasino, nearestToCasinoDist, nearestToCasinoIdx,
+          busStops, busDistance, totalWalkDist,
+          totalDist: totalWalkDist + busDistance,
+          nbStops: Math.abs(nearestToCasinoIdx - nearestToHomeIdx),
+          isTransfer: false
+        });
+      }
+    }
+  });
+
+  // --- 2. Itinéraires avec 1 correspondance (deux lignes) ---
+  for (let i = 0; i < busLines.value.length; i++) {
+    const line1 = busLines.value[i];
+
+    // Trouver l'arrêt de line1 le plus proche de la maison
+    let home1 = null, home1Dist = Infinity, home1Idx = -1;
+    line1.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
+    });
+    if (home1Dist > MAX_WALK_TO_STOP) continue;
+
+    for (let j = 0; j < busLines.value.length; j++) {
+      if (i === j) continue;
+      const line2 = busLines.value[j];
+
+      // Trouver l'arrêt de line2 le plus proche du casino
+      let casino2 = null, casino2Dist = Infinity, casino2Idx = -1;
+      line2.stops.forEach((stop, idx) => {
+        const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+        if (dist < casino2Dist) { casino2Dist = dist; casino2 = stop; casino2Idx = idx; }
+      });
+      if (casino2Dist > MAX_WALK_TO_STOP) continue;
+
+      // Trouver le meilleur point de correspondance entre line1 et line2
+      let bestTransferDist = Infinity;
+      let transfer1Idx = -1, transfer2Idx = -1;
+      let transferStop1 = null, transferStop2 = null;
+
+      line1.stops.forEach((s1, idx1) => {
+        // Ne considérer que les arrêts APRÈS le départ sur line1
+        if ((home1Idx <= idx1) || (idx1 <= home1Idx)) {
+          line2.stops.forEach((s2, idx2) => {
+            // Ne considérer que les arrêts AVANT la destination sur line2
+            if ((idx2 <= casino2Idx) || (casino2Idx <= idx2)) {
+              const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
+              if (dist < bestTransferDist) {
+                bestTransferDist = dist;
+                transfer1Idx = idx1;
+                transfer2Idx = idx2;
+                transferStop1 = s1;
+                transferStop2 = s2;
+              }
+            }
+          });
+        }
+      });
+
+      if (bestTransferDist > MAX_TRANSFER_DIST) continue;
+      if (transfer1Idx === home1Idx || transfer2Idx === casino2Idx) continue;
+
+      // Calculer les segments
+      const start1 = Math.min(home1Idx, transfer1Idx);
+      const end1 = Math.max(home1Idx, transfer1Idx);
+      let dist1 = 0;
+      const stops1 = [];
+      for (let k = start1; k <= end1; k++) {
+        stops1.push(line1.stops[k]);
+        if (k < end1) dist1 += getDistance(line1.stops[k].lat, line1.stops[k].lng, line1.stops[k + 1].lat, line1.stops[k + 1].lng);
+      }
+
+      const start2 = Math.min(transfer2Idx, casino2Idx);
+      const end2 = Math.max(transfer2Idx, casino2Idx);
+      let dist2 = 0;
+      const stops2 = [];
+      for (let k = start2; k <= end2; k++) {
+        stops2.push(line2.stops[k]);
+        if (k < end2) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k + 1].lat, line2.stops[k + 1].lng);
+      }
+
+      const totalWalkDist = home1Dist + bestTransferDist + casino2Dist;
+      const totalBusDist = dist1 + dist2;
+
+      results.push({
+        line: line1,
+        line2: line2,
+        isTransfer: true,
+        nearestToHome: home1,
+        nearestToHomeDist: home1Dist,
+        nearestToHomeIdx: home1Idx,
+        transferStop102: transferStop1,
+        transferStopLine: transferStop2,
+        transferDist: bestTransferDist,
+        nearestToCasino: casino2,
+        nearestToCasinoDist: casino2Dist,
+        nearestToCasinoIdx: casino2Idx,
+        busStops: stops1,
+        busStops2: stops2,
+        busDistance: totalBusDist,
+        totalWalkDist,
+        totalDist: totalWalkDist + totalBusDist,
+        nbStops: (end1 - start1) + (end2 - start2)
+      });
+    }
+  }
+
+  // --- 3. Itinéraires avec 2 correspondances (trois lignes) ---
+  for (let i = 0; i < busLines.value.length; i++) {
+    const line1 = busLines.value[i];
+    let home1 = null, home1Dist = Infinity, home1Idx = -1;
+    line1.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
+    });
+    if (home1Dist > MAX_WALK_TO_STOP) continue;
+
+    for (let j = 0; j < busLines.value.length; j++) {
+      if (i === j) continue;
+      const line2 = busLines.value[j];
+
+      // Trouver correspondance line1 → line2
+      let t1Dist = Infinity, t1_line1Idx = -1, t1_line2Idx = -1, t1Stop1 = null, t1Stop2 = null;
+      line1.stops.forEach((s1, idx1) => {
+        line2.stops.forEach((s2, idx2) => {
+          const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (dist < t1Dist) { t1Dist = dist; t1_line1Idx = idx1; t1_line2Idx = idx2; t1Stop1 = s1; t1Stop2 = s2; }
+        });
+      });
+      if (t1Dist > MAX_TRANSFER_DIST) continue;
+
+      for (let k = 0; k < busLines.value.length; k++) {
+        if (k === i || k === j) continue;
+        const line3 = busLines.value[k];
+
+        // Trouver correspondance line2 → line3
+        let t2Dist = Infinity, t2_line2Idx = -1, t2_line3Idx = -1, t2Stop2 = null, t2Stop3 = null;
+        line2.stops.forEach((s2, idx2) => {
+          line3.stops.forEach((s3, idx3) => {
+            const dist = getDistance(s2.lat, s2.lng, s3.lat, s3.lng);
+            if (dist < t2Dist) { t2Dist = dist; t2_line2Idx = idx2; t2_line3Idx = idx3; t2Stop2 = s2; t2Stop3 = s3; }
+          });
+        });
+        if (t2Dist > MAX_TRANSFER_DIST) continue;
+
+        // Trouver l'arrêt de line3 le plus proche du casino
+        let casino3 = null, casino3Dist = Infinity, casino3Idx = -1;
+        line3.stops.forEach((stop, idx) => {
+          const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+          if (dist < casino3Dist) { casino3Dist = dist; casino3 = stop; casino3Idx = idx; }
+        });
+        if (casino3Dist > MAX_WALK_TO_STOP) continue;
+
+        // Vérifier que les indices sont cohérents (on avance sur chaque ligne)
+        if (t1_line1Idx === home1Idx || t2_line2Idx === t1_line2Idx || t2_line3Idx === casino3Idx) continue;
+
+        // Calculer les segments
+        const s1Start = Math.min(home1Idx, t1_line1Idx), s1End = Math.max(home1Idx, t1_line1Idx);
+        const s2Start = Math.min(t1_line2Idx, t2_line2Idx), s2End = Math.max(t1_line2Idx, t2_line2Idx);
+        const s3Start = Math.min(t2_line3Idx, casino3Idx), s3End = Math.max(t2_line3Idx, casino3Idx);
+
+        let dist1 = 0; const stops1 = [];
+        for (let x = s1Start; x <= s1End; x++) { stops1.push(line1.stops[x]); if (x < s1End) dist1 += getDistance(line1.stops[x].lat, line1.stops[x].lng, line1.stops[x+1].lat, line1.stops[x+1].lng); }
+
+        let dist2 = 0; const stops2 = [];
+        for (let x = s2Start; x <= s2End; x++) { stops2.push(line2.stops[x]); if (x < s2End) dist2 += getDistance(line2.stops[x].lat, line2.stops[x].lng, line2.stops[x+1].lat, line2.stops[x+1].lng); }
+
+        let dist3 = 0; const stops3 = [];
+        for (let x = s3Start; x <= s3End; x++) { stops3.push(line3.stops[x]); if (x < s3End) dist3 += getDistance(line3.stops[x].lat, line3.stops[x].lng, line3.stops[x+1].lat, line3.stops[x+1].lng); }
+
+        const totalWalkDist = home1Dist + t1Dist + t2Dist + casino3Dist;
+        const totalBusDist = dist1 + dist2 + dist3;
+
+        results.push({
+          line: line1,
+          line2: line2,
+          line3: line3,
+          isTransfer: true,
+          isDoubleTransfer: true,
+          nearestToHome: home1,
+          nearestToHomeDist: home1Dist,
+          nearestToHomeIdx: home1Idx,
+          transferStop102: t1Stop1,
+          transferStopLine: t1Stop2,
+          transferDist: t1Dist,
+          transferStop2From: t2Stop2,
+          transferStop2To: t2Stop3,
+          transferDist2: t2Dist,
+          nearestToCasino: casino3,
+          nearestToCasinoDist: casino3Dist,
+          nearestToCasinoIdx: casino3Idx,
+          busStops: stops1,
+          busStops2: stops2,
+          busStops3: stops3,
+          busDistance: totalBusDist,
+          totalWalkDist,
+          totalDist: totalWalkDist + totalBusDist,
+          nbStops: (s1End - s1Start) + (s2End - s2Start) + (s3End - s3Start)
+        });
+      }
+    }
+  }
+
+  // Trier par moins de marche totale
+  results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
+
+  // Retourner le meilleur
+  return results.length > 0 ? [results[0]] : [];
+};
+
+// Nettoyer les layers de transit
+const clearTransitLayers = () => {
+  transitLayers.forEach(layer => {
+    if (map) map.removeLayer(layer);
+  });
+  transitLayers = [];
+};
+
+// Afficher l'itinéraire en transport en commun sur la carte
+const showTransitRoute = (casino) => {
+  if (!map) return;
+
+  const routes = findBestTransitRoute(casino);
+  if (routes.length === 0) {
+    routeInfo.value = {
+      casino: casino.name,
+      casinoData: casino,
+      distanceKm: '—',
+      distanceMiles: '—',
+      durationMin: '—',
+      transitDetails: null,
+      noRoute: true
+    };
+    return;
+  }
+
+  const best = routes[0];
+  drawTransitOnMap(casino, best);
+};
+
+// Dessiner un itinéraire transit sur la carte
+const drawTransitOnMap = (casino, best) => {
+  clearTransitLayers();
+
+
+  const line = best.line;
+  const allBusCoords = [];
+
+  // Dessiner la marche maison → arrêt de bus
+  const walkToStop = L.polyline(
+    [[HOME_LOCATION.lat, HOME_LOCATION.lng], [best.nearestToHome.lat, best.nearestToHome.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(map);
+  transitLayers.push(walkToStop);
+
+  // Dessiner le trajet en bus (1ère ligne)
+  const busCoords = best.busStops.map(s => [s.lat, s.lng]);
+  allBusCoords.push(...busCoords);
+  const busPolyline = L.polyline(busCoords, {
+    color: line.color,
+    weight: 7,
+    opacity: 0.9,
+    dashArray: line.isMonorail ? null : '12, 6'
+  }).addTo(map);
+  transitLayers.push(busPolyline);
+
+  // Marqueur montée
+  const boardIcon = L.divIcon({
+    className: 'transit-stop-marker',
+    html: `<div class="transit-board-icon" style="background: ${line.color}">🚏</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+  const boardMarker = L.marker([best.nearestToHome.lat, best.nearestToHome.lng], { icon: boardIcon })
+    .bindPopup(`<div class="bus-stop-popup"><h4>🚏 Montée</h4><p><strong>${best.nearestToHome.name}</strong></p><p style="color: ${line.color}">${line.isMonorail ? '🚝' : '🚌'} ${line.name} - ${line.description}</p></div>`)
+    .addTo(map);
+  transitLayers.push(boardMarker);
+
+  // Si correspondance (1 ou 2)
+  if (best.isTransfer && best.line2) {
+    // 1ère correspondance : line1 → line2
+    const walkTransfer = L.polyline(
+      [[best.transferStop102.lat, best.transferStop102.lng], [best.transferStopLine.lat, best.transferStopLine.lng]],
+      { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+    ).addTo(map);
+    transitLayers.push(walkTransfer);
+
+    const transferIcon = L.divIcon({
+      className: 'transit-stop-marker',
+      html: `<div class="transit-board-icon" style="background: ${best.line2.color}">⇄</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    const transferMarker = L.marker([best.transferStopLine.lat, best.transferStopLine.lng], { icon: transferIcon })
+      .bindPopup(`<div class="bus-stop-popup"><h4>⇄ Correspondance</h4><p>${line.name} → ${best.line2.name}</p></div>`)
+      .addTo(map);
+    transitLayers.push(transferMarker);
+
+    // Trajet line2
+    const busCoords2 = best.busStops2.map(s => [s.lat, s.lng]);
+    allBusCoords.push(...busCoords2);
+    const busPolyline2 = L.polyline(busCoords2, {
+      color: best.line2.color,
+      weight: 7,
+      opacity: 0.9,
+      dashArray: best.line2.isMonorail ? null : '12, 6'
+    }).addTo(map);
+    transitLayers.push(busPolyline2);
+
+    // 2ème correspondance : line2 → line3 (si double transfert)
+    if (best.isDoubleTransfer && best.line3) {
+      const walkTransfer2 = L.polyline(
+        [[best.transferStop2From.lat, best.transferStop2From.lng], [best.transferStop2To.lat, best.transferStop2To.lng]],
+        { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+      ).addTo(map);
+      transitLayers.push(walkTransfer2);
+
+      const transferIcon2 = L.divIcon({
+        className: 'transit-stop-marker',
+        html: `<div class="transit-board-icon" style="background: ${best.line3.color}">⇄</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+      const transferMarker2 = L.marker([best.transferStop2To.lat, best.transferStop2To.lng], { icon: transferIcon2 })
+        .bindPopup(`<div class="bus-stop-popup"><h4>⇄ Correspondance</h4><p>${best.line2.name} → ${best.line3.name}</p></div>`)
+        .addTo(map);
+      transitLayers.push(transferMarker2);
+
+      // Trajet line3
+      const busCoords3 = best.busStops3.map(s => [s.lat, s.lng]);
+      allBusCoords.push(...busCoords3);
+      const busPolyline3 = L.polyline(busCoords3, {
+        color: best.line3.color,
+        weight: 7,
+        opacity: 0.9,
+        dashArray: best.line3.isMonorail ? null : '12, 6'
+      }).addTo(map);
+      transitLayers.push(busPolyline3);
+    }
+  }
+
+  // Dessiner la marche arrêt → casino
+  const walkFromStop = L.polyline(
+    [[best.nearestToCasino.lat, best.nearestToCasino.lng], [casino.lat, casino.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(map);
+  transitLayers.push(walkFromStop);
+
+  // Marqueur descente
+  const alightColor = best.isDoubleTransfer ? best.line3.color : (best.isTransfer ? best.line2.color : line.color);
+  const alightIcon = L.divIcon({
+    className: 'transit-stop-marker',
+    html: `<div class="transit-alight-icon" style="background: ${alightColor}">🚏</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+  const alightMarker = L.marker([best.nearestToCasino.lat, best.nearestToCasino.lng], { icon: alightIcon })
+    .bindPopup(`<div class="bus-stop-popup"><h4>🚏 Descente</h4><p><strong>${best.nearestToCasino.name}</strong></p></div>`)
+    .addTo(map);
+  transitLayers.push(alightMarker);
+
+  // Ajuster la vue
+  const bounds = L.latLngBounds([
+    [HOME_LOCATION.lat, HOME_LOCATION.lng],
+    [casino.lat, casino.lng],
+    ...allBusCoords
+  ]);
+  map.fitBounds(bounds, { padding: [50, 50] });
+
+  // Calcul des temps
+  const walkTimeToStop = Math.round((best.nearestToHomeDist / 5) * 60);
+  const walkTimeFromStop = Math.round((best.nearestToCasinoDist / 5) * 60);
+  const busSpeed = line.isMonorail ? 40 : 20;
+  const busTime = Math.round((best.busDistance / busSpeed) * 60);
+  const waitTime = line.isMonorail ? 6 : 15;
+  const transferWaitTime = best.isTransfer ? (best.isDoubleTransfer ? 20 : 10) : 0;
+  const totalTime = walkTimeToStop + waitTime + busTime + transferWaitTime + walkTimeFromStop;
+  const totalDistKm = (best.totalDist).toFixed(1);
+  const totalDistMiles = (best.totalDist * 0.621371).toFixed(1);
+
+  routeInfo.value = {
+    casino: casino.name,
+    casinoData: casino,
+    distanceKm: totalDistKm,
+    distanceMiles: totalDistMiles,
+    durationMin: totalTime,
+    transitDetails: {
+      line: line,
+      line2: best.line2 || null,
+      line3: best.line3 || null,
+      isTransfer: best.isTransfer || false,
+      isDoubleTransfer: best.isDoubleTransfer || false,
+      boardStop: best.nearestToHome.name,
+      alightStop: best.nearestToCasino.name,
+      transferStop: best.isTransfer ? best.transferStop102.name : null,
+      transferStop2: best.isDoubleTransfer ? best.transferStop2From.name : null,
+      nbStops: best.nbStops,
+      walkToStop: walkTimeToStop,
+      waitTime: waitTime,
+      busTime: busTime,
+      walkFromStop: walkTimeFromStop
+    }
+  };
+};
+
 // Afficher l'itinéraire sur la carte
-const showRoute = (casino) => {
+const showRoute = (casino, mode = 'driving') => {
   if (!map) return;
 
   // Supprimer l'itinéraire précédent
   clearRoute();
 
+  routeMode.value = mode;
   activeRoute.value = casino.name;
 
-  // Créer le contrôle de routage
+  if (mode === 'transit') {
+    showTransitRoute(casino);
+    return;
+  }
+
+  // Mode voiture - utiliser OSRM
   routingControl = L.Routing.control({
     waypoints: [
       L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
@@ -763,7 +1292,7 @@ const showRoute = (casino) => {
     draggableWaypoints: false,
     fitSelectedRoutes: true,
     showAlternatives: false,
-    createMarker: () => null, // On garde nos propres marqueurs
+    createMarker: () => null,
     lineOptions: {
       styles: [
         { color: '#6366f1', opacity: 0.9, weight: 6 },
@@ -778,7 +1307,6 @@ const showRoute = (casino) => {
     })
   }).addTo(map);
 
-  // Écouter le calcul de la route pour récupérer les infos
   routingControl.on('routesfound', (e) => {
     const route = e.routes[0];
     const distanceKm = (route.summary.totalDistance / 1000).toFixed(1);
@@ -796,8 +1324,14 @@ const showRoute = (casino) => {
 
   routingControl.on('routingerror', (e) => {
     console.error('Erreur de routage:', e);
-    // Fallback vers Google Maps si erreur
-    window.open(getDirectionsUrl(casino), '_blank');
+    routeInfo.value = {
+      casino: casino.name,
+      casinoData: casino,
+      distanceKm: '—',
+      distanceMiles: '—',
+      durationMin: '—',
+      noRoute: true
+    };
   });
 };
 
@@ -807,6 +1341,7 @@ const clearRoute = () => {
     map.removeControl(routingControl);
     routingControl = null;
   }
+  clearTransitLayers();
   activeRoute.value = null;
   routeInfo.value = null;
 };
@@ -875,8 +1410,11 @@ const initMap = async () => {
         <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
         <p class="popup-desc">${casino.description}</p>
         <div class="popup-actions">
-          <button class="directions-btn" data-casino-index="${casinoIndex}">
-            <i class="pi pi-car"></i> Itinéraire
+          <button class="directions-btn directions-car-btn" data-casino-index="${casinoIndex}" data-mode="driving">
+            <i class="pi pi-car"></i> Voiture
+          </button>
+          <button class="directions-btn directions-bus-btn" data-casino-index="${casinoIndex}" data-mode="transit">
+            <i class="pi pi-directions"></i> Bus
           </button>
         </div>
       </div>
@@ -887,13 +1425,20 @@ const initMap = async () => {
       className: 'casino-popup-container'
     });
 
-    // Ajouter l'écouteur d'événement pour le bouton d'itinéraire
+    // Ajouter l'écouteur d'événement pour les boutons d'itinéraire
     marker.on('popupopen', () => {
       setTimeout(() => {
-        const btn = document.querySelector(`.directions-btn[data-casino-index="${casinoIndex}"]`);
-        if (btn) {
-          btn.addEventListener('click', () => {
-            showRoute(casino);
+        const carBtn = document.querySelector(`.directions-car-btn[data-casino-index="${casinoIndex}"]`);
+        const busBtn = document.querySelector(`.directions-bus-btn[data-casino-index="${casinoIndex}"]`);
+        if (carBtn) {
+          carBtn.addEventListener('click', () => {
+            showRoute(casino, 'driving');
+            marker.closePopup();
+          });
+        }
+        if (busBtn) {
+          busBtn.addEventListener('click', () => {
+            showRoute(casino, 'transit');
             marker.closePopup();
           });
         }
@@ -923,6 +1468,84 @@ const resetMapView = () => {
     });
     map.fitBounds(bounds, { padding: [30, 30] });
   }
+};
+
+// Géolocalisation de l'utilisateur
+const geolocateUser = () => {
+  if (!map) return;
+
+  // Si déjà localisé, centrer sur la position
+  if (userLocation.value) {
+    map.setView([userLocation.value.lat, userLocation.value.lng], 15);
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    alert('La géolocalisation n\'est pas supportée par votre navigateur');
+    return;
+  }
+
+  geolocating.value = true;
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      userLocation.value = { lat, lng };
+      geolocating.value = false;
+
+      // Supprimer l'ancien marqueur si existant
+      if (userLocationMarker) {
+        map.removeLayer(userLocationMarker);
+      }
+
+      // Créer le marqueur de position
+      const locationIcon = L.divIcon({
+        className: 'user-location-marker',
+        html: `
+          <div class="user-location-dot">
+            <div class="user-location-pulse"></div>
+            <div class="user-location-center"></div>
+          </div>
+        `,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+
+      userLocationMarker = L.marker([lat, lng], { icon: locationIcon })
+        .bindPopup(`
+          <div class="casino-popup">
+            <h3>📍 Ma position</h3>
+            <p class="popup-address">Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}</p>
+          </div>
+        `)
+        .addTo(map);
+
+      // Centrer la carte sur la position
+      map.setView([lat, lng], 15);
+    },
+    (error) => {
+      geolocating.value = false;
+      let message = 'Impossible de vous localiser';
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          message = 'Vous avez refusé la géolocalisation';
+          break;
+        case error.POSITION_UNAVAILABLE:
+          message = 'Position indisponible';
+          break;
+        case error.TIMEOUT:
+          message = 'Délai de géolocalisation dépassé';
+          break;
+      }
+      alert(message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 60000
+    }
+  );
 };
 
 // Focus sur un casino spécifique
@@ -1291,6 +1914,16 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
+.casino-popup .directions-bus-btn {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.casino-popup .directions-bus-btn:hover {
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
 .casino-popup .gmaps-btn {
   display: flex;
   align-items: center;
@@ -1407,6 +2040,72 @@ onUnmounted(() => {
   margin: 0;
   font-size: 0.8rem;
 }
+
+/* Transit route markers */
+.transit-stop-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.transit-board-icon,
+.transit-alight-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid white;
+}
+
+/* Marqueur de géolocalisation */
+.user-location-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.user-location-dot {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-location-center {
+  width: 14px;
+  height: 14px;
+  background: #3b82f6;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+  z-index: 2;
+  position: absolute;
+}
+
+.user-location-pulse {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+  z-index: 1;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
 </style>
 
 <style scoped>
@@ -1435,11 +2134,12 @@ onUnmounted(() => {
   background: rgba(30, 41, 59, 0.98);
   backdrop-filter: blur(10px);
   border-radius: 12px;
-  padding: 14px 18px;
+  padding: 12px 14px;
   z-index: 1000;
   border: 1px solid #6366f1;
   box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
-  max-width: 280px;
+  max-width: 320px;
+  overflow: hidden;
 }
 
 .route-info-header {
@@ -1534,6 +2234,192 @@ onUnmounted(() => {
 
 .route-close-btn {
   width: 100%;
+}
+
+/* Toggle mode voiture / bus */
+.route-mode-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.route-mode-toggle .mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: #64748b;
+}
+
+.route-mode-toggle .mode-btn.active {
+  background: #6366f1;
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.route-mode-toggle .mode-btn:not(.active):hover {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.route-mode-toggle .mode-btn i {
+  font-size: 0.875rem;
+}
+
+/* Toggle options transit (Direct vs Moins de marche) */
+.transit-option-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  background: #0f172a;
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.transit-opt-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: #64748b;
+}
+
+.transit-opt-btn.active {
+  background: #22c55e;
+  color: white;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
+}
+
+.transit-opt-btn:not(.active):hover {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+/* Détails transit */
+.transit-details {
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.transit-steps-simple {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.transit-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.transit-segment.walk-segment {
+  min-width: 32px;
+}
+
+.transit-segment.bus-segment {
+  border-left: 3px solid;
+  flex: 0 0 auto;
+}
+
+.segment-time {
+  color: #f1f5f9;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.segment-label {
+  color: #64748b;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.segment-line-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+.segment-arrow {
+  color: #475569;
+  font-size: 0.5rem;
+  flex-shrink: 0;
+}
+
+.transit-stops-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid #1e293b;
+  font-size: 0.625rem;
+  color: #94a3b8;
+  flex-wrap: wrap;
+}
+
+.transit-stops-info .stop-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+.transit-stops-info i {
+  font-size: 0.5rem;
+  color: #475569;
+}
+
+.transit-stops-info .transfer-stop {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Message aucune route transit */
+.transit-no-route {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  color: #fca5a5;
+  font-size: 0.75rem;
+}
+
+.transit-no-route i {
+  font-size: 1rem;
+  color: #ef4444;
 }
 
 /* Légende */
