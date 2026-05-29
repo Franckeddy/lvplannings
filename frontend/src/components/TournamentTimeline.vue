@@ -109,12 +109,12 @@
                   <i class="pi pi-car"></i>
                   <span>{{ getRouteTime(tournament.casino).durationMin }} min</span>
                   <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
-                  <button class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
-                    <i class="pi pi-map"></i>
-                    <span class="map-link-text">Maps</span>
-                  </button>
                 </div>
               </div>
+              <button v-if="getRouteTime(tournament.casino)" class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
+                <i class="pi pi-directions"></i>
+                <span class="map-link-text">Trajet</span>
+              </button>
             </div>
 
             <!-- Structure info -->
@@ -1332,6 +1332,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .casino-name {
@@ -1361,29 +1363,38 @@ onUnmounted(() => {
 }
 
 .map-link-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 12px;
-  color: #818cf8;
-  font-size: 0.6875rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.8125rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: 4px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .map-link-btn i {
-  font-size: 0.625rem;
+  font-size: 1rem;
 }
 
 .map-link-btn:hover {
-  background: rgba(99, 102, 241, 0.3);
-  border-color: #818cf8;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+
+.map-link-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
 
 .map-link-text {
@@ -1855,6 +1866,20 @@ onUnmounted(() => {
 
   .map-link-text {
     display: none;
+  }
+
+  .map-link-btn {
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .map-link-btn i {
+    font-size: 1.125rem;
+  }
+
+  .casino-section {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   /* Show mobile notes, hide desktop tooltips */

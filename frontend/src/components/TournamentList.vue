@@ -167,12 +167,12 @@
                       <i class="pi pi-car"></i>
                       {{ getRouteTime(tournament.casino).durationMin }} min
                       <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
-                      <button class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
-                        <i class="pi pi-map"></i>
-                        <span class="map-link-text">Maps</span>
-                      </button>
                     </span>
                   </div>
+                  <button v-if="getRouteTime(tournament.casino)" class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
+                    <i class="pi pi-directions"></i>
+                    <span class="map-link-text">Trajet</span>
+                  </button>
                   <span v-if="tournament.day" class="day-badge-small">Day {{ tournament.day }}</span>
                   <span v-else-if="tournament.isRestart" class="restart-badge-small">Restart</span>
                 </div>
@@ -1462,29 +1462,39 @@ onUnmounted(() => {
 }
 
 .map-link-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 12px;
-  color: #818cf8;
-  font-size: 0.625rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: 4px;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-left: auto;
 }
 
 .map-link-btn i {
-  font-size: 0.5625rem;
+  font-size: 0.875rem;
 }
 
 .map-link-btn:hover {
-  background: rgba(99, 102, 241, 0.3);
-  border-color: #818cf8;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(99, 102, 241, 0.5);
+}
+
+.map-link-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
 }
 
 .map-link-text {
