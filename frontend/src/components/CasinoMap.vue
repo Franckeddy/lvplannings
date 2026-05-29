@@ -95,6 +95,31 @@
           <span>Aucune ligne de bus/monorail ne dessert directement ce casino</span>
         </div>
 
+        <!-- Liens navigation externe -->
+        <div class="route-nav-links">
+          <!-- Google Maps -->
+          <a
+            :href="routeMode === 'transit' ? getGoogleMapsTransitUrl(routeInfo.casinoData) : getGoogleMapsUrl(routeInfo.casinoData)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-link-btn google-maps"
+          >
+            <i class="pi pi-map"></i>
+            <span class="nav-link-label">Google Maps</span>
+          </a>
+
+          <!-- Apple Maps -->
+          <a
+            :href="getAppleMapsUrl(routeInfo.casinoData)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-link-btn apple-maps"
+          >
+            <i class="pi pi-apple"></i>
+            <span class="nav-link-label">Apple Maps</span>
+          </a>
+        </div>
+
         <Button
           icon="pi pi-times"
           label="Fermer l'itinéraire"
@@ -2369,6 +2394,58 @@ onUnmounted(() => {
   display: none;
 }
 
+/* Liens de navigation externe dans le panneau d'itinéraire */
+.route-nav-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 16px 0 12px 0;
+}
+
+.route-nav-links .nav-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+  flex: 1;
+}
+
+.route-nav-links .nav-link-btn i {
+  font-size: 1.125rem;
+}
+
+.route-nav-links .nav-link-btn.google-maps {
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: white;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.route-nav-links .nav-link-btn.google-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.5);
+}
+
+.route-nav-links .nav-link-btn.apple-maps {
+  background: linear-gradient(135deg, #333333, #000000);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.route-nav-links .nav-link-btn.apple-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.route-nav-links .nav-link-label {
+  white-space: nowrap;
+}
+
 .route-close-btn {
   width: 100%;
 }
@@ -3064,6 +3141,20 @@ onUnmounted(() => {
   .route-close-btn {
     font-size: 0.6875rem !important;
     padding: 4px 8px !important;
+  }
+
+  .route-nav-links {
+    gap: 8px;
+    margin: 10px 0 8px 0;
+  }
+
+  .route-nav-links .nav-link-btn {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+
+  .route-nav-links .nav-link-btn i {
+    font-size: 1rem;
   }
 
   .external-nav-buttons {
