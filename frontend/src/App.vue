@@ -131,6 +131,17 @@
         <p>Sélectionnez un utilisateur pour voir son programme</p>
       </div>
     </main>
+
+    <!-- Bouton flottant Google Sheets -->
+    <a
+      href="https://docs.google.com/spreadsheets/d/1uGans4g_OhofWaYTCyc5R2RMGKsW-cRbBuLHApkc4Cw/edit?usp=drivesdk"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="floating-sheets-btn"
+      title="Tricount Las Vegas"
+    >
+      <i class="pi pi-file-excel"></i>
+    </a>
   </div>
 </template>
 
@@ -587,6 +598,37 @@ body {
   margin-left: var(--sidebar-collapsed-width);
 }
 
+/* Bouton flottant Google Sheets */
+.floating-sheets-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #34a853, #0f9d58);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(52, 168, 83, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.floating-sheets-btn i {
+  font-size: 1.5rem;
+}
+
+.floating-sheets-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 168, 83, 0.5);
+}
+
+.floating-sheets-btn:active {
+  transform: scale(1.05);
+}
 
 .main-tabs {
   background: var(--bg-secondary);
@@ -737,6 +779,17 @@ body {
 
   .welcome p {
     font-size: 1rem;
+  }
+
+  .floating-sheets-btn {
+    top: 0.75rem;
+    right: 4rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  .floating-sheets-btn i {
+    font-size: 1.25rem;
   }
 }
 
