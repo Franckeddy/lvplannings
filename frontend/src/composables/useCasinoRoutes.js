@@ -1,8 +1,8 @@
 // Composable pour calculer les temps de trajet vers les casinos
 
 const HOME_LOCATION = {
-  lat: 36.2693,
-  lng: -115.1241
+  lat: 36.2525,
+  lng: -115.2061
 };
 
 // Liste des casinos avec coordonnées pour le matching

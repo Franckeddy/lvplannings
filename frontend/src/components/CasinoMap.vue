@@ -132,8 +132,8 @@ const DEFAULT_ZOOM = 11;
 const HOME_LOCATION = {
   name: "Maison",
   address: "5111 Blue Onion Cir, North Las Vegas, NV 89031",
-  lat: 36.2693,
-  lng: -115.1241
+  lat: 36.2525,
+  lng: -115.2061
 };
 
 // Liste des casinos de poker à Las Vegas avec leurs coordonnées
