@@ -2446,32 +2446,57 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .route-card {
     margin-left: 0;
-    margin-top: 8px;
+    margin-top: 10px;
     width: 100%;
+    padding: 12px 14px;
+  }
+
+  .route-card-header {
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+  }
+
+  .route-card-header i {
+    font-size: 1rem;
   }
 
   .route-card-stats {
     flex-direction: row;
-    gap: 12px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .route-stat-mini {
+    font-size: 0.8125rem;
+    gap: 8px;
+  }
+
+  .route-stat-mini i {
+    font-size: 0.75rem;
+    width: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .route-card {
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
 
   .route-card-header {
-    font-size: 0.6875rem;
-    margin-bottom: 4px;
+    font-size: 0.8125rem;
+    margin-bottom: 6px;
   }
 
   .route-card-header i {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
 
   .route-stat-mini {
-    font-size: 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .route-stat-mini i {
+    font-size: 0.6875rem;
   }
 }
 </style>
