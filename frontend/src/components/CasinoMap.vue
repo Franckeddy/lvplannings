@@ -556,6 +556,37 @@ const casinos = ref([
   }
 ]);
 
+// Supermarchés à proximité de la maison
+const supermarkets = ref([
+  {
+    name: "Walmart Supercenter",
+    address: "1807 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2369,
+    lng: -115.1523,
+    type: "grocery",
+    category: "Grosses courses",
+    description: "Hypermarché - Tout en un"
+  },
+  {
+    name: "Smith's",
+    address: "3013 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2369,
+    lng: -115.1780,
+    type: "grocery",
+    category: "Aliments frais",
+    description: "Supermarché - Produits frais de qualité"
+  },
+  {
+    name: "Smoke Cigar & Gifts",
+    address: "4770 W Ann Rd, North Las Vegas, NV 89031",
+    lat: 36.2619982,
+    lng: -115.2067474,
+    type: "tobacco",
+    category: "Tabac & Cigares",
+    description: "Cigares, tabac et cadeaux"
+  }
+]);
+
 // Lignes de bus RTC Las Vegas
 const busLines = ref([
   {
@@ -898,6 +929,44 @@ const createHomeIcon = () => {
     iconAnchor: [24, 48],
     popupAnchor: [0, -48],
     className: 'home-marker-img'
+  });
+};
+
+// Créer l'icône des supermarchés et commerces
+const createSupermarketIcon = (supermarket) => {
+  const isWalmart = supermarket.name.includes('Walmart');
+  const isSmith = supermarket.name.includes('Smith');
+  const isTobacco = supermarket.type === 'tobacco';
+
+  // Pour le tabac, utiliser un emoji
+  if (isTobacco) {
+    return L.divIcon({
+      className: 'custom-supermarket-marker',
+      html: `
+        <div class="supermarket-marker-container" style="background: #8B4513">
+          <span class="tobacco-icon">🚬</span>
+        </div>
+      `,
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -40]
+    });
+  }
+
+  // Pour Walmart et Smith's, utiliser les logos
+  const iconUrl = isWalmart ? '/walmart.png' : '/smith.png';
+  const bgColor = isWalmart ? '#0071ce' : '#ffffff'; // Bleu Walmart, Blanc Smith's
+
+  return L.divIcon({
+    className: 'custom-supermarket-marker',
+    html: `
+      <div class="supermarket-marker-container" style="background: ${bgColor}">
+        <img src="${iconUrl}" alt="${supermarket.name}" class="supermarket-logo" />
+      </div>
+    `,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
   });
 };
 
@@ -1732,6 +1801,18 @@ const initMap = async () => {
         </div>
       ` : '';
 
+      // Sans géolocalisation : afficher seulement le bouton voiture
+      // Avec géolocalisation : afficher les deux modes (voiture + bus)
+      const routeButton = hasGeoLocation ? `
+        <button class="directions-btn directions-both-btn" data-casino-index="${casinoIndex}" data-mode="both">
+          <i class="pi pi-car"></i><i class="pi pi-directions"></i>${isMobile.value ? '' : ' Itinéraire'}
+        </button>
+      ` : `
+        <button class="directions-btn directions-driving-btn" data-casino-index="${casinoIndex}" data-mode="driving">
+          <i class="pi pi-car"></i>${isMobile.value ? '' : ' Itinéraire voiture'}
+        </button>
+      `;
+
       return `
         <div class="casino-popup${mobileClass}">
           <h3>${casino.name}</h3>
@@ -1740,9 +1821,7 @@ const initMap = async () => {
           <p class="popup-desc">${casino.description}</p>
           ${fromSection}
           <div class="popup-actions popup-mode-actions">
-            <button class="directions-btn directions-both-btn" data-casino-index="${casinoIndex}" data-mode="both">
-              <i class="pi pi-car"></i><i class="pi pi-directions"></i>${isMobile.value ? '' : ' Itinéraire'}
-            </button>
+            ${routeButton}
           </div>
         </div>
       `;
@@ -1782,10 +1861,19 @@ const initMap = async () => {
           });
         }
 
-        // Bouton "Itinéraire" - afficher voiture ET bus
+        // Bouton "Itinéraire" - afficher voiture ET bus (si géoloc active)
         if (bothBtn) {
           bothBtn.addEventListener('click', () => {
             showRoute(casino, 'both');
+            marker.closePopup();
+          });
+        }
+
+        // Bouton "Itinéraire voiture" - afficher seulement voiture (si pas de géoloc)
+        const drivingBtn = document.querySelector(`.directions-driving-btn[data-casino-index="${casinoIndex}"]`);
+        if (drivingBtn) {
+          drivingBtn.addEventListener('click', () => {
+            showRoute(casino, 'driving');
             marker.closePopup();
           });
         }
@@ -1794,6 +1882,65 @@ const initMap = async () => {
 
     marker.addTo(map);
     markers.push(marker);
+  });
+
+  // Ajouter les marqueurs pour les supermarchés
+  supermarkets.value.forEach((supermarket, index) => {
+    const marker = L.marker([supermarket.lat, supermarket.lng], {
+      icon: createSupermarketIcon(supermarket)
+    });
+
+    // Ajouter au bounds
+    bounds.extend([supermarket.lat, supermarket.lng]);
+
+    // Fonction pour générer le contenu du popup dynamiquement
+    const getSupermarketPopupContent = () => {
+      return `
+        <div class="casino-popup supermarket-popup">
+          <h3>🛒 ${supermarket.name}</h3>
+          <p class="popup-address"><i class="pi pi-map-marker"></i> ${supermarket.address}</p>
+          <p class="popup-category"><i class="pi pi-tag"></i> ${supermarket.category}</p>
+          <p class="popup-desc">${supermarket.description}</p>
+          <div class="popup-actions popup-mode-actions">
+            <button class="directions-btn directions-driving-btn" data-supermarket-index="${index}">
+              <i class="pi pi-car"></i> Itinéraire voiture
+            </button>
+          </div>
+        </div>
+      `;
+    };
+
+    // Créer le popup
+    const popup = L.popup({
+      maxWidth: 280,
+      className: 'casino-popup-container supermarket-popup-container'
+    });
+
+    marker.bindPopup(popup);
+
+    // Ajouter l'écouteur pour le bouton d'itinéraire
+    marker.on('popupopen', () => {
+      popup.setContent(getSupermarketPopupContent());
+
+      setTimeout(() => {
+        const drivingBtn = document.querySelector(`.directions-driving-btn[data-supermarket-index="${index}"]`);
+        if (drivingBtn) {
+          drivingBtn.addEventListener('click', () => {
+            // Créer un objet compatible avec showRoute
+            const destination = {
+              name: supermarket.name,
+              lat: supermarket.lat,
+              lng: supermarket.lng,
+              address: supermarket.address
+            };
+            showRoute(destination, 'driving');
+            marker.closePopup();
+          });
+        }
+      }, 10);
+    });
+
+    marker.addTo(map);
   });
 
   // Ajuster la vue pour montrer tous les casinos
@@ -2184,6 +2331,47 @@ onUnmounted(() => {
   color: white;
   font-weight: 700;
   font-size: 14px;
+}
+
+/* Supermarket marker styles */
+.custom-supermarket-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.supermarket-marker-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 3px solid white;
+}
+
+.supermarket-logo {
+  transform: rotate(45deg);
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.tobacco-icon {
+  transform: rotate(45deg);
+  font-size: 18px;
+}
+
+/* Supermarket popup styles */
+.supermarket-popup h3 {
+  color: #f59e0b !important;
+}
+
+.supermarket-popup .popup-category {
+  color: #fbbf24;
+  font-weight: 600;
 }
 
 /* Popup styles */

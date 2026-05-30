@@ -163,18 +163,32 @@
                   </div>
                   <div class="casino-name-wrapper">
                     <span class="casino-name">{{ tournament.casino }}</span>
-                    <span v-if="getRouteTime(tournament.casino)" class="casino-drive-time">
-                      <i class="pi pi-car"></i>
-                      {{ getRouteTime(tournament.casino).durationMin }} min
-                      <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
-                    </span>
                   </div>
-                  <button v-if="getRouteTime(tournament.casino)" class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
-                    <i class="pi pi-directions"></i>
-                    <span class="map-link-text">Trajet</span>
-                  </button>
                   <span v-if="tournament.day" class="day-badge-small">Day {{ tournament.day }}</span>
                   <span v-else-if="tournament.isRestart" class="restart-badge-small">Restart</span>
+                </div>
+
+                <!-- Carte trajet voiture -->
+                <div
+                  v-if="getRouteTime(tournament.casino)"
+                  class="route-card driving-card clickable"
+                  @click.stop="openRouteMap(tournament.casino)"
+                  title="Voir l'itinéraire"
+                >
+                  <div class="route-card-header">
+                    <i class="pi pi-car"></i>
+                    <span>Voiture</span>
+                  </div>
+                  <div class="route-card-stats">
+                    <div class="route-stat-mini">
+                      <i class="pi pi-map"></i>
+                      <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+                    </div>
+                    <div class="route-stat-mini">
+                      <i class="pi pi-clock"></i>
+                      <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Structure info: chips et niveaux -->
@@ -1503,65 +1517,6 @@ onUnmounted(() => {
   font-size: 0.9375rem;
 }
 
-.casino-drive-time {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--accent-color, #818cf8);
-  font-size: 0.6875rem;
-  font-weight: 500;
-}
-
-.casino-drive-time i {
-  font-size: 0.625rem;
-}
-
-.casino-drive-time .drive-distance {
-  color: var(--text-secondary, #94a3b8);
-  font-size: 0.625rem;
-  font-weight: 400;
-}
-
-.map-link-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.35);
-  flex-shrink: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-left: auto;
-}
-
-.map-link-btn i {
-  font-size: 0.875rem;
-}
-
-.map-link-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 16px rgba(99, 102, 241, 0.5);
-}
-
-.map-link-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
-}
-
-.map-link-text {
-  display: inline;
-}
-
 /* Route map modal */
 .route-map-container {
   width: 100%;
@@ -2413,6 +2368,110 @@ onUnmounted(() => {
 
   .input-pseudo {
     width: 100%;
+  }
+}
+
+/* Carte de trajet voiture */
+.route-card {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.route-card.driving-card {
+  border-color: #6366f1;
+}
+
+.route-card.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-card.clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.route-card.driving-card.clickable:hover {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.route-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.driving-card .route-card-header {
+  color: #818cf8;
+}
+
+.route-card-header i {
+  font-size: 0.875rem;
+}
+
+.route-card-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.route-stat-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f1f5f9;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.route-stat-mini i {
+  font-size: 0.5625rem;
+  width: 12px;
+  text-align: center;
+}
+
+.driving-card .route-stat-mini i {
+  color: #6366f1;
+}
+
+/* Responsive pour route-card */
+@media (max-width: 768px) {
+  .route-card {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .route-card-stats {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .route-card {
+    padding: 8px 10px;
+  }
+
+  .route-card-header {
+    font-size: 0.6875rem;
+    margin-bottom: 4px;
+  }
+
+  .route-card-header i {
+    font-size: 0.75rem;
+  }
+
+  .route-stat-mini {
+    font-size: 0.625rem;
   }
 }
 </style>

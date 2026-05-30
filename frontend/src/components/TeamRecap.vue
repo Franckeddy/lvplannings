@@ -364,17 +364,16 @@
       :breakpoints="{ '768px': '100vw' }"
       class="route-map-dialog"
     >
-      <div class="route-map-container">
-        <div ref="routeMapContainer" class="route-leaflet-map"></div>
-
-        <!-- Barre d'info et liens navigation -->
-        <div class="route-map-bottom-bar">
-          <div v-if="routeMapInfo" class="route-map-info">
-            <div class="route-map-stat">
+      <div class="route-map-wrapper">
+        <!-- Panneau infos itinéraire -->
+        <div v-if="routeMapInfo" class="route-info-panel">
+          <!-- Stats de l'itinéraire -->
+          <div class="route-info-details">
+            <div class="route-stat">
               <i class="pi pi-car"></i>
               <span>{{ routeMapInfo.durationMin }} min</span>
             </div>
-            <div class="route-map-stat">
+            <div class="route-stat">
               <i class="pi pi-map"></i>
               <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
             </div>
@@ -382,7 +381,6 @@
 
           <!-- Liens navigation externe -->
           <div class="route-nav-links">
-            <!-- Google Maps (Desktop + Android) -->
             <a
               :href="getGoogleMapsUrl()"
               target="_blank"
@@ -392,18 +390,21 @@
               <i class="pi pi-map"></i>
               <span class="nav-link-label">Google Maps</span>
             </a>
-
-            <!-- Apple Maps (iOS uniquement) -->
             <a
               :href="getAppleMapsUrl()"
               target="_blank"
               rel="noopener noreferrer"
-              class="nav-link-btn apple-maps mobile-only"
+              class="nav-link-btn apple-maps"
             >
               <i class="pi pi-apple"></i>
               <span class="nav-link-label">Apple Maps</span>
             </a>
           </div>
+        </div>
+
+        <!-- Carte -->
+        <div class="route-map-container">
+          <div ref="routeMapContainer" class="route-leaflet-map"></div>
         </div>
       </div>
     </Dialog>
@@ -456,13 +457,60 @@ const showRouteMapDialog = ref(false);
 const routeMapCasino = ref('');
 const routeMapContainer = ref(null);
 const routeMapInfo = ref(null);
+const routeMode = ref('driving'); // 'driving' ou 'transit'
 let routeMap = null;
 let routeMapControl = null;
+let transitLayers = [];
 
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
 
 const emit = defineEmits(['user-created']);
+
+// Lignes de bus RTC Las Vegas (simplifiées)
+const busLines = [
+  {
+    id: 'deuce',
+    name: 'DEUCE',
+    color: '#e53935',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Fremont Street', lat: 36.1699, lng: -115.1424 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'Wynn / Encore', lat: 36.1263, lng: -115.1627 },
+      { name: 'Venetian', lat: 36.1212, lng: -115.1696 },
+      { name: 'Flamingo / Caesars', lat: 36.1162, lng: -115.1720 },
+      { name: 'Bellagio', lat: 36.1129, lng: -115.1740 },
+      { name: 'Paris', lat: 36.1095, lng: -115.1708 },
+      { name: 'Aria', lat: 36.1073, lng: -115.1765 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Excalibur', lat: 36.0989, lng: -115.1754 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 }
+    ]
+  },
+  {
+    id: 'sdx',
+    name: 'SDX',
+    color: '#1e88e5',
+    stops: [
+      { name: 'Downtown', lat: 36.1685, lng: -115.1481 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'Fashion Show', lat: 36.1269, lng: -115.1703 },
+      { name: 'Flamingo', lat: 36.1162, lng: -115.1720 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 }
+    ]
+  },
+  {
+    id: '104',
+    name: '104',
+    color: '#ef6c00',
+    stops: [
+      { name: 'Rancho & Lake Mead', lat: 36.2150, lng: -115.2200 },
+      { name: 'Downtown', lat: 36.1685, lng: -115.1481 }
+    ]
+  }
+];
 
 // Couleurs pour les utilisateurs
 const userColors = {};
@@ -913,6 +961,7 @@ const saveNote = async () => {
 const openRouteMap = async (casinoName) => {
   routeMapCasino.value = casinoName;
   routeMapInfo.value = casinoRouteTimes.value[casinoName] || null;
+  routeMode.value = 'driving';
   showRouteMapDialog.value = true;
 
   await nextTick();
@@ -933,7 +982,6 @@ const initRouteMap = async (casinoName) => {
   const casinoCoords = await getCasinoCoords(casinoName);
   if (!casinoCoords) return;
 
-  // Sauvegarder les coordonnées pour les liens de navigation
   currentCasinoCoords.value = casinoCoords;
 
   routeMap = L.map(routeMapContainer.value, {
@@ -971,6 +1019,154 @@ const initRouteMap = async (casinoName) => {
     .addTo(routeMap)
     .bindPopup(`<b>${casinoName}</b>`);
 
+  showDrivingRoute(casinoCoords);
+
+  setTimeout(() => {
+    if (routeMap) routeMap.invalidateSize();
+  }, 300);
+};
+
+// Calculer la distance entre deux points (en km)
+const getDistance = (lat1, lng1, lat2, lng2) => {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+// Trouver le meilleur itinéraire en bus
+const findBestTransitRoute = (casinoCoords) => {
+  const results = [];
+  const MAX_TRANSFER_DIST = 1.5;
+
+  busLines.forEach(line => {
+    let nearestHome = null, nearestHomeDist = Infinity, nearestHomeIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < nearestHomeDist) { nearestHomeDist = dist; nearestHome = stop; nearestHomeIdx = idx; }
+    });
+
+    let nearestCasino = null, nearestCasinoDist = Infinity, nearestCasinoIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(casinoCoords.lat, casinoCoords.lng, stop.lat, stop.lng);
+      if (dist < nearestCasinoDist) { nearestCasinoDist = dist; nearestCasino = stop; nearestCasinoIdx = idx; }
+    });
+
+    if (nearestHome && nearestCasino && nearestHomeIdx !== nearestCasinoIdx) {
+      const startIdx = Math.min(nearestHomeIdx, nearestCasinoIdx);
+      const endIdx = Math.max(nearestHomeIdx, nearestCasinoIdx);
+      let busDistance = 0;
+      const busStops = [];
+      for (let i = startIdx; i <= endIdx; i++) {
+        busStops.push(line.stops[i]);
+        if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng);
+      }
+
+      results.push({
+        line,
+        nearestToHome: nearestHome,
+        nearestToHomeDist: nearestHomeDist,
+        nearestToCasino: nearestCasino,
+        nearestToCasinoDist: nearestCasinoDist,
+        busStops,
+        busDistance,
+        totalWalkDist: nearestHomeDist + nearestCasinoDist,
+        isTransfer: false
+      });
+    }
+  });
+
+  results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
+  return results.length > 0 ? results[0] : null;
+};
+
+// Nettoyer les layers de transit
+const clearTransitLayers = () => {
+  transitLayers.forEach(layer => {
+    if (routeMap) routeMap.removeLayer(layer);
+  });
+  transitLayers = [];
+};
+
+// Afficher l'itinéraire en bus
+const showTransitRoute = (casinoCoords) => {
+  if (!routeMap) return;
+
+  if (routeMapControl) {
+    routeMap.removeControl(routeMapControl);
+    routeMapControl = null;
+  }
+  clearTransitLayers();
+
+  const best = findBestTransitRoute(casinoCoords);
+  if (!best) {
+    routeMapInfo.value = { ...routeMapInfo.value, noRoute: true, transitDetails: null };
+    return;
+  }
+
+  const line = best.line;
+
+  // Marche vers l'arrêt
+  const walkToStop = L.polyline(
+    [[HOME_LOCATION.lat, HOME_LOCATION.lng], [best.nearestToHome.lat, best.nearestToHome.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(routeMap);
+  transitLayers.push(walkToStop);
+
+  // Trajet en bus
+  const busCoords = best.busStops.map(s => [s.lat, s.lng]);
+  const busPolyline = L.polyline(busCoords, {
+    color: line.color,
+    weight: 7,
+    opacity: 0.9,
+    dashArray: '12, 6'
+  }).addTo(routeMap);
+  transitLayers.push(busPolyline);
+
+  // Marche vers le casino
+  const walkFromStop = L.polyline(
+    [[best.nearestToCasino.lat, best.nearestToCasino.lng], [casinoCoords.lat, casinoCoords.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(routeMap);
+  transitLayers.push(walkFromStop);
+
+  // Calcul des temps
+  const walkTimeToStop = Math.round((best.nearestToHomeDist / 5) * 60);
+  const walkTimeFromStop = Math.round((best.nearestToCasinoDist / 5) * 60);
+  const busTime = Math.round((best.busDistance / 20) * 60);
+  const totalTime = walkTimeToStop + 15 + busTime + walkTimeFromStop;
+  const totalDistKm = (best.totalWalkDist + best.busDistance).toFixed(1);
+  const totalDistMiles = ((best.totalWalkDist + best.busDistance) * 0.621371).toFixed(1);
+
+  routeMapInfo.value = {
+    distanceKm: totalDistKm,
+    distanceMiles: totalDistMiles,
+    durationMin: totalTime,
+    noRoute: false,
+    transitDetails: {
+      line: line,
+      line2: null,
+      isTransfer: false,
+      boardStop: best.nearestToHome.name,
+      alightStop: best.nearestToCasino.name,
+      walkToStop: walkTimeToStop,
+      walkFromStop: walkTimeFromStop
+    }
+  };
+
+  const bounds = L.latLngBounds([[HOME_LOCATION.lat, HOME_LOCATION.lng], [casinoCoords.lat, casinoCoords.lng]]);
+  routeMap.fitBounds(bounds, { padding: [80, 80], maxZoom: 13 });
+};
+
+// Afficher l'itinéraire voiture
+const showDrivingRoute = (casinoCoords) => {
+  if (!routeMap) return;
+
+  clearTransitLayers();
+
   routeMapControl = L.Routing.control({
     waypoints: [
       L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
@@ -999,10 +1195,11 @@ const initRouteMap = async (casinoName) => {
     routeMapInfo.value = {
       durationMin: Math.round(route.summary.totalTime / 60),
       distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
-      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1)
+      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1),
+      noRoute: false,
+      transitDetails: null
     };
 
-    // Dézoomer pour avoir une meilleure vue d'ensemble
     setTimeout(() => {
       if (routeMap) {
         const currentZoom = routeMap.getZoom();
@@ -1010,10 +1207,25 @@ const initRouteMap = async (casinoName) => {
       }
     }, 100);
   });
+};
 
-  setTimeout(() => {
-    if (routeMap) routeMap.invalidateSize();
-  }, 300);
+// Basculer entre voiture et transit
+const switchRouteMode = async (mode) => {
+  if (routeMode.value === mode) return;
+  routeMode.value = mode;
+
+  const casinoCoords = await getCasinoCoords(routeMapCasino.value);
+  if (!casinoCoords) return;
+
+  if (mode === 'transit') {
+    if (routeMapControl) {
+      routeMap.removeControl(routeMapControl);
+      routeMapControl = null;
+    }
+    showTransitRoute(casinoCoords);
+  } else {
+    showDrivingRoute(casinoCoords);
+  }
 };
 
 // Coordonnées du casino actuel pour les liens de navigation
@@ -1043,6 +1255,8 @@ watch(showRouteMapDialog, (val) => {
     routeMap = null;
     routeMapControl = null;
     routeMapInfo.value = null;
+    transitLayers = [];
+    routeMode.value = 'driving';
   }
 });
 
@@ -1459,15 +1673,31 @@ onUnmounted(() => {
   display: inline;
 }
 
-/* Route map modal */
+/* Route map modal - Wrapper */
+.route-map-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 60vh;
+  min-height: 400px;
+}
+
+.route-map-wrapper.transit-mode {
+  flex-direction: row;
+}
+
+/* Carte */
 .route-map-container {
-  width: 100%;
-  height: 55vh;
-  min-height: 300px;
-  border-radius: 12px;
+  flex: 1;
+  min-height: 250px;
+  border-radius: 0 0 12px 12px;
   overflow: hidden;
   position: relative;
   background: #0f172a;
+}
+
+.route-map-wrapper.transit-mode .route-map-container {
+  border-radius: 0 12px 12px 0;
 }
 
 .route-leaflet-map {
@@ -1475,34 +1705,77 @@ onUnmounted(() => {
   height: 100%;
 }
 
-/* Barre inférieure avec info et liens navigation */
-.route-map-bottom-bar {
-  align-items: center;
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
+/* Panneau infos itinéraire */
+.route-info-panel {
+  background: rgba(30, 41, 59, 0.97);
+  backdrop-filter: blur(12px);
+  border-radius: 12px 12px 0 0;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-bottom: none;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
+  gap: 12px;
 }
 
-.route-map-info {
-  width: fit-content;
+.route-map-wrapper.transit-mode .route-info-panel {
+  width: 280px;
+  min-width: 280px;
+  border-radius: 12px 0 0 12px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-right: none;
+  overflow-y: auto;
+}
+
+/* Toggle voiture / bus */
+.route-mode-toggle {
+  display: flex;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.mode-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 10px 20px;
-  background: rgba(30, 41, 59, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  border: 1px solid #6366f1;
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  gap: 6px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-.route-map-stat {
+.mode-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: #f1f5f9;
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.mode-btn i {
+  font-size: 1rem;
+}
+
+/* Stats de l'itinéraire */
+.route-info-details {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.route-stat {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1511,9 +1784,122 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-.route-map-stat i {
+.route-stat i {
   color: #818cf8;
   font-size: 0.875rem;
+}
+
+/* Détails transit */
+.transit-details {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transit-steps-simple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.transit-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.transit-segment.walk-segment {
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.transit-segment.bus-segment {
+  border-left: 4px solid;
+  padding-left: 10px;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.segment-time {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.segment-label {
+  font-size: 0.6875rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.segment-line-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.segment-arrow {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.transit-stops-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.stop-name {
+  background: rgba(99, 102, 241, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #a5b4fc;
+  font-weight: 500;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stop-name.transfer-stop {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.transit-stops-info i {
+  color: #64748b;
+  font-size: 0.625rem;
+}
+
+/* Message pas de route transit */
+.transit-no-route {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+  color: #f87171;
+  font-size: 0.875rem;
+}
+
+.transit-no-route i {
+  font-size: 1rem;
 }
 
 /* Liens de navigation externe */
@@ -1528,17 +1914,16 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   transition: all 0.25s ease;
-  max-width: 200px;
 }
 
 .nav-link-btn i {
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 .nav-link-btn.google-maps {
@@ -1567,29 +1952,87 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-/* Apple Maps visible uniquement sur mobile (iOS) */
-.mobile-only {
-  display: none;
+:deep(.route-map-dialog .p-dialog-content) {
+  padding: 0 !important;
+  overflow: hidden;
 }
 
+:deep(.route-map-dialog .p-dialog-header) {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0.75rem 1rem;
+}
+
+:deep(.route-map-dialog .p-dialog-title) {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+:deep(.leaflet-routing-container) {
+  display: none !important;
+}
+
+/* Responsive pour la modale route-map */
 @media (max-width: 768px) {
-  .mobile-only {
-    display: flex;
+  .route-map-wrapper {
+    height: auto;
+    min-height: auto;
   }
 
-  .route-map-bottom-bar {
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
+  .route-map-wrapper.transit-mode {
+    flex-direction: column;
   }
 
-  .route-map-info {
-    padding: 8px 14px;
-    gap: 12px;
+  .route-map-wrapper.transit-mode .route-info-panel {
+    width: 100%;
+    min-width: auto;
+    border-radius: 12px 12px 0 0;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-bottom: none;
+    max-height: none;
+    overflow-y: visible;
   }
 
-  .route-map-stat {
+  .route-map-wrapper.transit-mode .route-map-container {
+    border-radius: 0 0 12px 12px;
+  }
+
+  .route-map-container {
+    height: 45vh;
+    min-height: 250px;
+  }
+
+  .transit-steps-simple {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .transit-segment {
+    padding: 6px 8px;
+  }
+
+  .segment-time {
     font-size: 0.8125rem;
+  }
+
+  .segment-label {
+    font-size: 0.625rem;
+  }
+
+  .segment-line-badge {
+    font-size: 0.6875rem;
+    padding: 3px 8px;
+  }
+
+  .transit-stops-info {
+    gap: 4px;
+  }
+
+  .stop-name {
+    max-width: 90px;
+    padding: 3px 8px;
+    font-size: 0.6875rem;
   }
 
   .nav-link-btn {

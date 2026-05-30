@@ -352,17 +352,16 @@
       :breakpoints="{ '768px': '100vw' }"
       class="route-map-dialog"
     >
-      <div class="route-map-container">
-        <div ref="routeMapContainer" class="route-leaflet-map"></div>
-
-        <!-- Barre d'info et liens navigation -->
-        <div class="route-map-bottom-bar">
-          <div v-if="routeMapInfo" class="route-map-info">
-            <div class="route-map-stat">
+      <div class="route-map-wrapper">
+        <!-- Panneau infos itinéraire -->
+        <div v-if="routeMapInfo" class="route-info-panel">
+          <!-- Stats de l'itinéraire -->
+          <div class="route-info-details">
+            <div class="route-stat">
               <i class="pi pi-car"></i>
               <span>{{ routeMapInfo.durationMin }} min</span>
             </div>
-            <div class="route-map-stat">
+            <div class="route-stat">
               <i class="pi pi-map"></i>
               <span>{{ routeMapInfo.distanceMiles }} mi ({{ routeMapInfo.distanceKm }} km)</span>
             </div>
@@ -370,7 +369,6 @@
 
           <!-- Liens navigation externe -->
           <div class="route-nav-links">
-            <!-- Google Maps (Desktop + Android) -->
             <a
               :href="getGoogleMapsUrl()"
               target="_blank"
@@ -380,18 +378,21 @@
               <i class="pi pi-map"></i>
               <span class="nav-link-label">Google Maps</span>
             </a>
-
-            <!-- Apple Maps (iOS uniquement) -->
             <a
               :href="getAppleMapsUrl()"
               target="_blank"
               rel="noopener noreferrer"
-              class="nav-link-btn apple-maps mobile-only"
+              class="nav-link-btn apple-maps"
             >
               <i class="pi pi-apple"></i>
               <span class="nav-link-label">Apple Maps</span>
             </a>
           </div>
+        </div>
+
+        <!-- Carte -->
+        <div class="route-map-container">
+          <div ref="routeMapContainer" class="route-leaflet-map"></div>
         </div>
       </div>
     </Dialog>
@@ -431,8 +432,10 @@ const showRouteMapDialog = ref(false);
 const routeMapCasino = ref('');
 const routeMapContainer = ref(null);
 const routeMapInfo = ref(null);
+const routeMode = ref('driving'); // 'driving' ou 'transit'
 let routeMap = null;
 let routeMapControl = null;
+let transitLayers = []; // Layers pour l'itinéraire transit
 
 // État
 const loading = ref(false);
@@ -491,6 +494,97 @@ const getUserColor = (name) => {
   }
   return userColors[name];
 };
+
+// Lignes de bus RTC Las Vegas (simplifiées pour les trajets)
+const busLines = [
+  {
+    id: 'deuce',
+    name: 'DEUCE',
+    description: 'Strip & Downtown Express',
+    color: '#e53935',
+    frequency: '15-20 min',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Fremont Street Experience', lat: 36.1699, lng: -115.1424 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'Circus Circus', lat: 36.1364, lng: -115.1640 },
+      { name: 'Resorts World', lat: 36.1284, lng: -115.1658 },
+      { name: 'Wynn / Encore', lat: 36.1263, lng: -115.1627 },
+      { name: 'Venetian / Palazzo', lat: 36.1212, lng: -115.1696 },
+      { name: 'Harrah\'s / The LINQ', lat: 36.1186, lng: -115.1708 },
+      { name: 'Flamingo / Caesars', lat: 36.1162, lng: -115.1720 },
+      { name: 'Bellagio / Bally\'s', lat: 36.1129, lng: -115.1740 },
+      { name: 'Paris / Planet Hollywood', lat: 36.1095, lng: -115.1708 },
+      { name: 'CityCenter / Aria', lat: 36.1073, lng: -115.1765 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Excalibur', lat: 36.0989, lng: -115.1754 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: 'sdx',
+    name: 'SDX',
+    description: 'Strip & Downtown Express (Limited)',
+    color: '#1e88e5',
+    frequency: '12-15 min',
+    stops: [
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 },
+      { name: 'Bonneville Transit Center', lat: 36.1648, lng: -115.1535 },
+      { name: 'Stratosphere', lat: 36.1475, lng: -115.1566 },
+      { name: 'Fashion Show Mall', lat: 36.1269, lng: -115.1703 },
+      { name: 'Flamingo / Caesars', lat: 36.1162, lng: -115.1720 },
+      { name: 'MGM Grand', lat: 36.1024, lng: -115.1695 },
+      { name: 'Mandalay Bay', lat: 36.0920, lng: -115.1755 },
+      { name: 'South Strip Transfer Terminal', lat: 36.0890, lng: -115.1760 }
+    ]
+  },
+  {
+    id: '104',
+    name: '104',
+    description: 'Rancho Dr',
+    color: '#ef6c00',
+    frequency: '30 min',
+    stops: [
+      { name: 'Rancho & Lake Mead', lat: 36.2150, lng: -115.2200 },
+      { name: 'Rancho & Cheyenne', lat: 36.2050, lng: -115.2200 },
+      { name: 'Rancho & Vegas Dr', lat: 36.1850, lng: -115.2200 },
+      { name: 'Rancho & US-95', lat: 36.1700, lng: -115.2100 },
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 }
+    ]
+  },
+  {
+    id: '106',
+    name: '106',
+    description: 'Charleston Blvd',
+    color: '#d81b60',
+    frequency: '15-20 min',
+    stops: [
+      { name: 'Red Rock Casino', lat: 36.1734, lng: -115.3090 },
+      { name: 'Charleston & Rainbow', lat: 36.1580, lng: -115.2420 },
+      { name: 'Charleston & Decatur', lat: 36.1580, lng: -115.2050 },
+      { name: 'Bonneville Transit Center', lat: 36.1648, lng: -115.1535 },
+      { name: 'Downtown Transit Center', lat: 36.1685, lng: -115.1481 }
+    ]
+  },
+  {
+    id: 'monorail',
+    name: 'MONORAIL',
+    description: 'Las Vegas Monorail',
+    color: '#232d6a',
+    frequency: '4-8 min',
+    isMonorail: true,
+    stops: [
+      { name: 'MGM Grand Station', lat: 36.1019, lng: -115.1656 },
+      { name: 'Bally\'s/Paris Station', lat: 36.1118, lng: -115.1685 },
+      { name: 'Flamingo/Caesars Palace Station', lat: 36.1163, lng: -115.1695 },
+      { name: 'Harrah\'s/The LINQ Station', lat: 36.1198, lng: -115.1688 },
+      { name: 'Las Vegas Convention Center Station', lat: 36.1280, lng: -115.1530 },
+      { name: 'Westgate Station', lat: 36.1350, lng: -115.1530 },
+      { name: 'SAHARA Las Vegas Station', lat: 36.1445, lng: -115.1566 }
+    ]
+  }
+];
 
 // Normaliser le nom du casino pour le matching
 const normalizeCasinoName = (name) => {
@@ -900,6 +994,7 @@ const hasStructureInfo = (tournament) => {
 const openRouteMap = async (casinoName) => {
   routeMapCasino.value = casinoName;
   routeMapInfo.value = casinoRouteTimes.value[casinoName] || null;
+  routeMode.value = 'driving'; // Reset au mode voiture
   showRouteMapDialog.value = true;
 
   await nextTick();
@@ -1012,6 +1107,314 @@ const initRouteMap = async (casinoName) => {
   }, 300);
 };
 
+// Calculer la distance entre deux points (en km)
+const getDistance = (lat1, lng1, lat2, lng2) => {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+// Trouver le meilleur itinéraire en bus depuis la maison
+const findBestTransitRoute = (casinoCoords) => {
+  const results = [];
+  const MAX_TRANSFER_DIST = 1.5; // km max entre arrêts pour correspondance
+
+  // Chercher les lignes directes
+  busLines.forEach(line => {
+    let nearestHome = null, nearestHomeDist = Infinity, nearestHomeIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < nearestHomeDist) { nearestHomeDist = dist; nearestHome = stop; nearestHomeIdx = idx; }
+    });
+
+    let nearestCasino = null, nearestCasinoDist = Infinity, nearestCasinoIdx = -1;
+    line.stops.forEach((stop, idx) => {
+      const dist = getDistance(casinoCoords.lat, casinoCoords.lng, stop.lat, stop.lng);
+      if (dist < nearestCasinoDist) { nearestCasinoDist = dist; nearestCasino = stop; nearestCasinoIdx = idx; }
+    });
+
+    if (nearestHome && nearestCasino && nearestHomeIdx !== nearestCasinoIdx) {
+      const startIdx = Math.min(nearestHomeIdx, nearestCasinoIdx);
+      const endIdx = Math.max(nearestHomeIdx, nearestCasinoIdx);
+      let busDistance = 0;
+      const busStops = [];
+      for (let i = startIdx; i <= endIdx; i++) {
+        busStops.push(line.stops[i]);
+        if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng);
+      }
+
+      results.push({
+        line,
+        nearestToHome: nearestHome,
+        nearestToHomeDist: nearestHomeDist,
+        nearestToCasino: nearestCasino,
+        nearestToCasinoDist: nearestCasinoDist,
+        busStops,
+        busDistance,
+        totalWalkDist: nearestHomeDist + nearestCasinoDist,
+        isTransfer: false
+      });
+    }
+  });
+
+  // Chercher avec correspondance
+  for (let i = 0; i < busLines.length; i++) {
+    const line1 = busLines[i];
+    let home1 = null, home1Dist = Infinity, home1Idx = -1;
+    line1.stops.forEach((stop, idx) => {
+      const dist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, stop.lat, stop.lng);
+      if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
+    });
+    if (home1Dist > 5) continue;
+
+    for (let j = 0; j < busLines.length; j++) {
+      if (i === j) continue;
+      const line2 = busLines[j];
+
+      let casino2 = null, casino2Dist = Infinity, casino2Idx = -1;
+      line2.stops.forEach((stop, idx) => {
+        const dist = getDistance(casinoCoords.lat, casinoCoords.lng, stop.lat, stop.lng);
+        if (dist < casino2Dist) { casino2Dist = dist; casino2 = stop; casino2Idx = idx; }
+      });
+
+      let bestTDist = Infinity, t1Idx = -1, t2Idx = -1, tStop1 = null, tStop2 = null;
+      line1.stops.forEach((s1, idx1) => {
+        line2.stops.forEach((s2, idx2) => {
+          const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (dist < bestTDist) { bestTDist = dist; t1Idx = idx1; t2Idx = idx2; tStop1 = s1; tStop2 = s2; }
+        });
+      });
+      if (bestTDist > MAX_TRANSFER_DIST || t1Idx === home1Idx || t2Idx === casino2Idx) continue;
+
+      // Calculer les arrêts de la 1ère ligne (maison → transfert)
+      const s1Start = Math.min(home1Idx, t1Idx);
+      const s1End = Math.max(home1Idx, t1Idx);
+      let dist1 = 0;
+      const busStops1 = [];
+      for (let k = s1Start; k <= s1End; k++) {
+        busStops1.push(line1.stops[k]);
+        if (k < s1End) dist1 += getDistance(line1.stops[k].lat, line1.stops[k].lng, line1.stops[k+1].lat, line1.stops[k+1].lng);
+      }
+
+      // Calculer les arrêts de la 2ème ligne (transfert → casino)
+      const s2Start = Math.min(t2Idx, casino2Idx);
+      const s2End = Math.max(t2Idx, casino2Idx);
+      let dist2 = 0;
+      const busStops2 = [];
+      for (let k = s2Start; k <= s2End; k++) {
+        busStops2.push(line2.stops[k]);
+        if (k < s2End) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k+1].lat, line2.stops[k+1].lng);
+      }
+
+      const totalWalkDist = home1Dist + bestTDist + casino2Dist;
+      results.push({
+        line: line1,
+        line2,
+        isTransfer: true,
+        nearestToHome: home1,
+        nearestToHomeDist: home1Dist,
+        nearestToHomeIdx: home1Idx,
+        transferStop102: tStop1,
+        transferStopLine: tStop2,
+        transferDist: bestTDist,
+        nearestToCasino: casino2,
+        nearestToCasinoDist: casino2Dist,
+        nearestToCasinoIdx: casino2Idx,
+        busStops: busStops1,
+        busStops2: busStops2,
+        busDistance: dist1 + dist2,
+        totalWalkDist
+      });
+    }
+  }
+
+  results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
+  return results.length > 0 ? results[0] : null;
+};
+
+// Nettoyer les layers de transit
+const clearTransitLayers = () => {
+  transitLayers.forEach(layer => {
+    if (routeMap) routeMap.removeLayer(layer);
+  });
+  transitLayers = [];
+};
+
+// Afficher l'itinéraire en transport en commun
+const showTransitRoute = (casinoCoords) => {
+  if (!routeMap) return;
+
+  // Supprimer l'itinéraire voiture
+  if (routeMapControl) {
+    routeMap.removeControl(routeMapControl);
+    routeMapControl = null;
+  }
+  clearTransitLayers();
+
+  const best = findBestTransitRoute(casinoCoords);
+  if (!best) {
+    routeMapInfo.value = {
+      ...routeMapInfo.value,
+      noRoute: true,
+      transitDetails: null
+    };
+    return;
+  }
+
+  const line = best.line;
+
+  // Dessiner la marche vers l'arrêt
+  const walkToStop = L.polyline(
+    [[HOME_LOCATION.lat, HOME_LOCATION.lng], [best.nearestToHome.lat, best.nearestToHome.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(routeMap);
+  transitLayers.push(walkToStop);
+
+  // Dessiner le trajet en bus
+  const busCoords = best.busStops ? best.busStops.map(s => [s.lat, s.lng]) : [[best.nearestToHome.lat, best.nearestToHome.lng]];
+  const busPolyline = L.polyline(busCoords, {
+    color: line.color,
+    weight: 7,
+    opacity: 0.9,
+    dashArray: line.isMonorail ? null : '12, 6'
+  }).addTo(routeMap);
+  transitLayers.push(busPolyline);
+
+  // Si correspondance
+  if (best.isTransfer && best.line2) {
+    const walkTransfer = L.polyline(
+      [[best.transferStop102.lat, best.transferStop102.lng], [best.transferStopLine.lat, best.transferStopLine.lng]],
+      { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+    ).addTo(routeMap);
+    transitLayers.push(walkTransfer);
+
+    // Trajet sur la 2ème ligne avec les arrêts intermédiaires
+    const busCoords2 = best.busStops2 ? best.busStops2.map(s => [s.lat, s.lng]) : [[best.transferStopLine.lat, best.transferStopLine.lng], [best.nearestToCasino.lat, best.nearestToCasino.lng]];
+    const busPolyline2 = L.polyline(busCoords2, {
+      color: best.line2.color,
+      weight: 7,
+      opacity: 0.9,
+      dashArray: best.line2.isMonorail ? null : '12, 6'
+    }).addTo(routeMap);
+    transitLayers.push(busPolyline2);
+  }
+
+  // Dessiner la marche vers le casino
+  const walkFromStop = L.polyline(
+    [[best.nearestToCasino.lat, best.nearestToCasino.lng], [casinoCoords.lat, casinoCoords.lng]],
+    { color: '#94a3b8', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(routeMap);
+  transitLayers.push(walkFromStop);
+
+  // Calcul des temps
+  const walkTimeToStop = Math.round((best.nearestToHomeDist / 5) * 60);
+  const walkTimeFromStop = Math.round((best.nearestToCasinoDist / 5) * 60);
+  const busSpeed = line.isMonorail ? 40 : 20;
+  const busDistance = best.busDistance || getDistance(best.nearestToHome.lat, best.nearestToHome.lng, best.nearestToCasino.lat, best.nearestToCasino.lng);
+  const busTime = Math.round((busDistance / busSpeed) * 60);
+  const waitTime = line.isMonorail ? 6 : 15;
+  const transferWaitTime = best.isTransfer ? 10 : 0;
+  const totalTime = walkTimeToStop + waitTime + busTime + transferWaitTime + walkTimeFromStop;
+  const totalDistKm = (best.totalWalkDist + busDistance).toFixed(1);
+  const totalDistMiles = ((best.totalWalkDist + busDistance) * 0.621371).toFixed(1);
+
+  routeMapInfo.value = {
+    distanceKm: totalDistKm,
+    distanceMiles: totalDistMiles,
+    durationMin: totalTime,
+    noRoute: false,
+    transitDetails: {
+      line: line,
+      line2: best.line2 || null,
+      isTransfer: best.isTransfer || false,
+      isDoubleTransfer: false,
+      boardStop: best.nearestToHome.name,
+      alightStop: best.nearestToCasino.name,
+      transferStop: best.isTransfer ? best.transferStop102.name : null,
+      walkToStop: walkTimeToStop,
+      walkFromStop: walkTimeFromStop
+    }
+  };
+
+  // Ajuster la vue
+  const bounds = L.latLngBounds([
+    [HOME_LOCATION.lat, HOME_LOCATION.lng],
+    [casinoCoords.lat, casinoCoords.lng]
+  ]);
+  routeMap.fitBounds(bounds, { padding: [80, 80], maxZoom: 13 });
+};
+
+// Afficher l'itinéraire voiture
+const showDrivingRoute = (casinoCoords) => {
+  if (!routeMap) return;
+
+  clearTransitLayers();
+
+  routeMapControl = L.Routing.control({
+    waypoints: [
+      L.latLng(HOME_LOCATION.lat, HOME_LOCATION.lng),
+      L.latLng(casinoCoords.lat, casinoCoords.lng)
+    ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives: false,
+    createMarker: () => null,
+    lineOptions: {
+      styles: [
+        { color: '#6366f1', opacity: 0.9, weight: 6 },
+        { color: '#818cf8', opacity: 0.4, weight: 12 }
+      ]
+    },
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
+      profile: 'driving'
+    })
+  }).addTo(routeMap);
+
+  routeMapControl.on('routesfound', (e) => {
+    const route = e.routes[0];
+    routeMapInfo.value = {
+      durationMin: Math.round(route.summary.totalTime / 60),
+      distanceKm: (route.summary.totalDistance / 1000).toFixed(1),
+      distanceMiles: (route.summary.totalDistance / 1609.34).toFixed(1),
+      noRoute: false,
+      transitDetails: null
+    };
+
+    setTimeout(() => {
+      if (routeMap) {
+        const currentZoom = routeMap.getZoom();
+        routeMap.setZoom(currentZoom - 1.5);
+      }
+    }, 100);
+  });
+};
+
+// Basculer entre mode voiture et transit
+const switchRouteMode = async (mode) => {
+  if (routeMode.value === mode) return;
+  routeMode.value = mode;
+
+  const casinoCoords = await getCasinoCoords(routeMapCasino.value);
+  if (!casinoCoords) return;
+
+  if (mode === 'transit') {
+    if (routeMapControl) {
+      routeMap.removeControl(routeMapControl);
+      routeMapControl = null;
+    }
+    showTransitRoute(casinoCoords);
+  } else {
+    showDrivingRoute(casinoCoords);
+  }
+};
+
 // Coordonnées du casino actuel pour les liens de navigation
 const currentCasinoCoords = ref(null);
 
@@ -1023,6 +1426,7 @@ const getGoogleMapsUrl = () => {
     : routeMapCasino.value;
   return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
 };
+
 
 // Générer l'URL Apple Maps pour l'itinéraire
 const getAppleMapsUrl = () => {
@@ -1040,6 +1444,8 @@ watch(showRouteMapDialog, (val) => {
     routeMap = null;
     routeMapControl = null;
     routeMapInfo.value = null;
+    transitLayers = [];
+    routeMode.value = 'driving';
   }
 });
 
@@ -1462,12 +1868,20 @@ onUnmounted(() => {
   display: inline;
 }
 
-/* Route map modal */
+/* Route map modal - Wrapper */
+.route-map-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 60vh;
+  min-height: 400px;
+}
+
+/* Carte */
 .route-map-container {
-  width: 100%;
-  height: 55vh;
+  flex: 1;
   min-height: 300px;
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
   overflow: hidden;
   position: relative;
   background: #0f172a;
@@ -1478,34 +1892,28 @@ onUnmounted(() => {
   height: 100%;
 }
 
-/* Barre inférieure avec info et liens navigation */
-.route-map-bottom-bar {
-  align-items: center;
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
+/* Panneau infos itinéraire */
+.route-info-panel {
+  background: rgba(30, 41, 59, 0.97);
+  backdrop-filter: blur(12px);
+  border-radius: 12px 12px 0 0;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-bottom: none;
+  padding: 14px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.route-map-info {
-  width: fit-content;
+/* Stats de l'itinéraire */
+.route-info-details {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 20px;
-  padding: 10px 20px;
-  background: rgba(30, 41, 59, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  border: 1px solid #6366f1;
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
 }
 
-.route-map-stat {
+.route-stat {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1514,7 +1922,7 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-.route-map-stat i {
+.route-stat i {
   color: #818cf8;
   font-size: 0.875rem;
 }
@@ -1523,7 +1931,6 @@ onUnmounted(() => {
 .route-nav-links {
   display: flex;
   gap: 10px;
-  justify-content: center;
 }
 
 .nav-link-btn {
@@ -1531,17 +1938,16 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   transition: all 0.25s ease;
-  max-width: 200px;
 }
 
 .nav-link-btn i {
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 .nav-link-btn.google-maps {
@@ -1570,9 +1976,57 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-/* Apple Maps visible uniquement sur mobile (iOS) */
-.route-nav-links .mobile-only {
-  display: none;
+:deep(.route-map-dialog .p-dialog-content) {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+:deep(.route-map-dialog .p-dialog-header) {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0.75rem 1rem;
+}
+
+:deep(.route-map-dialog .p-dialog-title) {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+:deep(.leaflet-routing-container) {
+  display: none !important;
+}
+
+/* Responsive pour la modale route-map */
+@media (max-width: 768px) {
+  .route-map-wrapper {
+    height: auto;
+    min-height: auto;
+  }
+
+  .route-map-container {
+    height: 50vh;
+    min-height: 280px;
+  }
+
+  .route-info-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .route-info-details {
+    justify-content: center;
+  }
+
+  .route-nav-links {
+    justify-content: center;
+  }
+
+  .nav-link-btn {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 .tournament-levels {
