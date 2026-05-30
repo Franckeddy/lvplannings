@@ -6172,6 +6172,30 @@ onUnmounted(() => {
     font-size: 0.9375rem;
   }
 
+  /* Responsive - Boutons flottants Courses/Tabac */
+  .floating-buttons-row {
+    top: 52px;
+    right: 8px;
+    gap: 6px;
+  }
+
+  .floating-buttons-row .supermarket-btn,
+  .floating-buttons-row .tobacco-btn {
+    padding: 6px 10px !important;
+    font-size: 0.7rem !important;
+    color: white !important;
+  }
+
+  .floating-buttons-row .supermarket-btn .p-button-label,
+  .floating-buttons-row .tobacco-btn .p-button-label {
+    color: white !important;
+  }
+
+  .floating-buttons-row .supermarket-btn .p-button-icon,
+  .floating-buttons-row .tobacco-btn .p-button-icon {
+    font-size: 0.75rem !important;
+  }
+
   /* Responsive - Bouton Restaurants */
   .restaurants-floating-btn {
     top: auto;
@@ -6234,6 +6258,25 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
+  /* Responsive 480px - Boutons flottants Courses/Tabac */
+  .floating-buttons-row {
+    top: 50px;
+    right: 6px;
+    gap: 4px;
+  }
+
+  .floating-buttons-row .supermarket-btn,
+  .floating-buttons-row .tobacco-btn {
+    padding: 5px 8px !important;
+    font-size: 0.65rem !important;
+    color: white !important;
+  }
+
+  .floating-buttons-row .supermarket-btn .p-button-icon,
+  .floating-buttons-row .tobacco-btn .p-button-icon {
+    font-size: 0.7rem !important;
+  }
+
   .map-container {
     height: calc(100vh - 50px);
     max-height: none;
