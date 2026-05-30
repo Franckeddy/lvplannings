@@ -20,8 +20,12 @@
         <!-- Mode "both" : afficher les deux trajets côte à côte -->
         <template v-if="showBothRoutes">
           <div class="both-routes-container">
-            <!-- Trajet voiture -->
-            <div class="route-card driving-card">
+            <!-- Trajet voiture - cliquable pour voir uniquement voiture -->
+            <div
+              class="route-card driving-card clickable"
+              @click="selectRouteMode('driving')"
+              title="Voir uniquement le trajet en voiture"
+            >
               <div class="route-card-header">
                 <i class="pi pi-car"></i>
                 <span>Voiture</span>
@@ -38,8 +42,13 @@
               </div>
             </div>
 
-            <!-- Trajet bus -->
-            <div class="route-card transit-card" v-if="routeInfoTransit">
+            <!-- Trajet bus - cliquable pour voir uniquement bus -->
+            <div
+              class="route-card transit-card clickable"
+              v-if="routeInfoTransit"
+              @click="selectRouteMode('transit')"
+              title="Voir uniquement le trajet en bus"
+            >
               <div class="route-card-header">
                 <i class="pi pi-directions"></i>
                 <span>Bus</span>
@@ -82,10 +91,10 @@
             </div>
           </div>
 
-          <!-- Légende des couleurs -->
-          <div class="routes-legend">
-            <span class="legend-item driving-legend"><span class="legend-line"></span> Voiture</span>
-            <span class="legend-item transit-legend"><span class="legend-line"></span> Bus</span>
+          <!-- Indication cliquable -->
+          <div class="routes-hint">
+            <i class="pi pi-info-circle"></i>
+            <span>Cliquez sur une carte pour voir uniquement ce trajet</span>
           </div>
         </template>
 
@@ -925,6 +934,13 @@ const switchRouteMode = (mode) => {
   }
 };
 
+// Sélectionner un mode unique depuis le mode "both" (clic sur une carte)
+const selectRouteMode = (mode) => {
+  if (!routeInfo.value) return;
+  // Passer du mode "both" à un mode unique
+  showRoute(routeInfo.value.casinoData, mode);
+};
+
 // Calculer la distance entre deux points (en km)
 const getDistance = (lat1, lng1, lat2, lng2) => {
   const R = 6371;
@@ -1696,56 +1712,60 @@ const initMap = async () => {
     const directionsUrl = getDirectionsUrl(casino);
     const casinoIndex = casinos.value.findIndex(c => c.name === casino.name);
 
-    // Popup avec les informations du casino et bouton itinéraire
-    const mobileClass = isMobile.value ? ' mobile' : '';
-    const popupContent = `
-      <div class="casino-popup${mobileClass}">
-        <h3>${casino.name}</h3>
-        <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
-        <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
-        <p class="popup-desc">${casino.description}</p>
+    // Fonction pour générer le contenu du popup dynamiquement
+    const getPopupContent = () => {
+      const mobileClass = isMobile.value ? ' mobile' : '';
+      const hasGeoLocation = userLocation.value !== null;
+
+      // Section "Itinéraire depuis" seulement si géolocalisation activée
+      const fromSection = hasGeoLocation ? `
         <p class="popup-route-label">${isMobile.value ? '' : 'Itinéraire depuis :'}</p>
-        <div class="popup-actions">
-          <button class="directions-btn directions-home-btn" data-casino-index="${casinoIndex}" data-from="home">
+        <div class="popup-actions popup-from-actions">
+          <button class="directions-btn directions-home-btn ${routeFrom.value === 'home' ? 'active' : ''}" data-casino-index="${casinoIndex}" data-from="home">
             <i class="pi pi-home"></i>${isMobile.value ? '' : ' Maison'}
           </button>
-          <button class="directions-btn directions-loc-btn" data-casino-index="${casinoIndex}" data-from="location">
+          <button class="directions-btn directions-loc-btn ${routeFrom.value === 'location' ? 'active' : ''}" data-casino-index="${casinoIndex}" data-from="location">
             <i class="pi pi-compass"></i>${isMobile.value ? '' : ' Ma position'}
           </button>
         </div>
-        <div class="popup-actions popup-mode-actions">
-          <button class="directions-btn directions-both-btn" data-casino-index="${casinoIndex}" data-mode="both">
-            <i class="pi pi-car"></i><i class="pi pi-directions"></i>${isMobile.value ? '' : ' Les deux'}
-          </button>
-        </div>
-        <div class="popup-actions popup-mode-actions-single">
-          <button class="directions-btn directions-car-btn single-mode-btn" data-casino-index="${casinoIndex}" data-mode="driving">
-            <i class="pi pi-car"></i>
-          </button>
-          <button class="directions-btn directions-bus-btn single-mode-btn" data-casino-index="${casinoIndex}" data-mode="transit">
-            <i class="pi pi-directions"></i>
-          </button>
-        </div>
-      </div>
-    `;
+      ` : '';
 
-    marker.bindPopup(popupContent, {
+      return `
+        <div class="casino-popup${mobileClass}">
+          <h3>${casino.name}</h3>
+          <p class="popup-address"><i class="pi pi-map-marker"></i> ${casino.address}</p>
+          <p class="popup-rooms"><i class="pi pi-heart"></i> ${casino.rooms}</p>
+          <p class="popup-desc">${casino.description}</p>
+          ${fromSection}
+          <div class="popup-actions popup-mode-actions">
+            <button class="directions-btn directions-both-btn" data-casino-index="${casinoIndex}" data-mode="both">
+              <i class="pi pi-car"></i><i class="pi pi-directions"></i>${isMobile.value ? '' : ' Itinéraire'}
+            </button>
+          </div>
+        </div>
+      `;
+    };
+
+    // Créer le popup avec contenu vide initialement
+    const popup = L.popup({
       maxWidth: 300,
       className: 'casino-popup-container'
     });
 
+    marker.bindPopup(popup);
+
     // Ajouter l'écouteur d'événement pour les boutons d'itinéraire
     marker.on('popupopen', () => {
+      // Mettre à jour le contenu du popup dynamiquement
+      popup.setContent(getPopupContent());
+
       setTimeout(() => {
         const homeBtn = document.querySelector(`.directions-home-btn[data-casino-index="${casinoIndex}"]`);
         const locBtn = document.querySelector(`.directions-loc-btn[data-casino-index="${casinoIndex}"]`);
-        const carBtn = document.querySelector(`.directions-car-btn[data-casino-index="${casinoIndex}"]`);
-        const busBtn = document.querySelector(`.directions-bus-btn[data-casino-index="${casinoIndex}"]`);
         const bothBtn = document.querySelector(`.directions-both-btn[data-casino-index="${casinoIndex}"]`);
 
-        // Gérer la sélection du point de départ
+        // Gérer la sélection du point de départ (seulement si géoloc activée)
         if (homeBtn) {
-          homeBtn.classList.add('active');
           homeBtn.addEventListener('click', () => {
             routeFrom.value = 'home';
             homeBtn.classList.add('active');
@@ -1754,34 +1774,16 @@ const initMap = async () => {
         }
         if (locBtn) {
           locBtn.addEventListener('click', () => {
-            if (!userLocation.value) {
-              // Demander la géoloc d'abord
-              geolocateUser();
-              return;
-            }
             routeFrom.value = 'location';
             locBtn.classList.add('active');
             if (homeBtn) homeBtn.classList.remove('active');
           });
         }
 
-        // Bouton "Les deux" - afficher voiture ET bus
+        // Bouton "Itinéraire" - afficher voiture ET bus
         if (bothBtn) {
           bothBtn.addEventListener('click', () => {
             showRoute(casino, 'both');
-            marker.closePopup();
-          });
-        }
-
-        if (carBtn) {
-          carBtn.addEventListener('click', () => {
-            showRoute(casino, 'driving');
-            marker.closePopup();
-          });
-        }
-        if (busBtn) {
-          busBtn.addEventListener('click', () => {
-            showRoute(casino, 'transit');
             marker.closePopup();
           });
         }
@@ -2628,6 +2630,44 @@ onUnmounted(() => {
   border-color: #22c55e;
 }
 
+/* Cartes cliquables */
+.route-card.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-card.clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.route-card.driving-card.clickable:hover {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.route-card.transit-card.clickable:hover {
+  border-color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+}
+
+/* Indication pour cliquer */
+.routes-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 0;
+  font-size: 0.625rem;
+  color: #64748b;
+  border-top: 1px solid #334155;
+  margin-top: 8px;
+}
+
+.routes-hint i {
+  font-size: 0.625rem;
+}
+
 .route-card-header {
   display: flex;
   align-items: center;
@@ -3447,6 +3487,12 @@ onUnmounted(() => {
     padding: 1px 4px;
   }
 
+  .routes-hint {
+    font-size: 0.5625rem;
+    padding: 4px 0;
+    margin-top: 6px;
+  }
+
   .routes-legend {
     gap: 12px;
     padding: 4px 0;
@@ -3595,6 +3641,12 @@ onUnmounted(() => {
   .line-badge {
     font-size: 0.5rem;
     padding: 1px 3px;
+  }
+
+  .routes-hint {
+    font-size: 0.5rem;
+    padding: 3px 0;
+    margin-top: 4px;
   }
 
   .routes-legend {
