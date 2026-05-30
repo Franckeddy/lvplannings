@@ -440,11 +440,6 @@
       class="join-dialog"
     >
       <div class="join-dialog-content">
-        <div class="join-icon">
-          <i class="pi pi-user-plus"></i>
-        </div>
-        <h3>Ajouter un membre à ce tournoi</h3>
-
         <div v-if="tournamentToJoin" class="join-tournament-info">
           <div class="join-info-row">
             <span>{{ tournamentToJoin.date }} à {{ tournamentToJoin.time }}</span>
@@ -458,36 +453,42 @@
         </div>
 
         <div class="join-select-wrapper">
-          <label>Choisir un membre</label>
-          <Select
-            v-if="availableUsers.length > 0"
-            v-model="selectedUserToJoin"
-            :options="availableUsers"
-            optionLabel="name"
-            placeholder="Sélectionner..."
-            class="w-full"
-          />
-          <div class="divider-or" v-if="availableUsers.length > 0">
-            <span>ou créez un nouveau pseudo</span>
+          <div v-if="user" class="connected-user-info">
+            <label>Ajout pour :</label>
+            <span class="connected-user-badge">{{ user.name }}</span>
           </div>
-          <div class="create-user-section">
-            <div class="create-user-inline">
-              <InputText
-                v-model="newUserName"
-                placeholder="Votre pseudo..."
-                class="input-pseudo"
-                @keyup.enter="createUserAndJoin"
-              />
-              <Button
-                label="Créer"
-                icon="pi pi-plus"
-                @click="createUserAndJoin"
-                :disabled="!newUserName || creatingUser"
-                :loading="creatingUser"
-                size="small"
-              />
+          <template v-else>
+            <label>Choisir un membre</label>
+            <Select
+              v-if="availableUsers.length > 0"
+              v-model="selectedUserToJoin"
+              :options="availableUsers"
+              optionLabel="name"
+              placeholder="Sélectionner..."
+              class="w-full"
+            />
+            <div class="divider-or" v-if="availableUsers.length > 0">
+              <span>ou créez un nouveau pseudo</span>
             </div>
-          </div>
+            <div class="create-user-section">
+              <div class="create-user-inline">
+                <InputText
+                  v-model="newUserName"
+                  placeholder="Votre pseudo..."
+                  class="input-pseudo"
+                  @keyup.enter="createUserAndJoin"
+                />
+                <Button
+                  label="Créer"
+                  icon="pi pi-plus"
+                  @click="createUserAndJoin"
+                  :disabled="!newUserName || creatingUser"
+                  :loading="creatingUser"
+                  size="small"
+                />
+              </div>
+            </div>
+          </template>
         </div>
 
         <div class="join-actions">
@@ -1179,7 +1180,8 @@ const availableUsers = computed(() => {
 // Ouvrir le dialog pour rejoindre
 const openJoinDialog = (tournament) => {
   tournamentToJoin.value = tournament;
-  selectedUserToJoin.value = null;
+  // Pré-sélectionner l'utilisateur connecté
+  selectedUserToJoin.value = props.user || null;
   showJoinDialog.value = true;
 };
 
@@ -2667,6 +2669,21 @@ onUnmounted(() => {
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 8px;
+}
+
+.connected-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connected-user-badge {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 
 .join-actions {

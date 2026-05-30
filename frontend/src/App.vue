@@ -117,12 +117,14 @@
       <!-- Timeline View -->
       <TournamentTimeline
         v-else-if="currentView === 'timeline'"
+        :connected-user="selectedUser"
         @tournament-added="handleTournamentAddedFromTimeline"
       />
 
       <!-- Team Recap View -->
       <TeamRecap
         v-else-if="currentView === 'team'"
+        :connected-user="selectedUser"
         @user-created="loadUsers"
       />
 

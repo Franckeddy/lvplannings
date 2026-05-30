@@ -264,38 +264,42 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Qui souhaite rejoindre ?</label>
-          <Select
-            v-if="availableUsersToJoin.length > 0"
-            :key="usersKey"
-            v-model="selectedUserToJoin"
-            :options="availableUsersToJoin"
-            optionLabel="name"
-            placeholder="Sélectionnez un membre..."
-            class="input-full"
-          />
-          <div class="divider-or" v-if="availableUsersToJoin.length > 0">
-            <span>ou créez un nouveau pseudo</span>
-          </div>
-          <div class="create-user-section">
-            <div class="create-user-inline">
-              <InputText
-                v-model="newUserName"
-                placeholder="Votre pseudo..."
-                class="input-pseudo"
-                @keyup.enter="createUserAndJoin"
-              />
-              <Button
-                label="Créer"
-                icon="pi pi-plus"
-                @click="createUserAndJoin"
-                :disabled="!newUserName || creatingUser"
-                :loading="creatingUser"
-                size="small"
-              />
+        <div v-if="connectedUser" class="connected-user-info">
+          <label>Ajout pour :</label>
+          <span class="connected-user-badge">{{ connectedUser.name }}</span>
+        </div>
+        <div v-else class="form-group">
+            <label>Qui souhaite rejoindre ?</label>
+            <Select
+              v-if="availableUsersToJoin.length > 0"
+              :key="usersKey"
+              v-model="selectedUserToJoin"
+              :options="availableUsersToJoin"
+              optionLabel="name"
+              placeholder="Sélectionnez un membre..."
+              class="input-full"
+            />
+            <div class="divider-or" v-if="availableUsersToJoin.length > 0">
+              <span>ou créez un nouveau pseudo</span>
             </div>
-          </div>
+            <div class="create-user-section">
+              <div class="create-user-inline">
+                <InputText
+                  v-model="newUserName"
+                  placeholder="Votre pseudo..."
+                  class="input-pseudo"
+                  @keyup.enter="createUserAndJoin"
+                />
+                <Button
+                  label="Créer"
+                  icon="pi pi-plus"
+                  @click="createUserAndJoin"
+                  :disabled="!newUserName || creatingUser"
+                  :loading="creatingUser"
+                  size="small"
+                />
+              </div>
+            </div>
         </div>
       </div>
 
@@ -470,6 +474,13 @@ const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
 
 const emit = defineEmits(['user-created']);
+
+const props = defineProps({
+  connectedUser: {
+    type: Object,
+    default: null
+  }
+});
 
 // Lignes de bus RTC Las Vegas (simplifiées)
 const busLines = [
@@ -695,7 +706,7 @@ const openJoinDialog = (date, casino, time, timeData) => {
     levels: timeData.levels,
     users: timeData.users
   };
-  selectedUserToJoin.value = null;
+  selectedUserToJoin.value = props.connectedUser || null;
   showJoinDialog.value = true;
 };
 
@@ -2386,7 +2397,7 @@ onUnmounted(() => {
 .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
 .summary-row:not(:last-child) { border-bottom: 1px solid rgba(236, 72, 153, 0.1); }
 .summary-label { color: var(--text-secondary, #64748b); font-size: 0.875rem; }
-.summary-value { color: var(--text-primary, #1e293b); font-weight: 600; text-transform: capitalize; }
+.summary-value { font-weight: 600; text-transform: capitalize; }
 .summary-value.highlight { color: #6366f1; font-size: 1.125rem; }
 .summary-value.buyin { color: #22c55e; font-size: 1.125rem; }
 
@@ -2397,6 +2408,21 @@ onUnmounted(() => {
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-group label { color: var(--text-primary, #1e293b); font-weight: 600; font-size: 0.9375rem; }
 .input-full { width: 100%; }
+
+.connected-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.connected-user-badge {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
 
 /* Note Dialog */
 .note-dialog-content {

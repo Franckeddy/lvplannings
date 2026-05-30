@@ -212,7 +212,7 @@
           <div class="summary-date">{{ formatDateFull(selectedTournament.date) }}</div>
         </div>
 
-        <div class="form-group">
+        <div v-if="!connectedUser" class="form-group">
           <label>Sélectionnez un utilisateur</label>
           <Select
             v-model="selectedUser"
@@ -221,6 +221,10 @@
             placeholder="Choisir un utilisateur..."
             class="input-full"
           />
+        </div>
+        <div v-else class="form-group connected-user-info">
+          <label>Ajout pour :</label>
+          <span class="connected-user-badge">{{ connectedUser.name }}</span>
         </div>
 
         <div class="form-group">
@@ -419,6 +423,13 @@ import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 const emit = defineEmits(['tournament-added']);
+
+const props = defineProps({
+  connectedUser: {
+    type: Object,
+    default: null
+  }
+});
 
 // Configuration API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -827,6 +838,10 @@ const closeDay = () => {
 const selectTournament = (tournament) => {
   selectedTournament.value = tournament;
   userNote.value = '';
+  // Pré-sélectionner l'utilisateur connecté s'il existe
+  if (props.connectedUser) {
+    selectedUser.value = users.value.find(u => u.id === props.connectedUser.id) || props.connectedUser;
+  }
   showSelectionDialog.value = true;
 };
 
@@ -2340,6 +2355,20 @@ onUnmounted(() => {
 .form-group label {
   font-weight: 600;
   font-size: 0.9375rem;
+}
+
+.connected-user-info {
+  flex-direction: row;
+  align-items: center;
+}
+
+.connected-user-badge {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 
 .input-full {
