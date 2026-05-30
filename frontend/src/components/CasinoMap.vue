@@ -5,7 +5,13 @@
     :modal="true"
     :style="{ width: '95vw', maxWidth: '1200px' }"
     :breakpoints="{ '768px': '100vw' }"
+    :maximizable="false"
+    :closable="true"
+    :draggable="false"
     class="casino-map-dialog"
+    :pt="{
+      root: { class: isMobile ? 'fullscreen-dialog' : '' }
+    }"
   >
     <div class="map-container">
       <div ref="mapContainer" class="leaflet-map"></div>
@@ -5877,6 +5883,29 @@ onUnmounted(() => {
   font-size: 1rem;
 }
 
+/* Fullscreen dialog on mobile */
+:deep(.fullscreen-dialog) {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  border-radius: 0 !important;
+}
+
+:deep(.fullscreen-dialog .p-dialog-content) {
+  height: calc(100vh - 50px) !important;
+  max-height: calc(100vh - 50px) !important;
+  border-radius: 0 !important;
+}
+
+:deep(.fullscreen-dialog .p-dialog-header) {
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0 !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hide-on-mobile {
@@ -5884,10 +5913,15 @@ onUnmounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - 60px);
-    max-height: calc(80vh - 60px);
-    min-height: 300px;
+    height: calc(100vh - 50px);
+    max-height: none;
+    min-height: 100%;
     border-radius: 0;
+  }
+
+  .leaflet-map {
+    height: 100% !important;
+    min-height: calc(100vh - 50px);
   }
 
   .route-info-panel {
@@ -6094,8 +6128,13 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   .map-container {
     height: calc(100vh - 50px);
-    max-height: calc(85vh - 50px);
-    min-height: 280px;
+    max-height: none;
+    min-height: 100%;
+  }
+
+  .leaflet-map {
+    height: 100% !important;
+    min-height: calc(100vh - 50px);
   }
 
   .route-info-panel {
