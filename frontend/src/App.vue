@@ -132,16 +132,127 @@
       </div>
     </main>
 
-    <!-- Bouton flottant Google Sheets -->
-    <a
-      href="https://docs.google.com/spreadsheets/d/1uGans4g_OhofWaYTCyc5R2RMGKsW-cRbBuLHApkc4Cw/edit?usp=drivesdk"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="floating-sheets-btn"
-      title="Tricount Las Vegas"
+    <!-- Bouton flottant Apps -->
+    <button
+      class="floating-apps-btn"
+      title="Applications utiles"
+      @click="showAppsModal = true"
     >
-      <i class="pi pi-file-excel"></i>
-    </a>
+      <i class="pi pi-mobile"></i>
+    </button>
+
+    <!-- Modale Apps -->
+    <Dialog
+      v-model:visible="showAppsModal"
+      header="Applications Utiles"
+      :modal="true"
+      :style="{ width: '420px', maxWidth: '95vw' }"
+      class="apps-dialog"
+    >
+      <div class="apps-modal-content">
+        <!-- Switch Apple / Google -->
+        <div class="store-switch">
+          <button
+            class="store-btn"
+            :class="{ active: selectedStore === 'google' }"
+            @click="selectedStore = 'google'"
+          >
+            <i class="pi pi-android"></i>
+            Google Play
+          </button>
+          <button
+            class="store-btn"
+            :class="{ active: selectedStore === 'apple' }"
+            @click="selectedStore = 'apple'"
+          >
+            <i class="pi pi-apple"></i>
+            App Store
+          </button>
+        </div>
+
+        <!-- Liste des apps -->
+        <div class="apps-list">
+          <!-- rideRTC -->
+          <a
+            :href="selectedStore === 'google'
+              ? 'https://play.google.com/store/apps/details?id=com.rtcsnv.rideRTC&hl=fr'
+              : 'https://apps.apple.com/fr/app/ridertc/id909691507'"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="app-link"
+          >
+            <div class="app-icon rtc-icon">
+              <i class="pi pi-directions"></i>
+            </div>
+            <div class="app-info">
+              <div class="app-name">rideRTC</div>
+              <div class="app-desc">Bus RTC Las Vegas - Horaires et itinéraires</div>
+            </div>
+            <i class="pi pi-external-link app-link-arrow"></i>
+          </a>
+
+          <!-- Transit -->
+          <a
+            :href="selectedStore === 'google'
+              ? 'https://play.google.com/store/apps/details?id=com.thetransitapp.droid&hl=fr'
+              : 'https://apps.apple.com/fr/app/transit-horaires-bus-m%C3%A9tro/id498151501'"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="app-link"
+          >
+            <div class="app-icon transit-icon">
+              <i class="pi pi-map"></i>
+            </div>
+            <div class="app-info">
+              <div class="app-name">Transit</div>
+              <div class="app-desc">Navigation transport en commun - Bus & Métro</div>
+            </div>
+            <i class="pi pi-external-link app-link-arrow"></i>
+          </a>
+
+          <!-- Monorail -->
+          <a
+            :href="selectedStore === 'google'
+              ? 'https://play.google.com/store/apps/details?id=com.lvmonorail.app&hl=fr'
+              : 'https://apps.apple.com/app/id6476942189'"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="app-link"
+          >
+            <div class="app-icon monorail-icon">
+              <i class="pi pi-arrows-h"></i>
+            </div>
+            <div class="app-info">
+              <div class="app-name">Las Vegas Monorail</div>
+              <div class="app-desc">Monorail du Strip - Horaires et tickets</div>
+            </div>
+            <i class="pi pi-external-link app-link-arrow"></i>
+          </a>
+
+          <!-- Séparateur -->
+          <div class="apps-separator">
+            <span>Autres</span>
+          </div>
+
+          <!-- Google Sheets - Tricount -->
+          <a
+            href="https://docs.google.com/spreadsheets/d/1uGans4g_OhofWaYTCyc5R2RMGKsW-cRbBuLHApkc4Cw/edit?usp=drivesdk"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="app-link"
+          >
+            <div class="app-icon sheets-icon">
+              <i class="pi pi-file-excel"></i>
+            </div>
+            <div class="app-info">
+              <div class="app-name">Tricount Las Vegas</div>
+              <div class="app-desc">Google Sheets - Gestion des dépenses</div>
+            </div>
+            <i class="pi pi-external-link app-link-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -154,6 +265,7 @@ import TournamentTimeline from './components/TournamentTimeline.vue';
 import TeamRecap from './components/TeamRecap.vue';
 import CasinoMap from './components/CasinoMap.vue';
 import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 
 const users = ref([]);
 const usersKey = ref(0);
@@ -165,6 +277,8 @@ const loading = ref(false);
 const currentView = ref('timeline');
 const windowWidth = ref(window.innerWidth);
 const showCasinoMap = ref(false);
+const showAppsModal = ref(false);
+const selectedStore = ref('google');
 
 // Computed pour détecter si on est sur mobile
 const isMobile = computed(() => windowWidth.value <= 768);
@@ -598,36 +712,209 @@ body {
   margin-left: var(--sidebar-collapsed-width);
 }
 
-/* Bouton flottant Google Sheets */
-.floating-sheets-btn {
+/* Bouton flottant Apps */
+.floating-apps-btn {
   position: fixed;
   top: 1rem;
   right: 1rem;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #34a853, #0f9d58);
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(52, 168, 83, 0.4);
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
   transition: all 0.3s ease;
   z-index: 1001;
+  border: none;
+  cursor: pointer;
 }
 
-.floating-sheets-btn i {
+.floating-apps-btn i {
   font-size: 1.5rem;
 }
 
-.floating-sheets-btn:hover {
+.floating-apps-btn:hover {
   transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 168, 83, 0.5);
+  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.5);
+  background: linear-gradient(135deg, #7e22ce, #6d28d9);
 }
 
-.floating-sheets-btn:active {
+.floating-apps-btn:active {
   transform: scale(1.05);
+}
+
+/* Modale Apps */
+:deep(.apps-dialog .p-dialog-header) {
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+}
+
+:deep(.apps-dialog .p-dialog-content) {
+  background: #0f172a;
+  padding: 20px;
+}
+
+:deep(.apps-dialog .p-dialog-title) {
+  color: #f1f5f9;
+  font-weight: 700;
+}
+
+.apps-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.store-switch {
+  display: flex;
+  gap: 10px;
+  padding: 6px;
+  background: #1e293b;
+  border-radius: 12px;
+}
+
+.store-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.store-btn:hover {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+.store-btn.active {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  border-color: #818cf8;
+}
+
+.store-btn i {
+  font-size: 1.125rem;
+}
+
+.apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #1e293b;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #f1f5f9;
+  transition: all 0.2s ease;
+  border: 2px solid #334155;
+}
+
+.app-link:hover {
+  background: #334155;
+  border-color: #6366f1;
+  transform: translateX(4px);
+}
+
+.app-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.rtc-icon {
+  background: linear-gradient(135deg, #e53935, #c62828);
+}
+
+.transit-icon {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.monorail-icon {
+  background: linear-gradient(135deg, #232d6a, #1a2150);
+}
+
+.sheets-icon {
+  background: linear-gradient(135deg, #34a853, #0f9d58);
+}
+
+.app-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f1f5f9;
+}
+
+.app-desc {
+  font-size: 0.8125rem;
+  color: #94a3b8;
+}
+
+.app-link-arrow {
+  color: #64748b;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.app-link:hover .app-link-arrow {
+  color: #6366f1;
+  transform: translateX(4px);
+}
+
+.apps-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.apps-separator::before,
+.apps-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #334155;
+}
+
+.apps-separator span {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .main-tabs {
