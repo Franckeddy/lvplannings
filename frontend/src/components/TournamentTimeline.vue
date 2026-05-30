@@ -66,15 +66,6 @@
           :key="tournament.id"
           class="tournament-card"
         >
-          <!-- Indicateur d'utilisateurs inscrits avec notes -->
-          <div
-            v-if="getEnrolledUsers(tournament).some(u => u.user_note)"
-            class="enrolled-notes-indicator desktop-only"
-            v-tooltip.top="getEnrolledUsers(tournament).filter(u => u.user_note).map(u => `${u.userName}: ${u.user_note}`).join('\n')"
-          >
-            <i class="pi pi-comment"></i>
-          </div>
-
           <!-- Top section: Time + Buy-in + Badges -->
           <div class="tournament-card-top">
             <div class="card-top-left">
@@ -105,16 +96,30 @@
               </div>
               <div class="casino-name-wrapper">
                 <div class="casino-name">{{ tournament.casino }}</div>
-                <div v-if="getRouteTime(tournament.casino)" class="casino-drive-time">
-                  <i class="pi pi-car"></i>
-                  <span>{{ getRouteTime(tournament.casino).durationMin }} min</span>
-                  <span class="drive-distance">({{ getRouteTime(tournament.casino).distanceMiles }} mi)</span>
+              </div>
+            </div>
+
+            <!-- Carte trajet voiture -->
+            <div
+              v-if="getRouteTime(tournament.casino)"
+              class="route-card driving-card clickable"
+              @click.stop="openRouteMap(tournament.casino)"
+              title="Voir l'itinéraire"
+            >
+              <div class="route-card-header">
+                <i class="pi pi-car"></i>
+                <span>Voiture</span>
+              </div>
+              <div class="route-card-stats">
+                <div class="route-stat-mini">
+                  <i class="pi pi-map"></i>
+                  <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+                </div>
+                <div class="route-stat-mini">
+                  <i class="pi pi-clock"></i>
+                  <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
                 </div>
               </div>
-              <button v-if="getRouteTime(tournament.casino)" class="map-link-btn" @click.stop="openRouteMap(tournament.casino)">
-                <i class="pi pi-directions"></i>
-                <span class="map-link-text">Trajet</span>
-              </button>
             </div>
 
             <!-- Structure info -->
@@ -147,24 +152,18 @@
                   :style="{ backgroundColor: getUserColor(enrolled.userName) }"
                 >
                   {{ enrolled.userName }}
-                  <span
-                    v-if="enrolled.user_note"
-                    class="enrolled-note-icon desktop-only"
-                    v-tooltip.top="enrolled.user_note"
-                  >
-                    <i class="pi pi-comment"></i>
-                  </span>
                 </div>
               </div>
-              <!-- Notes visibles sur mobile -->
-              <div class="mobile-notes" v-if="getEnrolledUsers(tournament).some(u => u.user_note)">
+              <!-- Notes toujours visibles -->
+              <div class="enrolled-notes-list" v-if="getEnrolledUsers(tournament).some(u => u.user_note)">
                 <div
                   v-for="enrolled in getEnrolledUsers(tournament).filter(u => u.user_note)"
                   :key="'note-' + enrolled.id"
-                  class="mobile-note-item"
+                  class="enrolled-note-item"
                 >
-                  <span class="mobile-note-user">{{ enrolled.userName }}:</span>
-                  <span class="mobile-note-text">{{ enrolled.user_note }}</span>
+                  <i class="pi pi-comment"></i>
+                  <span class="note-user">{{ enrolled.userName }}:</span>
+                  <span class="note-text">{{ enrolled.user_note }}</span>
                 </div>
               </div>
             </div>
@@ -588,6 +587,7 @@ const busLines = [
 
 // Normaliser le nom du casino pour le matching
 const normalizeCasinoName = (name) => {
+  if (!name) return '';
   const lowerName = name.toLowerCase();
 
   // Mapping des variations de noms
@@ -600,10 +600,10 @@ const normalizeCasinoName = (name) => {
   if (lowerName.includes('aria')) {
     return 'aria';
   }
-  if (lowerName.includes('venetian')) {
+  if (lowerName.includes('venetian') || lowerName.includes('palazzo')) {
     return 'venetian';
   }
-  if (lowerName.includes('wynn')) {
+  if (lowerName.includes('wynn') || lowerName.includes('encore')) {
     return 'wynn';
   }
   if (lowerName.includes('bellagio')) {
@@ -614,6 +614,42 @@ const normalizeCasinoName = (name) => {
   }
   if (lowerName.includes('caesars')) {
     return 'caesars';
+  }
+  if (lowerName.includes('golden nugget')) {
+    return 'goldennugget';
+  }
+  if (lowerName.includes('south point')) {
+    return 'southpoint';
+  }
+  if (lowerName.includes('red rock')) {
+    return 'redrock';
+  }
+  if (lowerName.includes('green valley')) {
+    return 'greenvalley';
+  }
+  if (lowerName.includes('planet hollywood')) {
+    return 'planethollywood';
+  }
+  if (lowerName.includes('flamingo')) {
+    return 'flamingo';
+  }
+  if (lowerName.includes('horseshoe') || lowerName.includes('paris')) {
+    return 'wsop';
+  }
+  if (lowerName.includes('resorts world')) {
+    return 'resortsworld';
+  }
+  if (lowerName.includes('sahara')) {
+    return 'sahara';
+  }
+  if (lowerName.includes('treasure island') || lowerName.includes(' ti ')) {
+    return 'treasureisland';
+  }
+  if (lowerName.includes('excalibur')) {
+    return 'excalibur';
+  }
+  if (lowerName.includes('binion')) {
+    return 'binions';
   }
 
   return lowerName.replace(/[^a-z0-9]/g, '');
@@ -633,38 +669,66 @@ const normalizeTime = (time) => {
 // Normaliser la date pour le matching
 const normalizeDate = (dateStr) => {
   if (!dateStr) return '';
+
+  // Si c'est déjà au format "DD-mois" (ex: "08-juin"), normaliser
+  if (dateStr.match(/^\d{1,2}-[a-zA-Zéû]+$/)) {
+    const parts = dateStr.split('-');
+    const day = parts[0].padStart(2, '0');
+    const month = parts[1].toLowerCase();
+    return `${day}-${month}`;
+  }
+
+  // Si c'est au format ISO "YYYY-MM-DD", convertir
+  if (dateStr.match(/^\d{4}-\d{2}-\d{2}/)) {
+    // Parser manuellement pour éviter les problèmes de timezone
+    const parts = dateStr.split('-');
+    const day = parts[2].padStart(2, '0');
+    const monthNum = parseInt(parts[1], 10);
+    const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    const month = months[monthNum - 1];
+    return `${day}-${month}`;
+  }
+
   return dateStr.toLowerCase().trim();
 };
 
 // Trouver les utilisateurs inscrits à un tournoi scrapé
 const getEnrolledUsers = (scrapedTournament) => {
   const scrapedId = scrapedTournament.id;
+  const matchesById = new Map();
+  const matchesByDetails = new Map();
 
-  // D'abord chercher par ID du tournoi scrapé (matching exact)
-  let matches = allUserTournaments.value.filter(ut =>
-    ut.scraped_tournament_id === scrapedId
-  );
+  // 1. Chercher par ID du tournoi scrapé (matching exact)
+  allUserTournaments.value.forEach(ut => {
+    if (ut.scraped_tournament_id && String(ut.scraped_tournament_id) === String(scrapedId)) {
+      matchesById.set(ut.id, ut);
+    }
+  });
 
-  // Si pas de match par ID, fallback sur date/time/casino
-  if (matches.length === 0) {
-    const scrapedDate = normalizeDate(formatDateForDb(scrapedTournament.date));
-    const scrapedTime = normalizeTime(scrapedTournament.time);
-    const scrapedCasinoNorm = normalizeCasinoName(scrapedTournament.casino);
+  // 2. Chercher aussi par date/time/casino (pour les tournois ajoutés manuellement ou avec des IDs différents)
+  const scrapedDate = normalizeDate(scrapedTournament.date);
+  const scrapedTime = normalizeTime(scrapedTournament.time || scrapedTournament.displayTime);
+  const scrapedCasinoNorm = normalizeCasinoName(scrapedTournament.casino);
 
-    matches = allUserTournaments.value.filter(ut => {
-      const userDate = normalizeDate(ut.date);
-      const userTime = normalizeTime(ut.time);
-      const userCasinoNorm = normalizeCasinoName(ut.casino);
+  allUserTournaments.value.forEach(ut => {
+    const userDate = normalizeDate(ut.date);
+    const userTime = normalizeTime(ut.time);
+    const userCasinoNorm = normalizeCasinoName(ut.casino);
 
-      const matchDate = userDate === scrapedDate;
-      const matchTime = userTime === scrapedTime;
-      const matchCasino = userCasinoNorm === scrapedCasinoNorm;
+    const matchDate = userDate === scrapedDate;
+    const matchTime = userTime === scrapedTime;
+    const matchCasino = userCasinoNorm === scrapedCasinoNorm;
 
-      return matchDate && matchTime && matchCasino;
-    });
-  }
+    if (matchDate && matchTime && matchCasino) {
+      matchesByDetails.set(ut.id, ut);
+    }
+  });
 
-  return matches;
+  // 3. Combiner les résultats (union des deux méthodes)
+  const allMatches = new Map([...matchesById, ...matchesByDetails]);
+
+  return Array.from(allMatches.values());
 };
 
 const handleImageError = (event) => {
@@ -1810,63 +1874,7 @@ onUnmounted(() => {
   line-height: 1.3;
 }
 
-.casino-drive-time {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--accent-color, #818cf8);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.casino-drive-time i {
-  font-size: 0.75rem;
-}
-
-.casino-drive-time .drive-distance {
-  color: var(--text-secondary, #94a3b8);
-  font-size: 0.75rem;
-  font-weight: 400;
-}
-
-.map-link-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
-  flex-shrink: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.map-link-btn i {
-  font-size: 1rem;
-}
-
-.map-link-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-}
-
-.map-link-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-}
-
-.map-link-text {
-  display: inline;
-}
+/* Tournament structure */
 
 /* Route map modal - Wrapper */
 .route-map-wrapper {
@@ -2092,9 +2100,79 @@ onUnmounted(() => {
   color: #f59e0b;
 }
 
+/* Route card styles */
+.route-card {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  margin-top: 10px;
+}
+
+.route-card.driving-card {
+  border-color: #6366f1;
+}
+
+.route-card.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-card.clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.route-card.driving-card.clickable:hover {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.route-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.driving-card .route-card-header {
+  color: #818cf8;
+}
+
+.route-card-header i {
+  font-size: 0.875rem;
+}
+
+.route-card-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.route-stat-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f1f5f9;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.route-stat-mini i {
+  font-size: 0.5625rem;
+  width: 12px;
+  text-align: center;
+}
+
+.driving-card .route-stat-mini i {
+  color: #6366f1;
+}
+
 /* Enrolled users */
 .enrolled-users {
-  margin-top: 4px;
+  margin-top: 10px;
   padding: 12px 14px;
   background: rgba(99, 102, 241, 0.05);
   border-radius: 10px;
@@ -2131,63 +2209,49 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-.enrolled-note-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.enrolled-note-icon i {
-  font-size: 0.5rem;
-}
-
-.enrolled-note-icon:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* Mobile notes (visible only on mobile) */
-.mobile-notes {
-  display: none;
+/* Notes toujours visibles */
+.enrolled-notes-list {
   margin-top: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   background: rgba(99, 102, 241, 0.1);
   border-radius: 8px;
   border-left: 3px solid #6366f1;
 }
 
-.mobile-note-item {
+.enrolled-note-item {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 4px 0;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
   font-size: 0.75rem;
 }
 
-.mobile-note-item:not(:last-child) {
+.enrolled-note-item:not(:last-child) {
   border-bottom: 1px dashed rgba(99, 102, 241, 0.3);
   padding-bottom: 8px;
   margin-bottom: 4px;
 }
 
-.mobile-note-user {
+.enrolled-note-item > i {
   color: #6366f1;
-  font-weight: 600;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.mobile-note-text {
+.enrolled-note-item .note-user {
+  color: #818cf8;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.enrolled-note-item .note-text {
   color: var(--text-secondary, #94a3b8);
   word-break: break-word;
+  flex: 1;
 }
 
-/* Desktop only elements */
-.desktop-only {
-  display: flex;
-}
+/* Footer card */
 
 .tournament-card-footer {
   padding: 14px 20px;
@@ -2458,31 +2522,46 @@ onUnmounted(() => {
     font-size: 1rem;
   }
 
-  .map-link-text {
-    display: none;
-  }
-
-  .map-link-btn {
-    padding: 10px 12px;
-    border-radius: 10px;
-  }
-
-  .map-link-btn i {
-    font-size: 1.125rem;
-  }
-
   .casino-section {
     flex-wrap: wrap;
     gap: 12px;
   }
 
-  /* Show mobile notes, hide desktop tooltips */
-  .mobile-notes {
-    display: block;
+  /* Route card responsive */
+  .route-card {
+    padding: 12px 14px;
   }
 
-  .desktop-only {
-    display: none !important;
+  .route-card-header {
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+  }
+
+  .route-card-header i {
+    font-size: 1rem;
+  }
+
+  .route-card-stats {
+    gap: 16px;
+  }
+
+  .route-stat-mini {
+    font-size: 0.8125rem;
+    gap: 8px;
+  }
+
+  .route-stat-mini i {
+    font-size: 0.75rem;
+    width: 16px;
+  }
+
+  /* Notes responsive */
+  .enrolled-notes-list {
+    padding: 12px 14px;
+  }
+
+  .enrolled-note-item {
+    font-size: 0.8125rem;
   }
 
   /* Form row responsive */
