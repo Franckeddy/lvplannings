@@ -51,9 +51,12 @@
             v-for="memberId in Array.from(dayData.members)"
             :key="memberId"
             class="member-tag"
-            :style="{ backgroundColor: getUserColorById(memberId) }"
+            :class="{ 'member-tag-itm': isMemberItmOnDay(memberId, dayData) }"
+            :style="{ backgroundColor: isMemberItmOnDay(memberId, dayData) ? undefined : getUserColorById(memberId) }"
           >
+            <span v-if="isMemberItmOnDay(memberId, dayData)">🔥</span>
             {{ getUserNameById(memberId) }}
+            <span v-if="getMemberWinningsOnDay(memberId, dayData)" class="member-winnings">${{ getMemberWinningsOnDay(memberId, dayData).toLocaleString() }}</span>
           </div>
         </div>
 
@@ -538,6 +541,33 @@ const getUserNameById = (userId) => {
   return user ? user.name : '';
 };
 
+// Vérifier si un membre est ITM sur un jour donné
+const isMemberItmOnDay = (memberId, dayData) => {
+  for (const casino of Object.values(dayData.casinos)) {
+    for (const timeSlot of Object.values(casino.times)) {
+      const userEntry = timeSlot.users.find(u => u.id === memberId);
+      if (userEntry && userEntry.liveStatus === 'eliminated' && userEntry.liveWinnings) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+// Obtenir les gains ITM d'un membre sur un jour
+const getMemberWinningsOnDay = (memberId, dayData) => {
+  let total = 0;
+  for (const casino of Object.values(dayData.casinos)) {
+    for (const timeSlot of Object.values(casino.times)) {
+      const userEntry = timeSlot.users.find(u => u.id === memberId);
+      if (userEntry && userEntry.liveStatus === 'eliminated' && userEntry.liveWinnings) {
+        total += userEntry.liveWinnings;
+      }
+    }
+  }
+  return total;
+};
+
 const selectDate = (date) => {
   selectedDate.value = date;
   // Charger les temps de trajet pour les casinos de ce jour
@@ -615,6 +645,7 @@ const teamByDay = computed(() => {
         ...user,
         tournamentId: tournament.id,
         user_note: tournament.user_note,
+        liveStatus: tournament.liveStatus,
         liveWinnings: tournament.liveWinnings
       });
       if (!grouped[date].casinos[casino].users.find(u => u.id === user.id)) {
@@ -1413,12 +1444,26 @@ onUnmounted(() => {
 }
 
 .member-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 12px;
   border-radius: 16px;
   color: white;
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.member-tag-itm {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.member-winnings {
+  color: #ecfdf5;
+  font-weight: 700;
+  font-size: 0.7rem;
 }
 
 .date-card-footer {

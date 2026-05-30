@@ -99,7 +99,7 @@ app.get('/api/users/:userId/tournaments', async (req, res) => {
     const tournamentsWithParticipants = await Promise.all(
       result.rows.map(async (tournament) => {
         const participantsResult = await pool.query(
-          `SELECT DISTINCT u.id, u.name 
+          `SELECT DISTINCT u.id, u.name, t2.live_status as "liveStatus", t2.live_winnings as "liveWinnings"
            FROM tournaments t2
            JOIN users u ON t2.user_id = u.id
            WHERE t2.date = $1 AND t2.time = $2 AND t2.casino = $3 AND t2.user_id != $4

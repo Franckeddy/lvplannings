@@ -61,9 +61,6 @@
     >
       <div class="missed-recap-content">
         <div class="missed-recap-header">
-          <div class="missed-recap-icon">
-            <i class="pi pi-history"></i>
-          </div>
           <h3>Tournois non saisis</h3>
           <p class="missed-recap-subtitle">
             {{ missedTournaments.length }} tournoi{{ missedTournaments.length > 1 ? 's' : '' }} passé{{ missedTournaments.length > 1 ? 's' : '' }} sans résultat
@@ -178,23 +175,23 @@
           </div>
         </div>
 
-        <div class="stat-card">
+        <div v-if="summary.totalWinnings > 0" class="stat-card stat-card-itm">
+          <div class="stat-icon itm">
+            <span class="itm-fire">🔥</span>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value itm-value">${{ summary.totalWinnings?.toLocaleString() || 0 }}</span>
+            <span class="stat-label">Gains ITM ({{ summary.itmCount || 0 }})</span>
+          </div>
+        </div>
+
+        <div v-else class="stat-card">
           <div class="stat-icon days">
             <i class="pi pi-calendar"></i>
           </div>
           <div class="stat-content">
             <span class="stat-value">{{ Object.keys(tournamentsByDay).length }}</span>
             <span class="stat-label">Jours</span>
-          </div>
-        </div>
-
-        <div class="stat-card stat-card-itm" v-if="summary.totalWinnings > 0">
-          <div class="stat-icon itm">
-            <i class="pi pi-dollar"></i>
-          </div>
-          <div class="stat-content">
-            <span class="stat-value itm-value">${{ summary.totalWinnings?.toLocaleString() || 0 }}</span>
-            <span class="stat-label">Gains ITM ({{ summary.itmCount || 0 }})</span>
           </div>
         </div>
       </div>
@@ -258,6 +255,17 @@
 
             <div class="day-total">
               {{ formatBuyIn(dayData.totalBuyin) }}
+            </div>
+
+            <!-- Tags ITM des participants ce jour -->
+            <div v-if="getDayItmParticipants(dayData.tournaments).length > 0" class="day-itm-tags">
+              <span
+                v-for="p in getDayItmParticipants(dayData.tournaments)"
+                :key="p.id"
+                class="day-itm-chip"
+              >
+                🔥 {{ p.name }} <span class="day-itm-amount">${{ p.liveWinnings.toLocaleString() }}</span>
+              </span>
             </div>
           </div>
 
@@ -375,8 +383,12 @@
                       v-for="participant in tournament.participants"
                       :key="participant.id"
                       class="participant-chip"
+                      :class="{ 'participant-itm': participant.liveStatus === 'eliminated' && participant.liveWinnings, 'participant-playing': participant.liveStatus === 'playing' }"
                     >
+                      <span v-if="participant.liveStatus === 'eliminated' && participant.liveWinnings">🔥</span>
+                      <span v-else-if="participant.liveStatus === 'playing'">🟢</span>
                       {{ participant.name }}
+                      <span v-if="participant.liveWinnings" class="participant-winnings">${{ participant.liveWinnings.toLocaleString() }}</span>
                     </span>
                   </div>
                 </div>
@@ -817,13 +829,11 @@ const checkMissedTournaments = () => {
   const missed = [];
 
   for (const tournament of props.tournaments) {
-    // Ignorer les tournois déjà saisis
     if (tournament.liveStatus === 'playing' || tournament.liveStatus === 'eliminated') continue;
 
     const tournamentDate = parseTournamentDate(tournament.date, tournament.time);
     if (!tournamentDate) continue;
 
-    // Le tournoi est passé depuis au moins 3h (il est terminé)
     const diffMs = now.getTime() - tournamentDate.getTime();
     const diffHours = diffMs / (1000 * 60 * 60);
 
@@ -833,15 +843,7 @@ const checkMissedTournaments = () => {
   }
 
   if (missed.length > 0) {
-    // Vérifier si déjà dismiss aujourd'hui
-    const dismissedKey = `dismissed_missed_recap_${props.user?.id}`;
-    const lastDismissed = localStorage.getItem(dismissedKey);
-    const today = now.toISOString().split('T')[0];
-
-    if (lastDismissed === today) return;
-
     missedTournaments.value = missed;
-    // Initialiser les résultats
     missed.forEach(t => {
       if (!missedResults.value[t.id]) {
         missedResults.value[t.id] = { type: null, winnings: '' };
@@ -861,9 +863,6 @@ const setMissedResult = (tournament, type) => {
 };
 
 const dismissMissedRecap = () => {
-  const dismissedKey = `dismissed_missed_recap_${props.user?.id}`;
-  const today = new Date().toISOString().split('T')[0];
-  localStorage.setItem(dismissedKey, today);
   showMissedRecapDialog.value = false;
 };
 
@@ -919,11 +918,18 @@ const parseTournamentDate = (dateStr, timeStr) => {
   if (!match) return null;
 
   const day = parseInt(match[1]);
+  const monthName = match[2].toLowerCase();
   const timeParts = timeStr.match(/^(\d+):(\d+)/);
   if (!timeParts) return null;
 
-  // Tous les tournois sont en juin 2026
-  return new Date(2026, 5, day, parseInt(timeParts[1]), parseInt(timeParts[2]));
+  const monthMap = {
+    'janvier': 0, 'février': 1, 'mars': 2, 'avril': 3,
+    'mai': 4, 'juin': 5, 'juillet': 6, 'août': 7,
+    'septembre': 8, 'octobre': 9, 'novembre': 10, 'décembre': 11
+  };
+
+  const month = monthMap[monthName] !== undefined ? monthMap[monthName] : 5; // défaut juin
+  return new Date(2026, month, day, parseInt(timeParts[1]), parseInt(timeParts[2]));
 };
 
 // Vérifier s'il y a un tournoi imminent (dans les 30 minutes avant jusqu'à 15 min après le début)
@@ -1032,10 +1038,13 @@ onMounted(() => {
 // Vérifier aussi quand les tournois changent
 watch(() => props.tournaments, (newTournaments) => {
   if (newTournaments && newTournaments.length > 0) {
-    // Si un tournoi est en cours et la modale n'est pas déjà ouverte
+    // Si un tournoi est en cours et la modale n'est pas déjà ouverte (et pas juste après une sauvegarde)
     const inProgress = newTournaments.find(t => t.liveStatus === 'playing');
-    if (inProgress && !showLiveDialog.value && !showTournamentAlert.value) {
+    if (inProgress && !showLiveDialog.value && !showTournamentAlert.value && !justSavedLive.value) {
       openLiveStatusDialog(inProgress);
+    } else if (!inProgress && justSavedLive.value) {
+      // Plus de tournoi en cours après une sauvegarde → vérifier les manqués
+      // (le timeout dans saveLiveStatus s'en occupe)
     } else {
       setTimeout(() => checkForActiveTournament(), 500);
     }
@@ -1058,6 +1067,7 @@ const liveStackValue = ref('');
 const liveLevelValue = ref('');
 const liveWinningsValue = ref('');
 const savingLive = ref(false);
+const justSavedLive = ref(false);
 
 const openLiveStatusDialog = (tournament) => {
   tournamentForLive.value = tournament;
@@ -1092,6 +1102,7 @@ const saveLiveStatus = async () => {
       tournamentForLive.value.liveStatus = liveStatusValue.value || null;
       tournamentForLive.value.liveLevel = liveLevelValue.value ? parseInt(liveLevelValue.value) : null;
       tournamentForLive.value.liveWinnings = liveWinningsValue.value ? parseInt(liveWinningsValue.value) : null;
+      justSavedLive.value = true;
       showLiveDialog.value = false;
       toast.add({
         severity: 'success',
@@ -1100,6 +1111,11 @@ const saveLiveStatus = async () => {
         life: 3000
       });
       emit('refresh');
+      // Après sauvegarde, vérifier les tournois manqués
+      setTimeout(() => {
+        justSavedLive.value = false;
+        checkMissedTournaments();
+      }, 1500);
     } else {
       toast.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de sauvegarder', life: 3000 });
     }
@@ -1331,6 +1347,26 @@ const tournamentsByDay = computed(() => {
 const formatBuyIn = (amount) => {
   if (!amount) return '$0';
   return '$' + amount.toLocaleString('en-US');
+};
+
+// Obtenir les participants ITM d'un jour (dédupliqués)
+const getDayItmParticipants = (tournaments) => {
+  const itmMap = new Map();
+  for (const t of tournaments) {
+    // Vérifier si le tournoi lui-même est ITM (l'utilisateur courant)
+    if (t.liveStatus === 'eliminated' && t.liveWinnings) {
+      itmMap.set('self', { id: 'self', name: props.user?.name, liveWinnings: t.liveWinnings });
+    }
+    // Vérifier les participants
+    if (t.participants) {
+      for (const p of t.participants) {
+        if (p.liveStatus === 'eliminated' && p.liveWinnings && !itmMap.has(p.id)) {
+          itmMap.set(p.id, p);
+        }
+      }
+    }
+  }
+  return Array.from(itmMap.values());
 };
 
 // Obtenir les notes d'un jour
@@ -1854,9 +1890,37 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 18px 22px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(99, 102, 241, 0.06));
   border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.day-itm-tags {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.day-itm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.1));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.day-itm-amount {
+  color: #22c55e;
+  font-weight: 700;
 }
 
 .day-date-info {
@@ -2467,12 +2531,34 @@ onUnmounted(() => {
 .participant-chip {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   padding: 3px 10px;
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.participant-chip.participant-itm {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.participant-chip.participant-playing {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.participant-winnings {
+  font-size: 0.7rem;
+  opacity: 0.9;
+  margin-left: 2px;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
 }
 
 .tournament-buyin {
@@ -3437,12 +3523,30 @@ onUnmounted(() => {
 
 .stat-card-itm {
   border-color: rgba(34, 197, 94, 0.3) !important;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(245, 158, 11, 0.05)) !important;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(245, 158, 11, 0.06)) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card-itm::before {
+  content: '🔥';
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  font-size: 2.5rem;
+  opacity: 0.12;
+  transform: rotate(15deg);
 }
 
 .stat-card-itm:hover {
   border-color: #22c55e !important;
   box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+}
+
+.itm-fire {
+  font-size: 1.4rem;
+  filter: saturate(0.7);
+  opacity: 0.85;
 }
 
 .itm-value {
@@ -3610,7 +3714,7 @@ onUnmounted(() => {
 
 .confirm-missed-btn {
   min-width: 160px;
-  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  background: white !important;
   border: none !important;
 }
 
