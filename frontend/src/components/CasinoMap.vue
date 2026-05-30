@@ -953,218 +953,88 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-// Trouver le meilleur itinéraire en bus/monorail
-// Départ toujours depuis Centennial Hills Transit Center (ligne 102)
+// Trouver le meilleur itinéraire en bus/monorail depuis la maison
+// Cherche l'arrêt de bus le plus proche de la maison sur toutes les lignes
 const findBestTransitRoute = (casino) => {
-  const results = [];
-  const MAX_TRANSFER_DIST = 1.5; // km max entre arrêts pour correspondance
-  const HOME_LINE_ID = '102';
-  const HOME_STOP_NAME = 'Centennial Hills Transit Center';
-
-  // Trouver la ligne 102 et l'arrêt de départ fixe
-  const homeLine = busLines.value.find(l => l.id === HOME_LINE_ID);
-  if (!homeLine) return [];
-  const homeStopIdx = homeLine.stops.findIndex(s => s.name === HOME_STOP_NAME);
-  if (homeStopIdx === -1) return [];
-  const homeStop = homeLine.stops[homeStopIdx];
-  const homeStopDist = getDistance(HOME_LOCATION.lat, HOME_LOCATION.lng, homeStop.lat, homeStop.lng);
-
-  // --- 1. Itinéraire direct avec la 102 ---
-  let nearestCasino102 = null, nearestCasino102Dist = Infinity, nearestCasino102Idx = -1;
-  homeLine.stops.forEach((stop, idx) => {
-    const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
-    if (dist < nearestCasino102Dist) { nearestCasino102Dist = dist; nearestCasino102 = stop; nearestCasino102Idx = idx; }
-  });
-
-  if (nearestCasino102 && nearestCasino102Idx !== homeStopIdx) {
-    const startIdx = Math.min(homeStopIdx, nearestCasino102Idx);
-    const endIdx = Math.max(homeStopIdx, nearestCasino102Idx);
-    let busDistance = 0;
-    const busStops = [];
-    for (let i = startIdx; i <= endIdx; i++) {
-      busStops.push(homeLine.stops[i]);
-      if (i < endIdx) busDistance += getDistance(homeLine.stops[i].lat, homeLine.stops[i].lng, homeLine.stops[i + 1].lat, homeLine.stops[i + 1].lng);
-    }
-    results.push({
-      line: homeLine, nearestToHome: homeStop, nearestToHomeDist: homeStopDist, nearestToHomeIdx: homeStopIdx,
-      nearestToCasino: nearestCasino102, nearestToCasinoDist: nearestCasino102Dist, nearestToCasinoIdx: nearestCasino102Idx,
-      busStops, busDistance, totalWalkDist: homeStopDist + nearestCasino102Dist,
-      totalDist: homeStopDist + nearestCasino102Dist + busDistance,
-      nbStops: Math.abs(nearestCasino102Idx - homeStopIdx), isTransfer: false
-    });
-  }
-
-  // --- 2. 102 + correspondance avec une 2e ligne ---
-  busLines.value.forEach(line2 => {
-    if (line2.id === HOME_LINE_ID) return;
-
-    // Trouver la correspondance entre 102 et line2
-    let bestTDist = Infinity, t102Idx = -1, tLine2Idx = -1, tStop102 = null, tStopLine2 = null;
-    homeLine.stops.forEach((s1, idx1) => {
-      if (idx1 <= homeStopIdx) return; // Seulement après le départ
-      line2.stops.forEach((s2, idx2) => {
-        const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
-        if (dist < bestTDist) { bestTDist = dist; t102Idx = idx1; tLine2Idx = idx2; tStop102 = s1; tStopLine2 = s2; }
-      });
-    });
-    if (bestTDist > MAX_TRANSFER_DIST) return;
-
-    // Trouver l'arrêt de line2 le plus proche du casino
-    let casino2 = null, casino2Dist = Infinity, casino2Idx = -1;
-    line2.stops.forEach((stop, idx) => {
-      const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
-      if (dist < casino2Dist) { casino2Dist = dist; casino2 = stop; casino2Idx = idx; }
-    });
-    if (casino2Idx === tLine2Idx) return;
-
-    // Segment 102
-    const s1Start = homeStopIdx, s1End = t102Idx;
-    let dist1 = 0; const stops1 = [];
-    for (let k = s1Start; k <= s1End; k++) { stops1.push(homeLine.stops[k]); if (k < s1End) dist1 += getDistance(homeLine.stops[k].lat, homeLine.stops[k].lng, homeLine.stops[k + 1].lat, homeLine.stops[k + 1].lng); }
-
-    // Segment line2
-    const s2Start = Math.min(tLine2Idx, casino2Idx), s2End = Math.max(tLine2Idx, casino2Idx);
-    let dist2 = 0; const stops2 = [];
-    for (let k = s2Start; k <= s2End; k++) { stops2.push(line2.stops[k]); if (k < s2End) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k + 1].lat, line2.stops[k + 1].lng); }
-
-    const totalWalkDist = homeStopDist + bestTDist + casino2Dist;
-    results.push({
-      line: homeLine, line2, isTransfer: true,
-      nearestToHome: homeStop, nearestToHomeDist: homeStopDist, nearestToHomeIdx: homeStopIdx,
-      transferStop102: tStop102, transferStopLine: tStopLine2, transferDist: bestTDist,
-      nearestToCasino: casino2, nearestToCasinoDist: casino2Dist, nearestToCasinoIdx: casino2Idx,
-      busStops: stops1, busStops2: stops2, busDistance: dist1 + dist2,
-      totalWalkDist, totalDist: totalWalkDist + dist1 + dist2,
-      nbStops: (s1End - s1Start) + (s2End - s2Start)
-    });
-  });
-
-  // --- 3. 102 + ligne intermédiaire + 3e ligne ---
-  busLines.value.forEach(line2 => {
-    if (line2.id === HOME_LINE_ID) return;
-
-    // Correspondance 102 → line2
-    let t1Dist = Infinity, t1_102Idx = -1, t1_l2Idx = -1, t1Stop102 = null, t1StopL2 = null;
-    homeLine.stops.forEach((s1, idx1) => {
-      if (idx1 <= homeStopIdx) return;
-      line2.stops.forEach((s2, idx2) => {
-        const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
-        if (dist < t1Dist) { t1Dist = dist; t1_102Idx = idx1; t1_l2Idx = idx2; t1Stop102 = s1; t1StopL2 = s2; }
-      });
-    });
-    if (t1Dist > MAX_TRANSFER_DIST) return;
-
-    busLines.value.forEach(line3 => {
-      if (line3.id === HOME_LINE_ID || line3.id === line2.id) return;
-
-      // Correspondance line2 → line3
-      let t2Dist = Infinity, t2_l2Idx = -1, t2_l3Idx = -1, t2StopL2 = null, t2StopL3 = null;
-      line2.stops.forEach((s2, idx2) => {
-        line3.stops.forEach((s3, idx3) => {
-          const dist = getDistance(s2.lat, s2.lng, s3.lat, s3.lng);
-          if (dist < t2Dist) { t2Dist = dist; t2_l2Idx = idx2; t2_l3Idx = idx3; t2StopL2 = s2; t2StopL3 = s3; }
-        });
-      });
-      if (t2Dist > MAX_TRANSFER_DIST) return;
-      if (t2_l2Idx === t1_l2Idx) return;
-
-      // Arrêt de line3 le plus proche du casino
-      let casino3 = null, casino3Dist = Infinity, casino3Idx = -1;
-      line3.stops.forEach((stop, idx) => {
-        const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
-        if (dist < casino3Dist) { casino3Dist = dist; casino3 = stop; casino3Idx = idx; }
-      });
-      if (casino3Idx === t2_l3Idx) return;
-
-      // Segments
-      const s1Start = homeStopIdx, s1End = t1_102Idx;
-      let dist1 = 0; const stops1 = [];
-      for (let x = s1Start; x <= s1End; x++) { stops1.push(homeLine.stops[x]); if (x < s1End) dist1 += getDistance(homeLine.stops[x].lat, homeLine.stops[x].lng, homeLine.stops[x+1].lat, homeLine.stops[x+1].lng); }
-
-      const s2Start = Math.min(t1_l2Idx, t2_l2Idx), s2End = Math.max(t1_l2Idx, t2_l2Idx);
-      let dist2 = 0; const stops2 = [];
-      for (let x = s2Start; x <= s2End; x++) { stops2.push(line2.stops[x]); if (x < s2End) dist2 += getDistance(line2.stops[x].lat, line2.stops[x].lng, line2.stops[x+1].lat, line2.stops[x+1].lng); }
-
-      const s3Start = Math.min(t2_l3Idx, casino3Idx), s3End = Math.max(t2_l3Idx, casino3Idx);
-      let dist3 = 0; const stops3 = [];
-      for (let x = s3Start; x <= s3End; x++) { stops3.push(line3.stops[x]); if (x < s3End) dist3 += getDistance(line3.stops[x].lat, line3.stops[x].lng, line3.stops[x+1].lat, line3.stops[x+1].lng); }
-
-      const totalWalkDist = homeStopDist + t1Dist + t2Dist + casino3Dist;
-      results.push({
-        line: homeLine, line2, line3, isTransfer: true, isDoubleTransfer: true,
-        nearestToHome: homeStop, nearestToHomeDist: homeStopDist, nearestToHomeIdx: homeStopIdx,
-        transferStop102: t1Stop102, transferStopLine: t1StopL2, transferDist: t1Dist,
-        transferStop2From: t2StopL2, transferStop2To: t2StopL3, transferDist2: t2Dist,
-        nearestToCasino: casino3, nearestToCasinoDist: casino3Dist, nearestToCasinoIdx: casino3Idx,
-        busStops: stops1, busStops2: stops2, busStops3: stops3,
-        busDistance: dist1 + dist2 + dist3, totalWalkDist,
-        totalDist: totalWalkDist + dist1 + dist2 + dist3,
-        nbStops: (s1End - s1Start) + (s2End - s2Start) + (s3End - s3Start)
-      });
-    });
-  });
-
-  // Trier par moins de marche totale
-  results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
-
-  // Retourner le meilleur
-  return results.length > 0 ? [results[0]] : [];
+  // Utiliser l'algorithme générique avec les coordonnées de la maison
+  return findTransitFromLocation(casino, HOME_LOCATION.lat, HOME_LOCATION.lng);
 };
 
-// Trouver un itinéraire transit depuis une position quelconque (géolocalisation)
+// Trouver un itinéraire transit depuis une position quelconque (géolocalisation ou maison)
+// Cherche l'arrêt de bus le plus proche du point de départ sur TOUTES les lignes
 const findTransitFromLocation = (casino, fromLat, fromLng) => {
   const results = [];
-  const MAX_TRANSFER_DIST = 1.5;
+  const MAX_TRANSFER_DIST = 1.5; // km max entre arrêts pour correspondance
 
-  // Chercher les lignes directes depuis la position
+  // --- 1. Chercher les lignes directes depuis la position ---
   busLines.value.forEach(line => {
-    let nearest = null, nearestDist = Infinity, nearestIdx = -1;
+    // Trouver l'arrêt le plus proche du point de départ sur cette ligne
+    let nearestHome = null, nearestHomeDist = Infinity, nearestHomeIdx = -1;
     line.stops.forEach((stop, idx) => {
       const dist = getDistance(fromLat, fromLng, stop.lat, stop.lng);
-      if (dist < nearestDist) { nearestDist = dist; nearest = stop; nearestIdx = idx; }
+      if (dist < nearestHomeDist) { nearestHomeDist = dist; nearestHome = stop; nearestHomeIdx = idx; }
     });
 
-    let casinoStop = null, casinoDist = Infinity, casinoIdx = -1;
+    // Trouver l'arrêt le plus proche du casino sur cette ligne
+    let nearestCasino = null, nearestCasinoDist = Infinity, nearestCasinoIdx = -1;
     line.stops.forEach((stop, idx) => {
       const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
-      if (dist < casinoDist) { casinoDist = dist; casinoStop = stop; casinoIdx = idx; }
+      if (dist < nearestCasinoDist) { nearestCasinoDist = dist; nearestCasino = stop; nearestCasinoIdx = idx; }
     });
 
-    if (nearest && casinoStop && nearestIdx !== casinoIdx) {
-      const startIdx = Math.min(nearestIdx, casinoIdx), endIdx = Math.max(nearestIdx, casinoIdx);
-      let busDistance = 0; const busStops = [];
-      for (let i = startIdx; i <= endIdx; i++) { busStops.push(line.stops[i]); if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng); }
+    // Si les deux arrêts sont différents, on a un itinéraire direct
+    if (nearestHome && nearestCasino && nearestHomeIdx !== nearestCasinoIdx) {
+      const startIdx = Math.min(nearestHomeIdx, nearestCasinoIdx);
+      const endIdx = Math.max(nearestHomeIdx, nearestCasinoIdx);
+      let busDistance = 0;
+      const busStops = [];
+      for (let i = startIdx; i <= endIdx; i++) {
+        busStops.push(line.stops[i]);
+        if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng);
+      }
 
       results.push({
-        line, nearestToHome: nearest, nearestToHomeDist: nearestDist, nearestToHomeIdx: nearestIdx,
-        nearestToCasino: casinoStop, nearestToCasinoDist: casinoDist, nearestToCasinoIdx: casinoIdx,
-        busStops, busDistance, totalWalkDist: nearestDist + casinoDist,
-        totalDist: nearestDist + casinoDist + busDistance,
-        nbStops: Math.abs(casinoIdx - nearestIdx), isTransfer: false
+        line,
+        nearestToHome: nearestHome,
+        nearestToHomeDist: nearestHomeDist,
+        nearestToHomeIdx: nearestHomeIdx,
+        nearestToCasino: nearestCasino,
+        nearestToCasinoDist: nearestCasinoDist,
+        nearestToCasinoIdx: nearestCasinoIdx,
+        busStops,
+        busDistance,
+        totalWalkDist: nearestHomeDist + nearestCasinoDist,
+        totalDist: nearestHomeDist + nearestCasinoDist + busDistance,
+        nbStops: Math.abs(nearestCasinoIdx - nearestHomeIdx),
+        isTransfer: false
       });
     }
   });
 
-  // Chercher aussi avec 1 correspondance
+  // --- 2. Chercher avec 1 correspondance ---
   for (let i = 0; i < busLines.value.length; i++) {
     const line1 = busLines.value[i];
+
+    // Trouver l'arrêt le plus proche du départ sur line1
     let home1 = null, home1Dist = Infinity, home1Idx = -1;
     line1.stops.forEach((stop, idx) => {
       const dist = getDistance(fromLat, fromLng, stop.lat, stop.lng);
       if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
     });
-    if (home1Dist > 5) continue;
+    if (home1Dist > 5) continue; // Trop loin, ignorer cette ligne
 
     for (let j = 0; j < busLines.value.length; j++) {
       if (i === j) continue;
       const line2 = busLines.value[j];
 
+      // Trouver l'arrêt le plus proche du casino sur line2
       let casino2 = null, casino2Dist = Infinity, casino2Idx = -1;
       line2.stops.forEach((stop, idx) => {
         const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
         if (dist < casino2Dist) { casino2Dist = dist; casino2 = stop; casino2Idx = idx; }
       });
 
+      // Trouver la meilleure correspondance entre line1 et line2
       let bestTDist = Infinity, t1Idx = -1, t2Idx = -1, tStop1 = null, tStop2 = null;
       line1.stops.forEach((s1, idx1) => {
         line2.stops.forEach((s2, idx2) => {
@@ -1174,28 +1044,152 @@ const findTransitFromLocation = (casino, fromLat, fromLng) => {
       });
       if (bestTDist > MAX_TRANSFER_DIST || t1Idx === home1Idx || t2Idx === casino2Idx) continue;
 
+      // Calculer le segment line1
       const s1Start = Math.min(home1Idx, t1Idx), s1End = Math.max(home1Idx, t1Idx);
       let dist1 = 0; const stops1 = [];
-      for (let k = s1Start; k <= s1End; k++) { stops1.push(line1.stops[k]); if (k < s1End) dist1 += getDistance(line1.stops[k].lat, line1.stops[k].lng, line1.stops[k+1].lat, line1.stops[k+1].lng); }
+      for (let k = s1Start; k <= s1End; k++) {
+        stops1.push(line1.stops[k]);
+        if (k < s1End) dist1 += getDistance(line1.stops[k].lat, line1.stops[k].lng, line1.stops[k+1].lat, line1.stops[k+1].lng);
+      }
 
+      // Calculer le segment line2
       const s2Start = Math.min(t2Idx, casino2Idx), s2End = Math.max(t2Idx, casino2Idx);
       let dist2 = 0; const stops2 = [];
-      for (let k = s2Start; k <= s2End; k++) { stops2.push(line2.stops[k]); if (k < s2End) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k+1].lat, line2.stops[k+1].lng); }
+      for (let k = s2Start; k <= s2End; k++) {
+        stops2.push(line2.stops[k]);
+        if (k < s2End) dist2 += getDistance(line2.stops[k].lat, line2.stops[k].lng, line2.stops[k+1].lat, line2.stops[k+1].lng);
+      }
 
       const totalWalkDist = home1Dist + bestTDist + casino2Dist;
       results.push({
-        line: line1, line2, isTransfer: true,
-        nearestToHome: home1, nearestToHomeDist: home1Dist, nearestToHomeIdx: home1Idx,
-        transferStop102: tStop1, transferStopLine: tStop2, transferDist: bestTDist,
-        nearestToCasino: casino2, nearestToCasinoDist: casino2Dist, nearestToCasinoIdx: casino2Idx,
-        busStops: stops1, busStops2: stops2, busDistance: dist1 + dist2,
-        totalWalkDist, totalDist: totalWalkDist + dist1 + dist2,
+        line: line1,
+        line2,
+        isTransfer: true,
+        nearestToHome: home1,
+        nearestToHomeDist: home1Dist,
+        nearestToHomeIdx: home1Idx,
+        transferStop102: tStop1,
+        transferStopLine: tStop2,
+        transferDist: bestTDist,
+        nearestToCasino: casino2,
+        nearestToCasinoDist: casino2Dist,
+        nearestToCasinoIdx: casino2Idx,
+        busStops: stops1,
+        busStops2: stops2,
+        busDistance: dist1 + dist2,
+        totalWalkDist,
+        totalDist: totalWalkDist + dist1 + dist2,
         nbStops: (s1End - s1Start) + (s2End - s2Start)
       });
     }
   }
 
+  // --- 3. Chercher avec 2 correspondances ---
+  for (let i = 0; i < busLines.value.length; i++) {
+    const line1 = busLines.value[i];
+
+    // Trouver l'arrêt le plus proche du départ sur line1
+    let home1 = null, home1Dist = Infinity, home1Idx = -1;
+    line1.stops.forEach((stop, idx) => {
+      const dist = getDistance(fromLat, fromLng, stop.lat, stop.lng);
+      if (dist < home1Dist) { home1Dist = dist; home1 = stop; home1Idx = idx; }
+    });
+    if (home1Dist > 3) continue; // Limiter à 3km pour éviter trop de calculs
+
+    for (let j = 0; j < busLines.value.length; j++) {
+      if (i === j) continue;
+      const line2 = busLines.value[j];
+
+      // Correspondance line1 → line2
+      let t1Dist = Infinity, t1_l1Idx = -1, t1_l2Idx = -1, t1StopL1 = null, t1StopL2 = null;
+      line1.stops.forEach((s1, idx1) => {
+        line2.stops.forEach((s2, idx2) => {
+          const dist = getDistance(s1.lat, s1.lng, s2.lat, s2.lng);
+          if (dist < t1Dist) { t1Dist = dist; t1_l1Idx = idx1; t1_l2Idx = idx2; t1StopL1 = s1; t1StopL2 = s2; }
+        });
+      });
+      if (t1Dist > MAX_TRANSFER_DIST) continue;
+
+      for (let k = 0; k < busLines.value.length; k++) {
+        if (k === i || k === j) continue;
+        const line3 = busLines.value[k];
+
+        // Correspondance line2 → line3
+        let t2Dist = Infinity, t2_l2Idx = -1, t2_l3Idx = -1, t2StopL2 = null, t2StopL3 = null;
+        line2.stops.forEach((s2, idx2) => {
+          line3.stops.forEach((s3, idx3) => {
+            const dist = getDistance(s2.lat, s2.lng, s3.lat, s3.lng);
+            if (dist < t2Dist) { t2Dist = dist; t2_l2Idx = idx2; t2_l3Idx = idx3; t2StopL2 = s2; t2StopL3 = s3; }
+          });
+        });
+        if (t2Dist > MAX_TRANSFER_DIST) continue;
+        if (t2_l2Idx === t1_l2Idx) continue;
+
+        // Arrêt de line3 le plus proche du casino
+        let casino3 = null, casino3Dist = Infinity, casino3Idx = -1;
+        line3.stops.forEach((stop, idx) => {
+          const dist = getDistance(casino.lat, casino.lng, stop.lat, stop.lng);
+          if (dist < casino3Dist) { casino3Dist = dist; casino3 = stop; casino3Idx = idx; }
+        });
+        if (casino3Idx === t2_l3Idx) continue;
+
+        // Calculer les segments
+        const s1Start = Math.min(home1Idx, t1_l1Idx), s1End = Math.max(home1Idx, t1_l1Idx);
+        let dist1 = 0; const stops1 = [];
+        for (let x = s1Start; x <= s1End; x++) {
+          stops1.push(line1.stops[x]);
+          if (x < s1End) dist1 += getDistance(line1.stops[x].lat, line1.stops[x].lng, line1.stops[x+1].lat, line1.stops[x+1].lng);
+        }
+
+        const s2Start = Math.min(t1_l2Idx, t2_l2Idx), s2End = Math.max(t1_l2Idx, t2_l2Idx);
+        let dist2 = 0; const stops2 = [];
+        for (let x = s2Start; x <= s2End; x++) {
+          stops2.push(line2.stops[x]);
+          if (x < s2End) dist2 += getDistance(line2.stops[x].lat, line2.stops[x].lng, line2.stops[x+1].lat, line2.stops[x+1].lng);
+        }
+
+        const s3Start = Math.min(t2_l3Idx, casino3Idx), s3End = Math.max(t2_l3Idx, casino3Idx);
+        let dist3 = 0; const stops3 = [];
+        for (let x = s3Start; x <= s3End; x++) {
+          stops3.push(line3.stops[x]);
+          if (x < s3End) dist3 += getDistance(line3.stops[x].lat, line3.stops[x].lng, line3.stops[x+1].lat, line3.stops[x+1].lng);
+        }
+
+        const totalWalkDist = home1Dist + t1Dist + t2Dist + casino3Dist;
+        results.push({
+          line: line1,
+          line2,
+          line3,
+          isTransfer: true,
+          isDoubleTransfer: true,
+          nearestToHome: home1,
+          nearestToHomeDist: home1Dist,
+          nearestToHomeIdx: home1Idx,
+          transferStop102: t1StopL1,
+          transferStopLine: t1StopL2,
+          transferDist: t1Dist,
+          transferStop2From: t2StopL2,
+          transferStop2To: t2StopL3,
+          transferDist2: t2Dist,
+          nearestToCasino: casino3,
+          nearestToCasinoDist: casino3Dist,
+          nearestToCasinoIdx: casino3Idx,
+          busStops: stops1,
+          busStops2: stops2,
+          busStops3: stops3,
+          busDistance: dist1 + dist2 + dist3,
+          totalWalkDist,
+          totalDist: totalWalkDist + dist1 + dist2 + dist3,
+          nbStops: (s1End - s1Start) + (s2End - s2Start) + (s3End - s3Start)
+        });
+      }
+    }
+  }
+
+  // Trier par moins de marche totale
   results.sort((a, b) => a.totalWalkDist - b.totalWalkDist);
+
+  // Retourner le meilleur
   return results.length > 0 ? [results[0]] : [];
 };
 

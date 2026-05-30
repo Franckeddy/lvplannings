@@ -62,7 +62,6 @@
             <span class="mini-stat"><i class="pi pi-trophy"></i> {{ dayData.totalTournaments }}</span>
             <span class="mini-stat"><i class="pi pi-building"></i> {{ Object.keys(dayData.casinos).length }}</span>
           </div>
-          <span class="date-total">${{ dayData.totalBuyin.toLocaleString() }}</span>
         </div>
       </div>
     </div>
@@ -86,7 +85,6 @@
           <div class="detail-stats">
             <span><i class="pi pi-users"></i> {{ teamByDay[selectedDate].members.size }} membres</span>
             <span><i class="pi pi-trophy"></i> {{ teamByDay[selectedDate].totalTournaments }} tournois</span>
-            <span class="detail-total"><i class="pi pi-wallet"></i> ${{ teamByDay[selectedDate].totalBuyin.toLocaleString() }}</span>
           </div>
         </div>
       </div>
