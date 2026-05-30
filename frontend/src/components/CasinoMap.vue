@@ -11,101 +11,175 @@
       <div ref="mapContainer" class="leaflet-map"></div>
 
       <!-- Infos de l'itinéraire actif -->
-      <div v-if="routeInfo" class="route-info-panel">
+      <div v-if="routeInfo" class="route-info-panel" :class="{ 'both-routes-panel': showBothRoutes }">
         <div class="route-info-header">
-          <i :class="['pi', routeMode === 'driving' ? 'pi-car' : 'pi-directions']"></i>
-          <span>{{ routeMode === 'driving' ? 'Voiture' : 'Bus' }} → {{ routeInfo.casino }}</span>
+          <i class="pi pi-map-marker"></i>
+          <span>Itinéraire → {{ routeInfo.casino }}</span>
         </div>
 
-        <!-- Toggle voiture / bus -->
-        <div class="route-mode-toggle">
-          <button
-            class="mode-btn"
-            :class="{ active: routeMode === 'driving' }"
-            @click="switchRouteMode('driving')"
-          >
-            <i class="pi pi-car"></i> Voiture
-          </button>
-          <button
-            class="mode-btn"
-            :class="{ active: routeMode === 'transit' }"
-            @click="switchRouteMode('transit')"
-          >
-            <i class="pi pi-directions"></i> Bus
-          </button>
-        </div>
-
-
-        <div class="route-info-details">
-          <div class="route-stat">
-            <i class="pi pi-map"></i>
-            <span>{{ routeInfo.distanceMiles }} mi ({{ routeInfo.distanceKm }} km)</span>
-          </div>
-          <div class="route-stat">
-            <i class="pi pi-clock"></i>
-            <span>~{{ routeInfo.durationMin }} min</span>
-          </div>
-        </div>
-
-        <!-- Détails du trajet en bus/monorail -->
-        <div v-if="routeMode === 'transit' && routeInfo.transitDetails" class="transit-details">
-          <div class="transit-steps-simple">
-            <div class="transit-segment walk-segment">
-              <span class="segment-time">{{ routeInfo.transitDetails.walkToStop }}'</span>
-              <span class="segment-label">à pied</span>
-            </div>
-            <i class="pi pi-chevron-right segment-arrow"></i>
-            <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line.color }">
-              <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line.color }">{{ routeInfo.transitDetails.line.name }}</span>
-            </div>
-            <!-- 1ère correspondance -->
-            <template v-if="routeInfo.transitDetails.isTransfer && routeInfo.transitDetails.line2">
-              <i class="pi pi-chevron-right segment-arrow"></i>
-              <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line2.color }">
-                <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line2.color }">{{ routeInfo.transitDetails.line2.name }}</span>
+        <!-- Mode "both" : afficher les deux trajets côte à côte -->
+        <template v-if="showBothRoutes">
+          <div class="both-routes-container">
+            <!-- Trajet voiture -->
+            <div class="route-card driving-card">
+              <div class="route-card-header">
+                <i class="pi pi-car"></i>
+                <span>Voiture</span>
               </div>
-            </template>
-            <!-- 2ème correspondance -->
-            <template v-if="routeInfo.transitDetails.isDoubleTransfer && routeInfo.transitDetails.line3">
-              <i class="pi pi-chevron-right segment-arrow"></i>
-              <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line3.color }">
-                <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line3.color }">{{ routeInfo.transitDetails.line3.name }}</span>
+              <div class="route-card-stats">
+                <div class="route-stat-mini">
+                  <i class="pi pi-map"></i>
+                  <span>{{ routeInfo.distanceMiles }} mi</span>
+                </div>
+                <div class="route-stat-mini">
+                  <i class="pi pi-clock"></i>
+                  <span>~{{ routeInfo.durationMin }} min</span>
+                </div>
               </div>
-            </template>
-            <i class="pi pi-chevron-right segment-arrow"></i>
-            <div class="transit-segment walk-segment">
-              <span class="segment-time">{{ routeInfo.transitDetails.walkFromStop }}'</span>
-              <span class="segment-label">à pied</span>
+            </div>
+
+            <!-- Trajet bus -->
+            <div class="route-card transit-card" v-if="routeInfoTransit">
+              <div class="route-card-header">
+                <i class="pi pi-directions"></i>
+                <span>Bus</span>
+              </div>
+              <div class="route-card-stats">
+                <div class="route-stat-mini">
+                  <i class="pi pi-map"></i>
+                  <span>{{ routeInfoTransit.distanceMiles }} mi</span>
+                </div>
+                <div class="route-stat-mini">
+                  <i class="pi pi-clock"></i>
+                  <span>~{{ routeInfoTransit.durationMin }} min</span>
+                </div>
+              </div>
+              <!-- Lignes de bus utilisées -->
+              <div class="transit-lines-badge" v-if="routeInfoTransit.transitDetails">
+                <span
+                  class="line-badge"
+                  :style="{ background: routeInfoTransit.transitDetails.line.color }"
+                >{{ routeInfoTransit.transitDetails.line.name }}</span>
+                <template v-if="routeInfoTransit.transitDetails.line2">
+                  <span class="badge-separator">→</span>
+                  <span
+                    class="line-badge"
+                    :style="{ background: routeInfoTransit.transitDetails.line2.color }"
+                  >{{ routeInfoTransit.transitDetails.line2.name }}</span>
+                </template>
+                <template v-if="routeInfoTransit.transitDetails.line3">
+                  <span class="badge-separator">→</span>
+                  <span
+                    class="line-badge"
+                    :style="{ background: routeInfoTransit.transitDetails.line3.color }"
+                  >{{ routeInfoTransit.transitDetails.line3.name }}</span>
+                </template>
+              </div>
+              <div v-if="routeInfoTransit.noRoute" class="transit-no-route-mini">
+                <i class="pi pi-info-circle"></i>
+                <span>Pas de bus direct</span>
+              </div>
             </div>
           </div>
-          <div class="transit-stops-info">
-            <span class="stop-name">{{ routeInfo.transitDetails.boardStop }}</span>
-            <i class="pi pi-arrow-right"></i>
-            <span v-if="routeInfo.transitDetails.transferStop" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop }}</span>
-            <i v-if="routeInfo.transitDetails.transferStop" class="pi pi-arrow-right"></i>
-            <span v-if="routeInfo.transitDetails.transferStop2" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop2 }}</span>
-            <i v-if="routeInfo.transitDetails.transferStop2" class="pi pi-arrow-right"></i>
-            <span class="stop-name">{{ routeInfo.transitDetails.alightStop }}</span>
-          </div>
-        </div>
 
-        <!-- Message si aucune route transit trouvée -->
-        <div v-if="routeMode === 'transit' && routeInfo.noRoute" class="transit-no-route">
-          <i class="pi pi-info-circle"></i>
-          <span>Aucune ligne de bus/monorail ne dessert directement ce casino</span>
-        </div>
+          <!-- Légende des couleurs -->
+          <div class="routes-legend">
+            <span class="legend-item driving-legend"><span class="legend-line"></span> Voiture</span>
+            <span class="legend-item transit-legend"><span class="legend-line"></span> Bus</span>
+          </div>
+        </template>
+
+        <!-- Mode single : ancien affichage -->
+        <template v-else>
+          <!-- Toggle voiture / bus -->
+          <div class="route-mode-toggle">
+            <button
+              class="mode-btn"
+              :class="{ active: routeMode === 'driving' }"
+              @click="switchRouteMode('driving')"
+            >
+              <i class="pi pi-car"></i> Voiture
+            </button>
+            <button
+              class="mode-btn"
+              :class="{ active: routeMode === 'transit' }"
+              @click="switchRouteMode('transit')"
+            >
+              <i class="pi pi-directions"></i> Bus
+            </button>
+          </div>
+
+          <div class="route-info-details">
+            <div class="route-stat">
+              <i class="pi pi-map"></i>
+              <span>{{ routeInfo.distanceMiles }} mi ({{ routeInfo.distanceKm }} km)</span>
+            </div>
+            <div class="route-stat">
+              <i class="pi pi-clock"></i>
+              <span>~{{ routeInfo.durationMin }} min</span>
+            </div>
+          </div>
+
+          <!-- Détails du trajet en bus/monorail -->
+          <div v-if="routeMode === 'transit' && routeInfo.transitDetails" class="transit-details">
+            <div class="transit-steps-simple">
+              <div class="transit-segment walk-segment">
+                <span class="segment-time">{{ routeInfo.transitDetails.walkToStop }}'</span>
+                <span class="segment-label">à pied</span>
+              </div>
+              <i class="pi pi-chevron-right segment-arrow"></i>
+              <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line.color }">
+                <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line.color }">{{ routeInfo.transitDetails.line.name }}</span>
+              </div>
+              <!-- 1ère correspondance -->
+              <template v-if="routeInfo.transitDetails.isTransfer && routeInfo.transitDetails.line2">
+                <i class="pi pi-chevron-right segment-arrow"></i>
+                <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line2.color }">
+                  <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line2.color }">{{ routeInfo.transitDetails.line2.name }}</span>
+                </div>
+              </template>
+              <!-- 2ème correspondance -->
+              <template v-if="routeInfo.transitDetails.isDoubleTransfer && routeInfo.transitDetails.line3">
+                <i class="pi pi-chevron-right segment-arrow"></i>
+                <div class="transit-segment bus-segment" :style="{ borderColor: routeInfo.transitDetails.line3.color }">
+                  <span class="segment-line-badge" :style="{ background: routeInfo.transitDetails.line3.color }">{{ routeInfo.transitDetails.line3.name }}</span>
+                </div>
+              </template>
+              <i class="pi pi-chevron-right segment-arrow"></i>
+              <div class="transit-segment walk-segment">
+                <span class="segment-time">{{ routeInfo.transitDetails.walkFromStop }}'</span>
+                <span class="segment-label">à pied</span>
+              </div>
+            </div>
+            <div class="transit-stops-info">
+              <span class="stop-name">{{ routeInfo.transitDetails.boardStop }}</span>
+              <i class="pi pi-arrow-right"></i>
+              <span v-if="routeInfo.transitDetails.transferStop" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop }}</span>
+              <i v-if="routeInfo.transitDetails.transferStop" class="pi pi-arrow-right"></i>
+              <span v-if="routeInfo.transitDetails.transferStop2" class="stop-name transfer-stop">{{ routeInfo.transitDetails.transferStop2 }}</span>
+              <i v-if="routeInfo.transitDetails.transferStop2" class="pi pi-arrow-right"></i>
+              <span class="stop-name">{{ routeInfo.transitDetails.alightStop }}</span>
+            </div>
+          </div>
+
+          <!-- Message si aucune route transit trouvée -->
+          <div v-if="routeMode === 'transit' && routeInfo.noRoute" class="transit-no-route">
+            <i class="pi pi-info-circle"></i>
+            <span>Aucune ligne de bus/monorail ne dessert directement ce casino</span>
+          </div>
+        </template>
 
         <!-- Liens navigation externe -->
         <div class="route-nav-links">
           <!-- Google Maps -->
           <a
-            :href="routeMode === 'transit' ? getGoogleMapsTransitUrl(routeInfo.casinoData) : getGoogleMapsUrl(routeInfo.casinoData)"
+            :href="getGoogleMapsUrl(routeInfo.casinoData)"
             target="_blank"
             rel="noopener noreferrer"
             class="nav-link-btn google-maps"
           >
             <i class="pi pi-map"></i>
-            <span class="nav-link-label">Google Maps</span>
+            <span class="nav-link-label">Maps</span>
           </a>
 
           <!-- Apple Maps -->
@@ -116,13 +190,13 @@
             class="nav-link-btn apple-maps"
           >
             <i class="pi pi-apple"></i>
-            <span class="nav-link-label">Apple Maps</span>
+            <span class="nav-link-label">Apple</span>
           </a>
         </div>
 
         <Button
           icon="pi pi-times"
-          label="Fermer l'itinéraire"
+          label="Fermer"
           size="small"
           severity="secondary"
           @click="clearRoute"
@@ -258,10 +332,12 @@ const mapContainer = ref(null);
 const showCasinoList = ref(false);
 const activeRoute = ref(null);
 const routeInfo = ref(null);
+const routeInfoTransit = ref(null); // Nouveau: info transit séparée
 const showBusLines = ref(false);
 const showMonorail = ref(false);
 const selectedBusLine = ref(null);
 const routeMode = ref('driving'); // 'driving' ou 'transit'
+const showBothRoutes = ref(true); // Nouveau: afficher les deux trajets par défaut
 const routeFrom = ref('home'); // 'home' ou 'location'
 const userLocation = ref(null);
 const geolocating = ref(false);
@@ -843,7 +919,10 @@ const getDirectionsUrl = getGoogleMapsUrl;
 const switchRouteMode = (mode) => {
   if (routeMode.value === mode || !routeInfo.value) return;
   routeMode.value = mode;
-  showRoute(routeInfo.value.casinoData, mode);
+  // Ne pas recalculer si on affiche les deux trajets
+  if (!showBothRoutes.value) {
+    showRoute(routeInfo.value.casinoData, mode);
+  }
 };
 
 // Calculer la distance entre deux points (en km)
@@ -1037,7 +1116,7 @@ const findTransitFromLocation = (casino, fromLat, fromLng) => {
     if (nearest && casinoStop && nearestIdx !== casinoIdx) {
       const startIdx = Math.min(nearestIdx, casinoIdx), endIdx = Math.max(nearestIdx, casinoIdx);
       let busDistance = 0; const busStops = [];
-      for (let i = startIdx; i <= endIdx; i++) { busStops.push(line.stops[i]); if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i+1].lat, line.stops[i+1].lng); }
+      for (let i = startIdx; i <= endIdx; i++) { busStops.push(line.stops[i]); if (i < endIdx) busDistance += getDistance(line.stops[i].lat, line.stops[i].lng, line.stops[i + 1].lat, line.stops[i + 1].lng); }
 
       results.push({
         line, nearestToHome: nearest, nearestToHomeDist: nearestDist, nearestToHomeIdx: nearestIdx,
@@ -1313,8 +1392,8 @@ const drawTransitOnMap = (casino, best) => {
   };
 };
 
-// Afficher l'itinéraire sur la carte
-const showRoute = (casino, mode = 'driving') => {
+// Afficher l'itinéraire sur la carte (les deux modes simultanément)
+const showRoute = (casino, mode = 'both') => {
   if (!map) return;
 
   // Déterminer le point de départ
@@ -1330,15 +1409,28 @@ const showRoute = (casino, mode = 'driving') => {
   // Supprimer l'itinéraire précédent
   clearRoute();
 
-  routeMode.value = mode;
+  routeMode.value = mode === 'both' ? 'driving' : mode;
   activeRoute.value = casino.name;
 
-  if (mode === 'transit') {
+  // Si mode = 'both', afficher voiture ET bus
+  if (mode === 'both') {
+    showBothRoutes.value = true;
+    // Afficher le trajet en voiture (OSRM)
+    showDrivingRoute(casino, startLat, startLng);
+    // Afficher le trajet en bus
+    showTransitRouteOnly(casino, startLat, startLng);
+  } else if (mode === 'transit') {
+    showBothRoutes.value = false;
     showTransitRoute(casino, startLat, startLng);
-    return;
+  } else {
+    // Mode voiture uniquement
+    showBothRoutes.value = false;
+    showDrivingRoute(casino, startLat, startLng);
   }
+};
 
-  // Mode voiture - utiliser OSRM
+// Afficher uniquement le trajet en voiture
+const showDrivingRoute = (casino, startLat, startLng) => {
   routingControl = L.Routing.control({
     waypoints: [
       L.latLng(startLat, startLng),
@@ -1347,7 +1439,7 @@ const showRoute = (casino, mode = 'driving') => {
     routeWhileDragging: false,
     addWaypoints: false,
     draggableWaypoints: false,
-    fitSelectedRoutes: true,
+    fitSelectedRoutes: !showBothRoutes.value, // Ne pas auto-fit si on affiche les deux
     showAlternatives: false,
     createMarker: () => null,
     lineOptions: {
@@ -1375,8 +1467,14 @@ const showRoute = (casino, mode = 'driving') => {
       casinoData: casino,
       distanceKm,
       distanceMiles,
-      durationMin
+      durationMin,
+      mode: 'driving'
     };
+
+    // Ajuster la vue pour montrer les deux trajets si nécessaire
+    if (showBothRoutes.value) {
+      fitBoundsForBothRoutes(casino, startLat, startLng);
+    }
   });
 
   routingControl.on('routingerror', (e) => {
@@ -1387,9 +1485,147 @@ const showRoute = (casino, mode = 'driving') => {
       distanceKm: '—',
       distanceMiles: '—',
       durationMin: '—',
-      noRoute: true
+      noRoute: true,
+      mode: 'driving'
     };
   });
+};
+
+// Afficher le trajet transit sans modifier routeInfo principal (pour mode "both")
+const showTransitRouteOnly = (casino, startLat, startLng) => {
+  const fromLat = startLat || HOME_LOCATION.lat;
+  const fromLng = startLng || HOME_LOCATION.lng;
+  const isFromHome = (fromLat === HOME_LOCATION.lat && fromLng === HOME_LOCATION.lng);
+
+  const routes = isFromHome ? findBestTransitRoute(casino) : findTransitFromLocation(casino, fromLat, fromLng);
+  if (routes.length === 0) {
+    routeInfoTransit.value = {
+      casino: casino.name,
+      casinoData: casino,
+      distanceKm: '—',
+      distanceMiles: '—',
+      durationMin: '—',
+      transitDetails: null,
+      noRoute: true
+    };
+    return;
+  }
+
+  const best = routes[0];
+  drawTransitOnMapForBoth(casino, best, fromLat, fromLng);
+};
+
+// Dessiner le trajet transit pour le mode "both" (sans modifier routeInfo principal)
+const drawTransitOnMapForBoth = (casino, best, startLat, startLng) => {
+  // Ne pas effacer les autres layers transit ici
+  const line = best.line;
+
+  // Dessiner la marche départ → arrêt de bus
+  const walkToStop = L.polyline(
+    [[startLat, startLng], [best.nearestToHome.lat, best.nearestToHome.lng]],
+    { color: '#22c55e', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(map);
+  transitLayers.push(walkToStop);
+
+  // Dessiner le trajet en bus (1ère ligne)
+  const busCoords = best.busStops.map(s => [s.lat, s.lng]);
+  const busPolyline = L.polyline(busCoords, {
+    color: line.color,
+    weight: 5,
+    opacity: 0.85,
+    dashArray: line.isMonorail ? null : '10, 6'
+  }).addTo(map);
+  transitLayers.push(busPolyline);
+
+  // Si correspondance (1 ou 2)
+  if (best.isTransfer && best.line2) {
+    const walkTransfer = L.polyline(
+      [[best.transferStop102.lat, best.transferStop102.lng], [best.transferStopLine.lat, best.transferStopLine.lng]],
+      { color: '#22c55e', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+    ).addTo(map);
+    transitLayers.push(walkTransfer);
+
+    const busCoords2 = best.busStops2.map(s => [s.lat, s.lng]);
+    const busPolyline2 = L.polyline(busCoords2, {
+      color: best.line2.color,
+      weight: 5,
+      opacity: 0.85,
+      dashArray: best.line2.isMonorail ? null : '10, 6'
+    }).addTo(map);
+    transitLayers.push(busPolyline2);
+
+    if (best.isDoubleTransfer && best.line3) {
+      const walkTransfer2 = L.polyline(
+        [[best.transferStop2From.lat, best.transferStop2From.lng], [best.transferStop2To.lat, best.transferStop2To.lng]],
+        { color: '#22c55e', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+      ).addTo(map);
+      transitLayers.push(walkTransfer2);
+
+      const busCoords3 = best.busStops3.map(s => [s.lat, s.lng]);
+      const busPolyline3 = L.polyline(busCoords3, {
+        color: best.line3.color,
+        weight: 5,
+        opacity: 0.85,
+        dashArray: best.line3.isMonorail ? null : '10, 6'
+      }).addTo(map);
+      transitLayers.push(busPolyline3);
+    }
+  }
+
+  // Dessiner la marche arrêt → casino
+  const walkFromStop = L.polyline(
+    [[best.nearestToCasino.lat, best.nearestToCasino.lng], [casino.lat, casino.lng]],
+    { color: '#22c55e', weight: 4, dashArray: '6, 8', opacity: 0.8 }
+  ).addTo(map);
+  transitLayers.push(walkFromStop);
+
+  // Calcul des temps pour le panneau transit
+  const walkTimeToStop = Math.round((best.nearestToHomeDist / 5) * 60);
+  const walkTimeFromStop = Math.round((best.nearestToCasinoDist / 5) * 60);
+  const busSpeed = line.isMonorail ? 40 : 20;
+  const busTime = Math.round((best.busDistance / busSpeed) * 60);
+  const waitTime = line.isMonorail ? 6 : 15;
+  const transferWaitTime = best.isTransfer ? (best.isDoubleTransfer ? 20 : 10) : 0;
+  const totalTime = walkTimeToStop + waitTime + busTime + transferWaitTime + walkTimeFromStop;
+  const totalDistKm = (best.totalDist).toFixed(1);
+  const totalDistMiles = (best.totalDist * 0.621371).toFixed(1);
+
+  routeInfoTransit.value = {
+    casino: casino.name,
+    casinoData: casino,
+    distanceKm: totalDistKm,
+    distanceMiles: totalDistMiles,
+    durationMin: totalTime,
+    transitDetails: {
+      line: line,
+      line2: best.line2 || null,
+      line3: best.line3 || null,
+      isTransfer: best.isTransfer || false,
+      isDoubleTransfer: best.isDoubleTransfer || false,
+      boardStop: best.nearestToHome.name,
+      alightStop: best.nearestToCasino.name,
+      transferStop: best.isTransfer ? best.transferStop102.name : null,
+      transferStop2: best.isDoubleTransfer ? best.transferStop2From.name : null,
+      nbStops: best.nbStops,
+      walkToStop: walkTimeToStop,
+      waitTime: waitTime,
+      busTime: busTime,
+      walkFromStop: walkTimeFromStop
+    }
+  };
+};
+
+// Ajuster la vue pour montrer les deux trajets
+const fitBoundsForBothRoutes = (casino, startLat, startLng) => {
+  if (!map) return;
+  const bounds = L.latLngBounds([
+    [startLat, startLng],
+    [casino.lat, casino.lng]
+  ]);
+  // Ajouter un petit délai pour laisser les polylines se dessiner
+  setTimeout(() => {
+    map.fitBounds(bounds, { padding: [60, 60] });
+  }, 100);
 };
 
 // Effacer l'itinéraire
@@ -1401,6 +1637,7 @@ const clearRoute = () => {
   clearTransitLayers();
   activeRoute.value = null;
   routeInfo.value = null;
+  routeInfoTransit.value = null;
 };
 
 // Initialiser la carte
@@ -1477,11 +1714,16 @@ const initMap = async () => {
           </button>
         </div>
         <div class="popup-actions popup-mode-actions">
-          <button class="directions-btn directions-car-btn" data-casino-index="${casinoIndex}" data-mode="driving">
-            <i class="pi pi-car"></i>${isMobile.value ? '' : ' Voiture'}
+          <button class="directions-btn directions-both-btn" data-casino-index="${casinoIndex}" data-mode="both">
+            <i class="pi pi-car"></i><i class="pi pi-directions"></i>${isMobile.value ? '' : ' Les deux'}
           </button>
-          <button class="directions-btn directions-bus-btn" data-casino-index="${casinoIndex}" data-mode="transit">
-            <i class="pi pi-directions"></i>${isMobile.value ? '' : ' Bus'}
+        </div>
+        <div class="popup-actions popup-mode-actions-single">
+          <button class="directions-btn directions-car-btn single-mode-btn" data-casino-index="${casinoIndex}" data-mode="driving">
+            <i class="pi pi-car"></i>
+          </button>
+          <button class="directions-btn directions-bus-btn single-mode-btn" data-casino-index="${casinoIndex}" data-mode="transit">
+            <i class="pi pi-directions"></i>
           </button>
         </div>
       </div>
@@ -1499,6 +1741,7 @@ const initMap = async () => {
         const locBtn = document.querySelector(`.directions-loc-btn[data-casino-index="${casinoIndex}"]`);
         const carBtn = document.querySelector(`.directions-car-btn[data-casino-index="${casinoIndex}"]`);
         const busBtn = document.querySelector(`.directions-bus-btn[data-casino-index="${casinoIndex}"]`);
+        const bothBtn = document.querySelector(`.directions-both-btn[data-casino-index="${casinoIndex}"]`);
 
         // Gérer la sélection du point de départ
         if (homeBtn) {
@@ -1519,6 +1762,14 @@ const initMap = async () => {
             routeFrom.value = 'location';
             locBtn.classList.add('active');
             if (homeBtn) homeBtn.classList.remove('active');
+          });
+        }
+
+        // Bouton "Les deux" - afficher voiture ET bus
+        if (bothBtn) {
+          bothBtn.addEventListener('click', () => {
+            showRoute(casino, 'both');
+            marker.closePopup();
           });
         }
 
@@ -2054,6 +2305,53 @@ onUnmounted(() => {
   margin-top: 6px;
 }
 
+/* Bouton "Les deux" - voiture ET bus */
+.casino-popup .directions-both-btn {
+  background: linear-gradient(135deg, #6366f1, #22c55e);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  display: flex;
+  gap: 4px;
+}
+
+.casino-popup .directions-both-btn:hover {
+  background: linear-gradient(135deg, #4f46e5, #16a34a);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+/* Petits boutons pour mode individuel */
+.casino-popup .popup-mode-actions-single {
+  margin-top: 4px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.casino-popup .single-mode-btn {
+  padding: 6px 12px !important;
+  min-width: 40px;
+  flex: 0 !important;
+}
+
+.casino-popup .single-mode-btn.directions-car-btn {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 2px 6px rgba(71, 85, 105, 0.3);
+}
+
+.casino-popup .single-mode-btn.directions-car-btn:hover {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  box-shadow: 0 3px 8px rgba(99, 102, 241, 0.4);
+}
+
+.casino-popup .single-mode-btn.directions-bus-btn {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 2px 6px rgba(71, 85, 105, 0.3);
+}
+
+.casino-popup .single-mode-btn.directions-bus-btn:hover {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 3px 8px rgba(34, 197, 94, 0.4);
+}
+
 /* Mobile popup compact */
 .casino-popup.mobile h3 {
   font-size: 0.875rem;
@@ -2301,6 +2599,152 @@ onUnmounted(() => {
   box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
   max-width: 320px;
   overflow: hidden;
+}
+
+/* Mode both routes - panneau élargi */
+.route-info-panel.both-routes-panel {
+  max-width: 380px;
+}
+
+.both-routes-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.route-card {
+  flex: 1;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+}
+
+.route-card.driving-card {
+  border-color: #6366f1;
+}
+
+.route-card.transit-card {
+  border-color: #22c55e;
+}
+
+.route-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+
+.driving-card .route-card-header {
+  color: #818cf8;
+}
+
+.transit-card .route-card-header {
+  color: #4ade80;
+}
+
+.route-card-header i {
+  font-size: 1rem;
+}
+
+.route-card-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.route-stat-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f1f5f9;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.route-stat-mini i {
+  font-size: 0.625rem;
+  width: 14px;
+  text-align: center;
+}
+
+.driving-card .route-stat-mini i {
+  color: #6366f1;
+}
+
+.transit-card .route-stat-mini i {
+  color: #22c55e;
+}
+
+.transit-lines-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.line-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.5625rem;
+  font-weight: 800;
+}
+
+.badge-separator {
+  color: #64748b;
+  font-size: 0.5rem;
+}
+
+.transit-no-route-mini {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: #fca5a5;
+  font-size: 0.625rem;
+}
+
+.transit-no-route-mini i {
+  font-size: 0.625rem;
+  color: #ef4444;
+}
+
+/* Légende des couleurs de route */
+.routes-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding: 6px 0;
+  border-top: 1px solid #334155;
+  border-bottom: 1px solid #334155;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.legend-line {
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.driving-legend .legend-line {
+  background: #6366f1;
+}
+
+.transit-legend .legend-line {
+  background: #22c55e;
 }
 
 .route-info-header {
@@ -2973,6 +3417,46 @@ onUnmounted(() => {
     border-radius: 10px;
   }
 
+  .route-info-panel.both-routes-panel {
+    max-width: none;
+  }
+
+  .both-routes-container {
+    gap: 8px;
+  }
+
+  .route-card {
+    padding: 8px 10px;
+  }
+
+  .route-card-header {
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+  }
+
+  .route-stat-mini {
+    font-size: 0.6875rem;
+  }
+
+  .transit-lines-badge {
+    margin-top: 6px;
+  }
+
+  .line-badge {
+    font-size: 0.5rem;
+    padding: 1px 4px;
+  }
+
+  .routes-legend {
+    gap: 12px;
+    padding: 4px 0;
+    margin-bottom: 8px;
+  }
+
+  .legend-item {
+    font-size: 0.625rem;
+  }
+
   .route-info-header {
     font-size: 0.8125rem;
     margin-bottom: 6px;
@@ -3073,6 +3557,60 @@ onUnmounted(() => {
     width: auto;
     padding: 8px 10px;
     border-radius: 8px;
+  }
+
+  .both-routes-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .route-card {
+    padding: 6px 8px;
+  }
+
+  .route-card-header {
+    font-size: 0.6875rem;
+    margin-bottom: 4px;
+    gap: 4px;
+  }
+
+  .route-card-header i {
+    font-size: 0.75rem;
+  }
+
+  .route-card-stats {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .route-stat-mini {
+    font-size: 0.625rem;
+    gap: 4px;
+  }
+
+  .transit-lines-badge {
+    margin-top: 4px;
+  }
+
+  .line-badge {
+    font-size: 0.5rem;
+    padding: 1px 3px;
+  }
+
+  .routes-legend {
+    gap: 10px;
+    padding: 3px 0;
+    margin-bottom: 6px;
+  }
+
+  .legend-item {
+    font-size: 0.5625rem;
+    gap: 4px;
+  }
+
+  .legend-line {
+    width: 14px;
+    height: 3px;
   }
 
   .route-info-header {
