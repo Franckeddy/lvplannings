@@ -251,6 +251,146 @@
         </div>
       </div>
 
+      <!-- Bouton Restaurants flottant (DÉSACTIVÉ) -->
+      <!-- <div class="restaurants-floating-btn">
+        <Button
+          :icon="showRestaurants ? 'pi pi-times' : 'pi pi-shopping-bag'"
+          :label="showRestaurants ? 'Fermer' : 'Restaurants'"
+          size="small"
+          :severity="showRestaurants ? 'danger' : 'secondary'"
+          @click="openRestaurantFilters"
+          class="restaurants-btn"
+        />
+        <span v-if="activeRestaurantFilters > 0" class="filter-badge">{{ activeRestaurantFilters }}</span>
+      </div> -->
+
+      <!-- Bouton Tabac flottant -->
+      <div class="tobacco-floating-btn">
+        <Button
+          :icon="showTobaccoShops ? 'pi pi-times' : 'pi pi-box'"
+          :label="showTobaccoShops ? 'Fermer' : 'Tabac'"
+          size="small"
+          :severity="showTobaccoShops ? 'danger' : 'secondary'"
+          @click="toggleTobaccoShops"
+          class="tobacco-btn"
+        />
+      </div>
+
+      <!-- Modale filtres restaurants -->
+      <Dialog
+        v-model:visible="showRestaurantModal"
+        header="Filtrer les Restaurants"
+        :modal="true"
+        :style="{ width: '320px' }"
+        class="restaurant-filter-dialog"
+        position="topright"
+      >
+        <div class="restaurant-filters">
+          <!-- Filtre proximité maison -->
+          <div class="filter-section">
+            <h4>Proximité</h4>
+            <div class="filter-chips">
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.proximity === 'nearby' }"
+                @click="toggleProximityFilter('nearby')"
+              >
+                Près de la maison
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtres par type -->
+          <div class="filter-section">
+            <h4>Type</h4>
+            <div class="filter-chips">
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.types.includes('fast-food') }"
+                @click="toggleFilter('types', 'fast-food')"
+              >
+                Fast-Food
+              </div>
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.types.includes('restaurant') }"
+                @click="toggleFilter('types', 'restaurant')"
+              >
+                Restaurant
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtres par cuisine -->
+          <div class="filter-section">
+            <h4>Cuisine</h4>
+            <div class="filter-chips cuisine-chips">
+              <div
+                v-for="cuisine in availableCuisines"
+                :key="cuisine.id"
+                class="filter-chip"
+                :class="{ active: restaurantFilters.cuisines.includes(cuisine.id) }"
+                @click="toggleFilter('cuisines', cuisine.id)"
+              >
+                {{ cuisine.label }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtres par prix -->
+          <div class="filter-section">
+            <h4>Budget</h4>
+            <div class="filter-chips">
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.prices.includes('$') }"
+                @click="toggleFilter('prices', '$')"
+              >
+                $
+              </div>
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.prices.includes('$$') }"
+                @click="toggleFilter('prices', '$$')"
+              >
+                $$
+              </div>
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.prices.includes('$$$') }"
+                @click="toggleFilter('prices', '$$$')"
+              >
+                $$$
+              </div>
+              <div
+                class="filter-chip"
+                :class="{ active: restaurantFilters.prices.includes('$$$$') }"
+                @click="toggleFilter('prices', '$$$$')"
+              >
+                $$$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template #footer>
+          <div class="filter-actions">
+            <Button
+              label="Réinitialiser"
+              severity="secondary"
+              size="small"
+              @click="resetRestaurantFilters"
+            />
+            <Button
+              :label="`Afficher (${filteredRestaurantsCount})`"
+              severity="success"
+              size="small"
+              @click="applyRestaurantFilters"
+            />
+          </div>
+        </template>
+      </Dialog>
+
       <!-- Liste des lignes de bus -->
       <div class="casino-list-mobile">
         <div class="casino-list-header" @click="toggleCasinoList">
@@ -320,7 +460,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, onUnmounted } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import L from 'leaflet';
@@ -345,6 +485,15 @@ const routeInfo = ref(null);
 const routeInfoTransit = ref(null); // Nouveau: info transit séparée
 const showBusLines = ref(false);
 const showMonorail = ref(false);
+const showRestaurants = ref(false); // Toggle pour afficher les restaurants
+const showRestaurantModal = ref(false); // Modale de filtres
+const showTobaccoShops = ref(false); // Toggle pour afficher les tabacs
+const restaurantFilters = ref({
+  proximity: null, // null = tous, 'walk' = 5min à pied, 'drive' = 15min en voiture
+  types: [],
+  cuisines: [],
+  prices: []
+});
 const selectedBusLine = ref(null);
 const routeMode = ref('driving'); // 'driving' ou 'transit'
 const showBothRoutes = ref(true); // Nouveau: afficher les deux trajets par défaut
@@ -352,8 +501,24 @@ const routeFrom = ref('home'); // 'home' ou 'location'
 const userLocation = ref(null);
 const geolocating = ref(false);
 const isMobile = ref(window.innerWidth <= 768);
+
+// Cuisines disponibles pour les filtres
+const availableCuisines = ref([
+  { id: 'burger', icon: '🍔', label: 'Burgers' },
+  { id: 'chicken', icon: '🍗', label: 'Poulet' },
+  { id: 'mexican', icon: '🌮', label: 'Mexicain' },
+  { id: 'asian', icon: '🥢', label: 'Asiatique' },
+  { id: 'italian', icon: '🍝', label: 'Italien' },
+  { id: 'french', icon: '🥐', label: 'Français' },
+  { id: 'steak', icon: '🥩', label: 'Steakhouse' },
+  { id: 'breakfast', icon: '🥞', label: 'Petit-déj' },
+  { id: 'pizza', icon: '🍕', label: 'Pizza' }
+]);
+
 let map = null;
 let markers = [];
+let restaurantMarkers = []; // Marqueurs des restaurants
+let tobaccoMarkers = []; // Marqueurs des tabacs
 let routingControl = null;
 let transitLayers = []; // Layers pour l'itinéraire transit
 let userLocationMarker = null;
@@ -575,15 +740,1371 @@ const supermarkets = ref([
     type: "grocery",
     category: "Aliments frais",
     description: "Supermarché - Produits frais de qualité"
-  },
+  }
+]);
+
+// Magasins de tabac (cigares et cigarettes)
+const tobaccoShops = ref([
   {
     name: "Smoke Cigar & Gifts",
     address: "4770 W Ann Rd, North Las Vegas, NV 89031",
     lat: 36.2619982,
     lng: -115.2067474,
     type: "tobacco",
-    category: "Tabac & Cigares",
-    description: "Cigares, tabac et cadeaux"
+    category: "Cigares & Tabac",
+    description: "Cigares premium, tabac et cadeaux"
+  },
+  {
+    name: "Las Vegas Cigar Company",
+    address: "3900 Paradise Rd #Q, Las Vegas, NV 89169",
+    lat: 36.1140,
+    lng: -115.1530,
+    type: "tobacco",
+    category: "Cigares Premium",
+    description: "Grande sélection de cigares haut de gamme"
+  },
+  {
+    name: "En Fuego Cigars & Lounge",
+    address: "3743 Las Vegas Blvd S, Las Vegas, NV 89109",
+    lat: 36.1030,
+    lng: -115.1725,
+    type: "tobacco",
+    category: "Cigares & Lounge",
+    description: "Lounge avec cigares et boissons"
+  },
+  {
+    name: "Casa Fuente - Caesars Forum Shops",
+    address: "3500 Las Vegas Blvd S, Las Vegas, NV 89109",
+    lat: 36.1175,
+    lng: -115.1745,
+    type: "tobacco",
+    category: "Cigares Premium",
+    description: "Cigares Arturo Fuente - Lounge haut de gamme"
+  },
+  {
+    name: "Montecristo Cigar Bar - Caesars",
+    address: "3570 Las Vegas Blvd S, Las Vegas, NV 89109",
+    lat: 36.1162,
+    lng: -115.1745,
+    type: "tobacco",
+    category: "Cigares & Bar",
+    description: "Cigares et cocktails dans un cadre élégant"
+  },
+  {
+    name: "Davidoff of Geneva - Fashion Show Mall",
+    address: "3200 Las Vegas Blvd S, Las Vegas, NV 89109",
+    lat: 36.1269,
+    lng: -115.1703,
+    type: "tobacco",
+    category: "Cigares Luxe",
+    description: "Boutique Davidoff - Cigares suisses premium"
+  },
+  {
+    name: "The Cigar Box - Venetian",
+    address: "3355 Las Vegas Blvd S, Las Vegas, NV 89109",
+    lat: 36.1212,
+    lng: -115.1696,
+    type: "tobacco",
+    category: "Cigares & Lounge",
+    description: "Lounge cigares au Grand Canal Shoppes"
+  },
+  {
+    name: "Tobacco Road",
+    address: "4110 S Maryland Pkwy, Las Vegas, NV 89119",
+    lat: 36.1050,
+    lng: -115.1390,
+    type: "tobacco",
+    category: "Cigarettes & Tabac",
+    description: "Cigarettes, tabac à rouler et accessoires"
+  },
+  {
+    name: "Cigars International",
+    address: "4530 W Tropicana Ave, Las Vegas, NV 89103",
+    lat: 36.0997,
+    lng: -115.1888,
+    type: "tobacco",
+    category: "Cigares",
+    description: "Large choix de cigares à prix compétitifs"
+  },
+  {
+    name: "Payless Cigarettes & Tobacco",
+    address: "2310 E Lake Mead Blvd, North Las Vegas, NV 89030",
+    lat: 36.2150,
+    lng: -115.1250,
+    type: "tobacco",
+    category: "Cigarettes",
+    description: "Cigarettes et tabac à prix discount"
+  },
+  {
+    name: "Smoke Shop Plus",
+    address: "3225 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2369,
+    lng: -115.1840,
+    type: "tobacco",
+    category: "Cigarettes & Vape",
+    description: "Cigarettes, cigares et produits vape"
+  },
+  {
+    name: "Famous Smoke Shop",
+    address: "4780 W Tropicana Ave, Las Vegas, NV 89103",
+    lat: 36.0997,
+    lng: -115.1960,
+    type: "tobacco",
+    category: "Cigares Premium",
+    description: "Cigares haut de gamme et humidors"
+  },
+  {
+    name: "Paiute Tribal Smoke Shop",
+    address: "1225 N Main St, Las Vegas, NV 89101",
+    lat: 36.1850,
+    lng: -115.1500,
+    type: "tobacco",
+    category: "Cigarettes Tax-Free",
+    description: "Cigarettes détaxées - Réserve indienne"
+  }
+]);
+
+// Restaurants à proximité de la maison et sur le Strip
+const restaurants = ref([
+  // === RESTAURANTS PRÈS DE LA MAISON (North Las Vegas - Craig Rd) ===
+  {
+    name: "In-N-Out Burger",
+    address: "2005 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371544,
+    lng: -115.1558647,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Burgers frais californiens - Incontournable",
+    icon: "🍔",
+    zone: "north"
+  },
+  {
+    name: "Chick-fil-A",
+    address: "2140 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371389,
+    lng: -115.1589722,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet - Service excellent",
+    icon: "🍗",
+    zone: "north"
+  },
+  {
+    name: "Raising Cane's",
+    address: "2480 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371111,
+    lng: -115.1648889,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet - Simple et délicieux",
+    icon: "🍗",
+    zone: "north"
+  },
+  {
+    name: "Chipotle",
+    address: "3025 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370833,
+    lng: -115.1783611,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Burritos et bowls personnalisables",
+    icon: "🌯",
+    zone: "north"
+  },
+  {
+    name: "Panda Express",
+    address: "1869 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371944,
+    lng: -115.1531389,
+    type: "fast-food",
+    cuisine: "Asiatique 🥡",
+    priceRange: "$",
+    description: "Fast-food chinois américain",
+    icon: "🥡",
+    zone: "north"
+  },
+  {
+    name: "Buffalo Wild Wings",
+    address: "2225 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371667,
+    lng: -115.1603889,
+    type: "restaurant",
+    cuisine: "Wings & Sports Bar 🍗",
+    priceRange: "$$",
+    description: "Ailes de poulet, sports sur écrans géants",
+    icon: "🍗",
+    zone: "north"
+  },
+  {
+    name: "Applebee's",
+    address: "3025 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370556,
+    lng: -115.1785278,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Grill & Bar - Menu varié",
+    icon: "🍽️",
+    zone: "north"
+  },
+  {
+    name: "IHOP",
+    address: "1850 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2378889,
+    lng: -115.1541944,
+    type: "restaurant",
+    cuisine: "Petit-déjeuner 🥞",
+    priceRange: "$",
+    description: "Pancakes et petit-déjeuner toute la journée",
+    icon: "🥞",
+    zone: "north"
+  },
+  {
+    name: "Denny's",
+    address: "2820 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370278,
+    lng: -115.1745556,
+    type: "restaurant",
+    cuisine: "Diner américain 🍳",
+    priceRange: "$",
+    description: "American Diner 24/7",
+    icon: "🍳",
+    zone: "north"
+  },
+  {
+    name: "Olive Garden",
+    address: "3041 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370278,
+    lng: -115.1788889,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$",
+    description: "Cuisine italienne - Breadsticks à volonté",
+    icon: "🍝",
+    zone: "north"
+  },
+  {
+    name: "Red Robin",
+    address: "3115 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370000,
+    lng: -115.1803611,
+    type: "restaurant",
+    cuisine: "Burgers Gourmet 🍔",
+    priceRange: "$$",
+    description: "Burgers gourmets - Frites à volonté",
+    icon: "🍔",
+    zone: "north"
+  },
+  {
+    name: "Five Guys",
+    address: "2550 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370833,
+    lng: -115.1663611,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$$",
+    description: "Burgers et frites premium",
+    icon: "🍔",
+    zone: "north"
+  },
+  {
+    name: "Wingstop",
+    address: "2051 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2371389,
+    lng: -115.1568889,
+    type: "fast-food",
+    cuisine: "Wings 🍗",
+    priceRange: "$",
+    description: "Ailes de poulet - Plusieurs sauces",
+    icon: "🍗",
+    zone: "north"
+  },
+  {
+    name: "Taco Bell",
+    address: "1920 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2377500,
+    lng: -115.1550833,
+    type: "fast-food",
+    cuisine: "Tex-Mex 🌮",
+    priceRange: "$",
+    description: "Fast-food mexicain",
+    icon: "🌮",
+    zone: "north"
+  },
+  // === RESTAURANTS SUR LE STRIP ===
+  {
+    name: "Gordon Ramsay Hell's Kitchen",
+    address: "3570 S Las Vegas Blvd, Las Vegas (Caesars Palace)",
+    lat: 36.1161389,
+    lng: -115.1744167,
+    type: "restaurant",
+    cuisine: "Cuisine signature 🔥",
+    priceRange: "$$$",
+    description: "Restaurant du célèbre chef - Expérience culinaire",
+    icon: "🔥",
+    zone: "strip"
+  },
+  {
+    name: "Gordon Ramsay Burger",
+    address: "3667 S Las Vegas Blvd, Las Vegas (Planet Hollywood)",
+    lat: 36.1095278,
+    lng: -115.1707500,
+    type: "fast-food",
+    cuisine: "Burgers Gourmet 🍔",
+    priceRange: "$$",
+    description: "Burgers signature du chef Gordon Ramsay",
+    icon: "🍔",
+    zone: "strip"
+  },
+  {
+    name: "In-N-Out Burger (Strip)",
+    address: "3545 S Las Vegas Blvd, Las Vegas",
+    lat: 36.1169722,
+    lng: -115.1719444,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Le classique californien sur le Strip",
+    icon: "🍔",
+    zone: "strip"
+  },
+  {
+    name: "Shake Shack",
+    address: "3790 S Las Vegas Blvd, Las Vegas (NY NY)",
+    lat: 36.1021944,
+    lng: -115.1744722,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$$",
+    description: "Burgers new-yorkais premium",
+    icon: "🍔",
+    zone: "strip"
+  },
+  {
+    name: "Giada - The Cromwell",
+    address: "3595 S Las Vegas Blvd, Las Vegas",
+    lat: 36.1145833,
+    lng: -115.1715278,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$$",
+    description: "Cuisine italienne de Giada De Laurentiis",
+    icon: "🍝",
+    zone: "strip"
+  },
+  {
+    name: "TAO Asian Bistro",
+    address: "3355 S Las Vegas Blvd, Las Vegas (Venetian)",
+    lat: 36.1211944,
+    lng: -115.1696667,
+    type: "restaurant",
+    cuisine: "Asiatique 🥢",
+    priceRange: "$$$",
+    description: "Cuisine asiatique fusion, ambiance club",
+    icon: "🥢",
+    zone: "strip"
+  },
+  {
+    name: "Nobu",
+    address: "3570 S Las Vegas Blvd, Las Vegas (Caesars)",
+    lat: 36.1158611,
+    lng: -115.1746944,
+    type: "restaurant",
+    cuisine: "Japonais 🍣",
+    priceRange: "$$$$",
+    description: "Cuisine japonaise haut de gamme du chef Nobu",
+    icon: "🍣",
+    zone: "strip"
+  },
+  {
+    name: "Mon Ami Gabi",
+    address: "3655 S Las Vegas Blvd, Las Vegas (Paris)",
+    lat: 36.1128056,
+    lng: -115.1706944,
+    type: "restaurant",
+    cuisine: "Français 🥐",
+    priceRange: "$$",
+    description: "Bistro français avec vue sur la fontaine du Bellagio",
+    icon: "🥐",
+    zone: "strip"
+  },
+  {
+    name: "Bouchon",
+    address: "3355 S Las Vegas Blvd, Las Vegas (Venetian)",
+    lat: 36.1218889,
+    lng: -115.1693056,
+    type: "restaurant",
+    cuisine: "Français 🥐",
+    priceRange: "$$$",
+    description: "Bistro français de Thomas Keller",
+    icon: "🥐",
+    zone: "strip"
+  },
+  {
+    name: "STK Steakhouse",
+    address: "3708 S Las Vegas Blvd, Las Vegas (Cosmopolitan)",
+    lat: 36.1091667,
+    lng: -115.1746389,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$$",
+    description: "Steakhouse moderne avec ambiance DJ",
+    icon: "🥩",
+    zone: "strip"
+  },
+  {
+    name: "Guy Fieri's Vegas Kitchen",
+    address: "3545 S Las Vegas Blvd, Las Vegas (LINQ)",
+    lat: 36.1172222,
+    lng: -115.1711944,
+    type: "restaurant",
+    cuisine: "Américain 🍔",
+    priceRange: "$$",
+    description: "Cuisine américaine du célèbre chef TV",
+    icon: "🍔",
+    zone: "strip"
+  },
+  {
+    name: "Eggslut",
+    address: "3708 S Las Vegas Blvd, Las Vegas (Cosmopolitan)",
+    lat: 36.1088889,
+    lng: -115.1741667,
+    type: "fast-food",
+    cuisine: "Petit-déjeuner 🍳",
+    priceRange: "$$",
+    description: "Sandwichs aux œufs cultes de LA",
+    icon: "🍳",
+    zone: "strip"
+  },
+  {
+    name: "Secret Pizza",
+    address: "3708 S Las Vegas Blvd, Las Vegas (Cosmopolitan)",
+    lat: 36.1092500,
+    lng: -115.1737500,
+    type: "fast-food",
+    cuisine: "Pizza 🍕",
+    priceRange: "$",
+    description: "Pizza cachée au 3ème étage - Légende de Vegas",
+    icon: "🍕",
+    zone: "strip"
+  },
+  {
+    name: "Yardbird",
+    address: "3355 S Las Vegas Blvd, Las Vegas (Venetian)",
+    lat: 36.1215000,
+    lng: -115.1700833,
+    type: "restaurant",
+    cuisine: "Southern 🍗",
+    priceRange: "$$",
+    description: "Poulet frit du sud - Ambiance chic",
+    icon: "🍗",
+    zone: "strip"
+  },
+  {
+    name: "Earl of Sandwich",
+    address: "3667 S Las Vegas Blvd, Las Vegas (Planet Hollywood)",
+    lat: 36.1098333,
+    lng: -115.1703889,
+    type: "fast-food",
+    cuisine: "Sandwichs 🥪",
+    priceRange: "$",
+    description: "Sandwichs chauds légendaires",
+    icon: "🥪",
+    zone: "strip"
+  },
+  // === DOWNTOWN FREMONT ===
+  {
+    name: "Heart Attack Grill",
+    address: "450 Fremont St, Las Vegas",
+    lat: 36.1696944,
+    lng: -115.1406111,
+    type: "restaurant",
+    cuisine: "Burgers XXL 🍔",
+    priceRange: "$$",
+    description: "Burgers géants - Expérience unique et décalée",
+    icon: "🍔",
+    zone: "downtown"
+  },
+  {
+    name: "Oscar's Steakhouse",
+    address: "1 S Main St, Las Vegas (Plaza)",
+    lat: 36.1712778,
+    lng: -115.1451389,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$$",
+    description: "Vue sur Fremont, ancien casino de la mafia",
+    icon: "🥩",
+    zone: "downtown"
+  },
+  {
+    name: "Nacho Daddy",
+    address: "113 N 3rd St, Las Vegas",
+    lat: 36.1698611,
+    lng: -115.1408889,
+    type: "restaurant",
+    cuisine: "Mexicain 🌮",
+    priceRange: "$$",
+    description: "Nachos géants et cocktails fous",
+    icon: "🌮",
+    zone: "downtown"
+  },
+  // === SPRING VALLEY (Ouest - près de The Orleans) ===
+  {
+    name: "In-N-Out Burger",
+    address: "4888 Dean Martin Dr, Las Vegas, NV 89103",
+    lat: 36.1048333,
+    lng: -115.1923056,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Le classique californien près de The Orleans",
+    icon: "🍔",
+    zone: "spring-valley"
+  },
+  {
+    name: "Raising Cane's",
+    address: "4750 W Tropicana Ave, Las Vegas, NV 89103",
+    lat: 36.0997778,
+    lng: -115.1958333,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet - Simple et délicieux",
+    icon: "🍗",
+    zone: "spring-valley"
+  },
+  {
+    name: "Chick-fil-A",
+    address: "4560 W Tropicana Ave, Las Vegas, NV 89103",
+    lat: 36.0997222,
+    lng: -115.1888889,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet - Service excellent",
+    icon: "🍗",
+    zone: "spring-valley"
+  },
+  {
+    name: "BJ's Restaurant",
+    address: "6587 Las Vegas Blvd S, Las Vegas, NV 89119",
+    lat: 36.0631944,
+    lng: -115.1713889,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Brasserie américaine - Deep dish pizza",
+    icon: "🍽️",
+    zone: "spring-valley"
+  },
+  {
+    name: "Grimaldi's Pizzeria",
+    address: "4029 S Rainbow Blvd, Las Vegas, NV 89103",
+    lat: 36.1063889,
+    lng: -115.2418889,
+    type: "restaurant",
+    cuisine: "Pizza 🍕",
+    priceRange: "$$",
+    description: "Pizza new-yorkaise au feu de bois",
+    icon: "🍕",
+    zone: "spring-valley"
+  },
+  {
+    name: "The Cheesecake Factory",
+    address: "4500 W Tropicana Ave, Las Vegas, NV 89103",
+    lat: 36.0997500,
+    lng: -115.1873333,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Menu énorme - Cheesecakes légendaires",
+    icon: "🍽️",
+    zone: "spring-valley"
+  },
+  {
+    name: "P.F. Chang's",
+    address: "4165 S Grand Canyon Dr, Las Vegas, NV 89147",
+    lat: 36.1041667,
+    lng: -115.2956944,
+    type: "restaurant",
+    cuisine: "Asiatique 🥢",
+    priceRange: "$$",
+    description: "Cuisine asiatique moderne",
+    icon: "🥢",
+    zone: "spring-valley"
+  },
+  {
+    name: "Texas Roadhouse",
+    address: "1380 E Flamingo Rd, Las Vegas, NV 89119",
+    lat: 36.1148333,
+    lng: -115.1378889,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$",
+    description: "Steaks et ribs texans - Ambiance western",
+    icon: "🥩",
+    zone: "spring-valley"
+  },
+  // === SUMMERLIN (Nord-Ouest) ===
+  {
+    name: "In-N-Out Burger",
+    address: "7740 W Sahara Ave, Las Vegas, NV 89117",
+    lat: 36.1446389,
+    lng: -115.2788889,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Le classique californien à Summerlin",
+    icon: "🍔",
+    zone: "summerlin"
+  },
+  {
+    name: "Shake Shack",
+    address: "10975 Lavender Hill Dr, Las Vegas, NV 89135",
+    lat: 36.1463889,
+    lng: -115.3331944,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$$",
+    description: "Burgers new-yorkais premium",
+    icon: "🍔",
+    zone: "summerlin"
+  },
+  {
+    name: "Lazy Dog Restaurant",
+    address: "10820 W Charleston Blvd, Las Vegas, NV 89135",
+    lat: 36.1580000,
+    lng: -115.3310000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Ambiance lodge - Dog-friendly",
+    icon: "🍽️",
+    zone: "summerlin"
+  },
+  {
+    name: "Red Rock Casino - T-Bones",
+    address: "11011 W Charleston Blvd, Las Vegas, NV 89135",
+    lat: 36.1734000,
+    lng: -115.3090000,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$$",
+    description: "Steakhouse haut de gamme au Red Rock Casino",
+    icon: "🥩",
+    zone: "summerlin"
+  },
+  {
+    name: "Brio Italian Grille",
+    address: "750 S Rampart Blvd, Las Vegas, NV 89145",
+    lat: 36.1613889,
+    lng: -115.2841667,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$",
+    description: "Cuisine italienne élégante",
+    icon: "🍝",
+    zone: "summerlin"
+  },
+  {
+    name: "Chipotle",
+    address: "7501 W Lake Mead Blvd, Las Vegas, NV 89128",
+    lat: 36.2150000,
+    lng: -115.2610000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Burritos et bowls personnalisables",
+    icon: "🌯",
+    zone: "summerlin"
+  },
+  // === HENDERSON (Sud-Est) ===
+  {
+    name: "In-N-Out Burger",
+    address: "2900 W Horizon Ridge Pkwy, Henderson, NV 89052",
+    lat: 36.0156944,
+    lng: -115.0731944,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Le classique californien à Henderson",
+    icon: "🍔",
+    zone: "henderson"
+  },
+  {
+    name: "Green Valley Ranch - Hank's",
+    address: "2300 Paseo Verde Pkwy, Henderson, NV 89052",
+    lat: 36.0194000,
+    lng: -115.0797000,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$$",
+    description: "Fine dining au Green Valley Ranch",
+    icon: "🥩",
+    zone: "henderson"
+  },
+  {
+    name: "Lucille's Smokehouse BBQ",
+    address: "2245 Village Walk Dr, Henderson, NV 89052",
+    lat: 36.0180556,
+    lng: -115.0790000,
+    type: "restaurant",
+    cuisine: "BBQ 🍖",
+    priceRange: "$$",
+    description: "BBQ du sud authentique",
+    icon: "🍖",
+    zone: "henderson"
+  },
+  {
+    name: "Raising Cane's",
+    address: "1351 W Sunset Rd, Henderson, NV 89014",
+    lat: 36.0613889,
+    lng: -115.0638889,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet - Simple et délicieux",
+    icon: "🍗",
+    zone: "henderson"
+  },
+  {
+    name: "Chick-fil-A",
+    address: "1001 W Sunset Rd, Henderson, NV 89014",
+    lat: 36.0615278,
+    lng: -115.0521944,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet - Service excellent",
+    icon: "🍗",
+    zone: "henderson"
+  },
+  {
+    name: "Olive Garden",
+    address: "671 Mall Ring Cir, Henderson, NV 89014",
+    lat: 36.0605556,
+    lng: -115.0462500,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$",
+    description: "Cuisine italienne - Breadsticks à volonté",
+    icon: "🍝",
+    zone: "henderson"
+  },
+  // === CENTENNIAL HILLS (Nord-Ouest) ===
+  {
+    name: "In-N-Out Burger",
+    address: "6730 N Durango Dr, Las Vegas, NV 89149",
+    lat: 36.2680000,
+    lng: -115.2795000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Le classique californien à Centennial",
+    icon: "🍔",
+    zone: "centennial"
+  },
+  {
+    name: "Chick-fil-A",
+    address: "6380 N Decatur Blvd, Las Vegas, NV 89149",
+    lat: 36.2635000,
+    lng: -115.2050000,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet",
+    icon: "🍗",
+    zone: "centennial"
+  },
+  {
+    name: "Raising Cane's",
+    address: "7380 W Azure Dr, Las Vegas, NV 89130",
+    lat: 36.2560000,
+    lng: -115.2710000,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet",
+    icon: "🍗",
+    zone: "centennial"
+  },
+  {
+    name: "BJ's Restaurant",
+    address: "7355 Aliante Pkwy, North Las Vegas, NV 89084",
+    lat: 36.2875000,
+    lng: -115.1775000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Brasserie américaine",
+    icon: "🍽️",
+    zone: "centennial"
+  },
+  // === ALIANTE (Nord) ===
+  {
+    name: "Olive Garden",
+    address: "7390 Aliante Pkwy, North Las Vegas, NV 89084",
+    lat: 36.2881000,
+    lng: -115.1780000,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$",
+    description: "Cuisine italienne à Aliante",
+    icon: "🍝",
+    zone: "aliante"
+  },
+  {
+    name: "Red Robin",
+    address: "2640 W Craig Rd, North Las Vegas, NV 89032",
+    lat: 36.2370000,
+    lng: -115.1680000,
+    type: "restaurant",
+    cuisine: "Burgers Gourmet 🍔",
+    priceRange: "$$",
+    description: "Burgers gourmets",
+    icon: "🍔",
+    zone: "aliante"
+  },
+  {
+    name: "Chipotle",
+    address: "7350 Aliante Pkwy, North Las Vegas, NV 89084",
+    lat: 36.2870000,
+    lng: -115.1770000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Burritos personnalisables",
+    icon: "🌯",
+    zone: "aliante"
+  },
+  // === DESERT SHORES (Ouest) ===
+  {
+    name: "In-N-Out Burger",
+    address: "2900 W Sahara Ave, Las Vegas, NV 89102",
+    lat: 36.1445000,
+    lng: -115.1950000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Burgers frais californiens",
+    icon: "🍔",
+    zone: "desert-shores"
+  },
+  {
+    name: "Panda Express",
+    address: "2550 S Rainbow Blvd, Las Vegas, NV 89146",
+    lat: 36.1365000,
+    lng: -115.2420000,
+    type: "fast-food",
+    cuisine: "Asiatique 🥡",
+    priceRange: "$",
+    description: "Fast-food chinois",
+    icon: "🥡",
+    zone: "desert-shores"
+  },
+  {
+    name: "Outback Steakhouse",
+    address: "2869 N Rancho Dr, Las Vegas, NV 89130",
+    lat: 36.1920000,
+    lng: -115.2200000,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$",
+    description: "Steaks style australien",
+    icon: "🥩",
+    zone: "desert-shores"
+  },
+  // === LONE MOUNTAIN (Nord-Ouest) ===
+  {
+    name: "Five Guys",
+    address: "8130 W Sahara Ave, Las Vegas, NV 89117",
+    lat: 36.1445000,
+    lng: -115.2835000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$$",
+    description: "Burgers premium",
+    icon: "🍔",
+    zone: "lone-mountain"
+  },
+  {
+    name: "Jersey Mike's",
+    address: "7501 W Lake Mead Blvd, Las Vegas, NV 89128",
+    lat: 36.2150000,
+    lng: -115.2610000,
+    type: "fast-food",
+    cuisine: "Sandwichs 🥪",
+    priceRange: "$",
+    description: "Subs authentiques",
+    icon: "🥪",
+    zone: "lone-mountain"
+  },
+  {
+    name: "Wingstop",
+    address: "7040 N Durango Dr, Las Vegas, NV 89149",
+    lat: 36.2715000,
+    lng: -115.2795000,
+    type: "fast-food",
+    cuisine: "Wings 🍗",
+    priceRange: "$",
+    description: "Ailes de poulet",
+    icon: "🍗",
+    zone: "lone-mountain"
+  },
+  // === TULE SPRINGS (Nord) ===
+  {
+    name: "McDonald's",
+    address: "5588 Centennial Center Blvd, Las Vegas, NV 89149",
+    lat: 36.2740000,
+    lng: -115.2563000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Fast-food classique",
+    icon: "🍔",
+    zone: "tule-springs"
+  },
+  {
+    name: "Starbucks",
+    address: "5765 Centennial Center Blvd, Las Vegas, NV 89149",
+    lat: 36.2760000,
+    lng: -115.2548000,
+    type: "fast-food",
+    cuisine: "Café ☕",
+    priceRange: "$",
+    description: "Café et snacks",
+    icon: "☕",
+    zone: "tule-springs"
+  },
+  // === SUNRISE MANOR (Est) ===
+  {
+    name: "In-N-Out Burger",
+    address: "5545 Boulder Hwy, Las Vegas, NV 89122",
+    lat: 36.1055000,
+    lng: -115.0620000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Burgers frais",
+    icon: "🍔",
+    zone: "sunrise-manor"
+  },
+  {
+    name: "Denny's",
+    address: "4085 Boulder Hwy, Las Vegas, NV 89121",
+    lat: 36.1180000,
+    lng: -115.0780000,
+    type: "restaurant",
+    cuisine: "Diner américain 🍳",
+    priceRange: "$",
+    description: "Diner 24/7",
+    icon: "🍳",
+    zone: "sunrise-manor"
+  },
+  {
+    name: "Taco Bell",
+    address: "3960 Boulder Hwy, Las Vegas, NV 89121",
+    lat: 36.1200000,
+    lng: -115.0800000,
+    type: "fast-food",
+    cuisine: "Tex-Mex 🌮",
+    priceRange: "$",
+    description: "Fast-food mexicain",
+    icon: "🌮",
+    zone: "sunrise-manor"
+  },
+  // === PARADISE (Centre-Est) ===
+  {
+    name: "Raising Cane's",
+    address: "4235 S Paradise Rd, Las Vegas, NV 89169",
+    lat: 36.1090000,
+    lng: -115.1530000,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet",
+    icon: "🍗",
+    zone: "paradise"
+  },
+  {
+    name: "Chipotle",
+    address: "4460 Paradise Rd, Las Vegas, NV 89169",
+    lat: 36.1035000,
+    lng: -115.1530000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Burritos frais",
+    icon: "🌯",
+    zone: "paradise"
+  },
+  {
+    name: "Lotus of Siam",
+    address: "620 E Flamingo Rd, Las Vegas, NV 89119",
+    lat: 36.1148000,
+    lng: -115.1490000,
+    type: "restaurant",
+    cuisine: "Thaï 🥢",
+    priceRange: "$$",
+    description: "Meilleur thaï de Vegas - Récompensé",
+    icon: "🥢",
+    zone: "paradise"
+  },
+  // === ENTERPRISE (Sud) ===
+  {
+    name: "In-N-Out Burger",
+    address: "9155 S Las Vegas Blvd, Las Vegas, NV 89123",
+    lat: 36.0280000,
+    lng: -115.1730000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Burgers californiens",
+    icon: "🍔",
+    zone: "enterprise"
+  },
+  {
+    name: "Chick-fil-A",
+    address: "9101 W Flamingo Rd, Las Vegas, NV 89147",
+    lat: 36.1148000,
+    lng: -115.3100000,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet",
+    icon: "🍗",
+    zone: "enterprise"
+  },
+  {
+    name: "Texas Roadhouse",
+    address: "6840 S Rainbow Blvd, Las Vegas, NV 89118",
+    lat: 36.0650000,
+    lng: -115.2420000,
+    type: "restaurant",
+    cuisine: "Steakhouse 🥩",
+    priceRange: "$$",
+    description: "Steaks et ribs texans",
+    icon: "🥩",
+    zone: "enterprise"
+  },
+  // === SOUTHERN HIGHLANDS (Sud) ===
+  {
+    name: "Café Rio",
+    address: "10575 S Eastern Ave, Henderson, NV 89052",
+    lat: 36.0020000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Cuisine mexicaine fraîche",
+    icon: "🌯",
+    zone: "southern-highlands"
+  },
+  {
+    name: "Cracker Barrel",
+    address: "2815 E St Rose Pkwy, Henderson, NV 89052",
+    lat: 36.0110000,
+    lng: -115.1050000,
+    type: "restaurant",
+    cuisine: "Southern 🍗",
+    priceRange: "$$",
+    description: "Cuisine du sud américain",
+    icon: "🍗",
+    zone: "southern-highlands"
+  },
+  // === MOUNTAINS EDGE (Sud-Ouest) ===
+  {
+    name: "Raising Cane's",
+    address: "8470 W Warm Springs Rd, Las Vegas, NV 89113",
+    lat: 36.0510000,
+    lng: -115.2950000,
+    type: "fast-food",
+    cuisine: "Poulet frit 🍗",
+    priceRange: "$",
+    description: "Fingers de poulet",
+    icon: "🍗",
+    zone: "mountains-edge"
+  },
+  {
+    name: "Buffalo Wild Wings",
+    address: "8310 W Warm Springs Rd, Las Vegas, NV 89113",
+    lat: 36.0510000,
+    lng: -115.2890000,
+    type: "restaurant",
+    cuisine: "Wings & Sports Bar 🍗",
+    priceRange: "$$",
+    description: "Ailes de poulet et sport",
+    icon: "🍗",
+    zone: "mountains-edge"
+  },
+  // === THE LAKES (Ouest) ===
+  {
+    name: "Applebee's",
+    address: "2920 N Rainbow Blvd, Las Vegas, NV 89108",
+    lat: 36.1710000,
+    lng: -115.2420000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Grill & Bar",
+    icon: "🍽️",
+    zone: "the-lakes"
+  },
+  {
+    name: "Panda Express",
+    address: "2675 S Rainbow Blvd, Las Vegas, NV 89146",
+    lat: 36.1320000,
+    lng: -115.2420000,
+    type: "fast-food",
+    cuisine: "Asiatique 🥡",
+    priceRange: "$",
+    description: "Fast-food chinois",
+    icon: "🥡",
+    zone: "the-lakes"
+  },
+  // === ANGEL PARK (Nord-Ouest) ===
+  {
+    name: "Egg & I",
+    address: "4533 W Sahara Ave, Las Vegas, NV 89102",
+    lat: 36.1445000,
+    lng: -115.2150000,
+    type: "restaurant",
+    cuisine: "Petit-déjeuner 🥞",
+    priceRange: "$$",
+    description: "Brunch populaire",
+    icon: "🥞",
+    zone: "angel-park"
+  },
+  {
+    name: "Chili's",
+    address: "4280 W Flamingo Rd, Las Vegas, NV 89103",
+    lat: 36.1148000,
+    lng: -115.2100000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Tex-Mex et grillades",
+    icon: "🍽️",
+    zone: "angel-park"
+  },
+  // === RHODES RANCH (Sud-Ouest) ===
+  {
+    name: "Sonic Drive-In",
+    address: "7855 W Tropical Pkwy, Las Vegas, NV 89149",
+    lat: 36.2845000,
+    lng: -115.2880000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Fast-food drive-in rétro",
+    icon: "🍔",
+    zone: "rhodes-ranch"
+  },
+  // === WHITNEY RANCH (Henderson Est) ===
+  {
+    name: "Panera Bread",
+    address: "10620 S Eastern Ave, Henderson, NV 89052",
+    lat: 36.0010000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Sandwichs 🥪",
+    priceRange: "$$",
+    description: "Soupes et sandwichs frais",
+    icon: "🥪",
+    zone: "whitney-ranch"
+  },
+  {
+    name: "Five Guys",
+    address: "10870 S Eastern Ave, Henderson, NV 89052",
+    lat: 35.9980000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$$",
+    description: "Burgers premium",
+    icon: "🍔",
+    zone: "whitney-ranch"
+  },
+  // === INSPIRADA (Henderson Sud) ===
+  {
+    name: "Starbucks",
+    address: "2830 Bicentennial Pkwy, Henderson, NV 89044",
+    lat: 35.9720000,
+    lng: -115.0690000,
+    type: "fast-food",
+    cuisine: "Café ☕",
+    priceRange: "$",
+    description: "Café et snacks",
+    icon: "☕",
+    zone: "inspirada"
+  },
+  // === EAST LAS VEGAS ===
+  {
+    name: "El Pollo Loco",
+    address: "4660 E Charleston Blvd, Las Vegas, NV 89104",
+    lat: 36.1580000,
+    lng: -115.0970000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌮",
+    priceRange: "$",
+    description: "Poulet grillé mexicain",
+    icon: "🌮",
+    zone: "east-vegas"
+  },
+  {
+    name: "IHOP",
+    address: "4540 E Charleston Blvd, Las Vegas, NV 89104",
+    lat: 36.1580000,
+    lng: -115.1020000,
+    type: "restaurant",
+    cuisine: "Petit-déjeuner 🥞",
+    priceRange: "$",
+    description: "Pancakes toute la journée",
+    icon: "🥞",
+    zone: "east-vegas"
+  },
+  // === CHINATOWN (Ouest Spring Mountain) ===
+  {
+    name: "Ichiza",
+    address: "4355 Spring Mountain Rd, Las Vegas, NV 89102",
+    lat: 36.1260000,
+    lng: -115.2070000,
+    type: "restaurant",
+    cuisine: "Japonais 🍣",
+    priceRange: "$$",
+    description: "Izakaya japonais populaire",
+    icon: "🍣",
+    zone: "chinatown"
+  },
+  {
+    name: "Ramen Sora",
+    address: "4490 Spring Mountain Rd, Las Vegas, NV 89102",
+    lat: 36.1260000,
+    lng: -115.2110000,
+    type: "restaurant",
+    cuisine: "Japonais 🍜",
+    priceRange: "$$",
+    description: "Ramen authentique",
+    icon: "🍜",
+    zone: "chinatown"
+  },
+  {
+    name: "Kung Fu Thai & Chinese",
+    address: "3505 S Valley View Blvd, Las Vegas, NV 89103",
+    lat: 36.1180000,
+    lng: -115.1960000,
+    type: "restaurant",
+    cuisine: "Asiatique 🥢",
+    priceRange: "$$",
+    description: "Cuisine thaï et chinoise",
+    icon: "🥢",
+    zone: "chinatown"
+  },
+  // === SPANISH TRAIL (Sud-Ouest) ===
+  {
+    name: "The Cheesecake Factory",
+    address: "750 S Rampart Blvd, Las Vegas, NV 89145",
+    lat: 36.1615000,
+    lng: -115.2840000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Menu énorme - Cheesecakes",
+    icon: "🍽️",
+    zone: "spanish-trail"
+  },
+  // === SILVERADO RANCH (Sud) ===
+  {
+    name: "Chick-fil-A",
+    address: "9310 S Eastern Ave, Henderson, NV 89123",
+    lat: 36.0230000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Poulet 🍗",
+    priceRange: "$",
+    description: "Sandwichs au poulet",
+    icon: "🍗",
+    zone: "silverado-ranch"
+  },
+  {
+    name: "In-N-Out Burger",
+    address: "2005 E Silverado Ranch Blvd, Las Vegas, NV 89183",
+    lat: 36.0120000,
+    lng: -115.1410000,
+    type: "fast-food",
+    cuisine: "Burgers 🍔",
+    priceRange: "$",
+    description: "Burgers californiens",
+    icon: "🍔",
+    zone: "silverado-ranch"
+  },
+  // === ANTHEM (Henderson Sud) ===
+  {
+    name: "Café Rio",
+    address: "10895 S Eastern Ave, Henderson, NV 89052",
+    lat: 35.9970000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Mexicain 🌯",
+    priceRange: "$",
+    description: "Cuisine mexicaine",
+    icon: "🌯",
+    zone: "anthem"
+  },
+  {
+    name: "Blaze Pizza",
+    address: "10960 S Eastern Ave, Henderson, NV 89052",
+    lat: 35.9955000,
+    lng: -115.1190000,
+    type: "fast-food",
+    cuisine: "Pizza 🍕",
+    priceRange: "$",
+    description: "Pizza personnalisée",
+    icon: "🍕",
+    zone: "anthem"
+  },
+  // === BOULDER CITY ===
+  {
+    name: "Southwest Diner",
+    address: "1229 Arizona St, Boulder City, NV 89005",
+    lat: 35.9790000,
+    lng: -114.8320000,
+    type: "restaurant",
+    cuisine: "Diner américain 🍳",
+    priceRange: "$$",
+    description: "Diner rétro populaire",
+    icon: "🍳",
+    zone: "boulder-city"
+  },
+  // === ARTS DISTRICT (Downtown) ===
+  {
+    name: "Esther's Kitchen",
+    address: "1131 S Main St, Las Vegas, NV 89104",
+    lat: 36.1590000,
+    lng: -115.1535000,
+    type: "restaurant",
+    cuisine: "Italien 🍝",
+    priceRange: "$$$",
+    description: "Italien moderne tendance",
+    icon: "🍝",
+    zone: "arts-district"
+  },
+  {
+    name: "Carson Kitchen",
+    address: "124 S 6th St, Las Vegas, NV 89101",
+    lat: 36.1675000,
+    lng: -115.1470000,
+    type: "restaurant",
+    cuisine: "Américain 🍽️",
+    priceRange: "$$",
+    description: "Gastropub créatif",
+    icon: "🍽️",
+    zone: "arts-district"
   }
 ]);
 
@@ -967,6 +2488,46 @@ const createSupermarketIcon = (supermarket) => {
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
+  });
+};
+
+// Créer l'icône des restaurants
+const createRestaurantIcon = (restaurant) => {
+  // Couleurs par type de restaurant
+  const typeColors = {
+    'fast-food': '#ef4444', // Rouge pour fast-food
+    'restaurant': '#f59e0b', // Orange pour restaurants
+    'cafe': '#8b5cf6',      // Violet pour cafés
+  };
+
+  const bgColor = typeColors[restaurant.type] || '#ef4444';
+  const icon = restaurant.icon || '🍽️';
+
+  return L.divIcon({
+    className: 'custom-casino-marker',
+    html: `
+      <div class="marker-container" style="background: ${bgColor}">
+        <span class="marker-initial">${icon}</span>
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+  });
+};
+
+// Créer l'icône des tabacs
+const createTobaccoIcon = () => {
+  return L.divIcon({
+    className: 'custom-casino-marker',
+    html: `
+      <div class="marker-container" style="background: #8B4513">
+        <span class="marker-initial">🚬</span>
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
   });
 };
 
@@ -1943,6 +3504,12 @@ const initMap = async () => {
     marker.addTo(map);
   });
 
+  // Créer les marqueurs pour les restaurants (non affichés par défaut)
+  createRestaurantMarkers();
+
+  // Créer les marqueurs pour les tabacs (non affichés par défaut)
+  createTobaccoMarkers();
+
   // Ajuster la vue pour montrer tous les casinos
   setTimeout(() => {
     if (map) {
@@ -1962,6 +3529,394 @@ const resetMapView = () => {
     });
     map.fitBounds(bounds, { padding: [30, 30] });
   }
+};
+
+// Créer les marqueurs de restaurants (sans les afficher)
+const createRestaurantMarkers = () => {
+  if (!map) return;
+
+  // Nettoyer les marqueurs existants
+  restaurantMarkers.forEach(marker => {
+    if (map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  restaurantMarkers = [];
+
+  // Créer les marqueurs
+  restaurants.value.forEach((restaurant, index) => {
+    const marker = L.marker([restaurant.lat, restaurant.lng], {
+      icon: createRestaurantIcon(restaurant)
+    });
+
+    // Fonction pour générer le contenu du popup
+    const getRestaurantPopupContent = () => {
+      // Calculer la distance depuis la maison
+      const distance = getDistanceFromHome(restaurant.lat, restaurant.lng);
+      let distanceLabel;
+      if (distance < 1) {
+        distanceLabel = `${Math.round(distance * 1000)} m`;
+      } else {
+        distanceLabel = `${distance.toFixed(1)} km`;
+      }
+      // Estimer le temps en voiture
+      const driveMinutes = Math.round((distance / 40) * 60); // 40 km/h en voiture
+
+      return `
+        <div class="casino-popup restaurant-popup">
+          <h3>${restaurant.icon} ${restaurant.name}</h3>
+          <p class="popup-distance">${distanceLabel} (~${driveMinutes} min)</p>
+          <p class="popup-address">${restaurant.address}</p>
+          <p class="popup-cuisine">${restaurant.cuisine}</p>
+          <p class="popup-price">${restaurant.priceRange}</p>
+          <p class="popup-desc">${restaurant.description}</p>
+          <div class="popup-actions popup-mode-actions">
+            <button class="directions-btn directions-driving-btn" data-restaurant-index="${index}">
+              Itinéraire
+            </button>
+          </div>
+        </div>
+      `;
+    };
+
+    // Créer le popup
+    const popup = L.popup({
+      maxWidth: 280,
+      className: 'casino-popup-container restaurant-popup-container'
+    });
+
+    marker.bindPopup(popup);
+
+    // Ajouter l'écouteur pour le bouton d'itinéraire
+    marker.on('popupopen', () => {
+      popup.setContent(getRestaurantPopupContent());
+
+      setTimeout(() => {
+        const drivingBtn = document.querySelector(`.directions-driving-btn[data-restaurant-index="${index}"]`);
+        if (drivingBtn) {
+          drivingBtn.addEventListener('click', () => {
+            const destination = {
+              name: restaurant.name,
+              lat: restaurant.lat,
+              lng: restaurant.lng,
+              address: restaurant.address
+            };
+            showRoute(destination, 'driving');
+            marker.closePopup();
+          });
+        }
+      }, 10);
+    });
+
+    // Stocker le marqueur sans l'afficher
+    restaurantMarkers.push(marker);
+  });
+};
+
+// Toggle l'affichage des restaurants
+const toggleRestaurants = () => {
+  showRestaurants.value = !showRestaurants.value;
+
+  if (!map) return;
+
+  if (showRestaurants.value) {
+    // Afficher tous les restaurants
+    restaurantMarkers.forEach(marker => {
+      marker.addTo(map);
+    });
+
+    // Réduire l'opacité des casinos pour mettre en avant les restaurants
+    setCasinoMarkersOpacity(0.4);
+  } else {
+    // Masquer tous les restaurants
+    restaurantMarkers.forEach(marker => {
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+    });
+
+    // Restaurer l'opacité des casinos
+    setCasinoMarkersOpacity(1);
+  }
+};
+
+// Nettoyer les marqueurs de restaurants
+const clearRestaurantMarkers = () => {
+  restaurantMarkers.forEach(marker => {
+    if (map && map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  restaurantMarkers = [];
+};
+
+// Créer les marqueurs de tabacs (sans les afficher)
+const createTobaccoMarkers = () => {
+  if (!map) return;
+
+  // Nettoyer les marqueurs existants
+  tobaccoMarkers.forEach(marker => {
+    if (map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  tobaccoMarkers = [];
+
+  // Créer les marqueurs
+  tobaccoShops.value.forEach((shop, index) => {
+    const marker = L.marker([shop.lat, shop.lng], {
+      icon: createTobaccoIcon()
+    });
+
+    // Fonction pour générer le contenu du popup
+    const getTobaccoPopupContent = () => {
+      // Calculer la distance depuis la maison
+      const distance = getDistanceFromHome(shop.lat, shop.lng);
+      let distanceLabel;
+      if (distance < 1) {
+        distanceLabel = `${Math.round(distance * 1000)} m`;
+      } else {
+        distanceLabel = `${distance.toFixed(1)} km`;
+      }
+      // Estimer le temps en voiture
+      const driveMinutes = Math.round((distance / 40) * 60);
+
+      return `
+        <div class="casino-popup tobacco-popup">
+          <h3>🚬 ${shop.name}</h3>
+          <p class="popup-distance">${distanceLabel} (~${driveMinutes} min)</p>
+          <p class="popup-address"><i class="pi pi-map-marker"></i> ${shop.address}</p>
+          <p class="popup-category"><i class="pi pi-tag"></i> ${shop.category}</p>
+          <p class="popup-desc">${shop.description}</p>
+          <div class="popup-actions popup-mode-actions">
+            <button class="directions-btn directions-driving-btn" data-tobacco-index="${index}">
+              <i class="pi pi-car"></i> Itinéraire
+            </button>
+          </div>
+        </div>
+      `;
+    };
+
+    // Créer le popup
+    const popup = L.popup({
+      maxWidth: 280,
+      className: 'casino-popup-container tobacco-popup-container'
+    });
+
+    marker.bindPopup(popup);
+
+    // Ajouter l'écouteur pour le bouton d'itinéraire
+    marker.on('popupopen', () => {
+      popup.setContent(getTobaccoPopupContent());
+
+      setTimeout(() => {
+        const drivingBtn = document.querySelector(`.directions-driving-btn[data-tobacco-index="${index}"]`);
+        if (drivingBtn) {
+          drivingBtn.addEventListener('click', () => {
+            const destination = {
+              name: shop.name,
+              lat: shop.lat,
+              lng: shop.lng,
+              address: shop.address
+            };
+            showRoute(destination, 'driving');
+            marker.closePopup();
+          });
+        }
+      }, 10);
+    });
+
+    // Stocker le marqueur sans l'afficher
+    tobaccoMarkers.push(marker);
+  });
+};
+
+// Toggle l'affichage des tabacs
+const toggleTobaccoShops = () => {
+  showTobaccoShops.value = !showTobaccoShops.value;
+
+  if (!map) return;
+
+  // S'assurer que les marqueurs sont créés
+  if (tobaccoMarkers.length === 0) {
+    createTobaccoMarkers();
+  }
+
+  if (showTobaccoShops.value) {
+    // Afficher tous les tabacs
+    tobaccoMarkers.forEach(marker => {
+      marker.addTo(map);
+    });
+
+    // Réduire l'opacité des casinos pour mettre en avant les tabacs
+    setCasinoMarkersOpacity(0.4);
+  } else {
+    // Masquer tous les tabacs
+    tobaccoMarkers.forEach(marker => {
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+    });
+
+    // Restaurer l'opacité des casinos
+    setCasinoMarkersOpacity(1);
+  }
+};
+
+// Nettoyer les marqueurs de tabacs
+const clearTobaccoMarkers = () => {
+  tobaccoMarkers.forEach(marker => {
+    if (map && map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  tobaccoMarkers = [];
+};
+
+// Ouvrir la modale de filtres restaurants
+const openRestaurantFilters = () => {
+  if (showRestaurants.value) {
+    // Si déjà affiché, on ferme
+    hideAllRestaurants();
+    showRestaurants.value = false;
+  } else {
+    // Ouvrir la modale de filtres
+    showRestaurantModal.value = true;
+  }
+};
+
+// Cacher tous les restaurants
+const hideAllRestaurants = () => {
+  restaurantMarkers.forEach(marker => {
+    if (map && map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  setCasinoMarkersOpacity(1);
+};
+
+// Obtenir le nombre de filtres actifs
+const activeRestaurantFilters = computed(() => {
+  const f = restaurantFilters.value;
+  let count = f.types.length + f.cuisines.length + f.prices.length;
+  if (f.proximity) count++;
+  return count;
+});
+
+// Obtenir le nombre de restaurants filtrés
+const filteredRestaurantsCount = computed(() => {
+  return getFilteredRestaurants().length;
+});
+
+// Calculer la distance en km entre deux points
+const getDistanceFromHome = (lat, lng) => {
+  const R = 6371; // Rayon de la Terre en km
+  const dLat = (lat - HOME_LOCATION.lat) * Math.PI / 180;
+  const dLng = (lng - HOME_LOCATION.lng) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(HOME_LOCATION.lat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+// Obtenir les restaurants filtrés
+const getFilteredRestaurants = () => {
+  const f = restaurantFilters.value;
+
+  return restaurants.value.filter(r => {
+    // Filtre de proximité (près de la maison = moins de 10km)
+    if (f.proximity === 'nearby') {
+      const distance = getDistanceFromHome(r.lat, r.lng);
+      if (distance > 10) return false;
+    }
+
+    // Si aucun filtre de type, on accepte tous
+    if (f.types.length > 0 && !f.types.includes(r.type)) return false;
+
+    // Si aucun filtre de prix, on accepte tous
+    if (f.prices.length > 0 && !f.prices.includes(r.priceRange)) return false;
+
+    // Filtre par cuisine
+    if (f.cuisines.length > 0) {
+      const cuisineMatch = f.cuisines.some(cuisine => {
+        const cuisineMap = {
+          'burger': ['🍔'],
+          'chicken': ['🍗'],
+          'mexican': ['🌮', '🌯'],
+          'asian': ['🥢', '🥡'],
+          'italian': ['🍝'],
+          'french': ['🥐'],
+          'steak': ['🥩'],
+          'breakfast': ['🥞', '🍳'],
+          'pizza': ['🍕']
+        };
+        return cuisineMap[cuisine]?.some(icon => r.icon === icon);
+      });
+      if (!cuisineMatch) return false;
+    }
+
+    return true;
+  });
+};
+
+// Toggle le filtre de proximité
+const toggleProximityFilter = (value) => {
+  if (restaurantFilters.value.proximity === value) {
+    restaurantFilters.value.proximity = null;
+  } else {
+    restaurantFilters.value.proximity = value;
+  }
+};
+
+// Toggle un filtre
+const toggleFilter = (category, value) => {
+  const arr = restaurantFilters.value[category];
+  const index = arr.indexOf(value);
+  if (index === -1) {
+    arr.push(value);
+  } else {
+    arr.splice(index, 1);
+  }
+};
+
+// Réinitialiser les filtres
+const resetRestaurantFilters = () => {
+  restaurantFilters.value = {
+    proximity: null,
+    types: [],
+    cuisines: [],
+    prices: []
+  };
+};
+
+// Appliquer les filtres et afficher les restaurants
+const applyRestaurantFilters = () => {
+  if (!map) return;
+
+  // Masquer tous les marqueurs existants
+  hideAllRestaurants();
+
+  // Obtenir les restaurants filtrés
+  const filtered = getFilteredRestaurants();
+
+  if (filtered.length === 0) {
+    showRestaurantModal.value = false;
+    return;
+  }
+
+  // Afficher les marqueurs correspondants
+  filtered.forEach(restaurant => {
+    const index = restaurants.value.findIndex(r => r.name === restaurant.name);
+    if (index !== -1 && restaurantMarkers[index]) {
+      restaurantMarkers[index].addTo(map);
+    }
+  });
+
+  // Réduire l'opacité des casinos
+  setCasinoMarkersOpacity(0.4);
+
+  showRestaurants.value = true;
+  showRestaurantModal.value = false;
 };
 
 // Géolocalisation de l'utilisateur
@@ -2270,8 +4225,13 @@ watch(() => props.modelValue, (newVal) => {
     // Nettoyer l'itinéraire et les lignes de bus quand on ferme
     clearRoute();
     clearBusLines();
+    clearRestaurantMarkers();
+    clearTobaccoMarkers();
     showBusLines.value = false;
     showMonorail.value = false;
+    showRestaurants.value = false;
+    showRestaurantModal.value = false;
+    showTobaccoShops.value = false;
   }
 });
 
@@ -2280,8 +4240,13 @@ watch(visible, (newVal) => {
   if (!newVal) {
     clearRoute();
     clearBusLines();
+    clearRestaurantMarkers();
+    clearTobaccoMarkers();
     showBusLines.value = false;
     showMonorail.value = false;
+    showRestaurants.value = false;
+    showRestaurantModal.value = false;
+    showTobaccoShops.value = false;
   }
 });
 
@@ -2299,11 +4264,15 @@ const handleResize = () => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
   clearRoute();
+  clearRestaurantMarkers();
+  clearTobaccoMarkers();
   if (map) {
     map.remove();
     map = null;
   }
   markers = [];
+  restaurantMarkers = [];
+  tobaccoMarkers = [];
 });
 </script>
 
@@ -2324,6 +4293,7 @@ onUnmounted(() => {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border: 2px solid white;
+  overflow: hidden;
 }
 
 .marker-initial {
@@ -2331,6 +4301,7 @@ onUnmounted(() => {
   color: white;
   font-weight: 700;
   font-size: 14px;
+  line-height: 1;
 }
 
 /* Supermarket marker styles */
@@ -2349,6 +4320,7 @@ onUnmounted(() => {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border: 3px solid white;
+  overflow: hidden;
 }
 
 .supermarket-logo {
@@ -2359,11 +4331,6 @@ onUnmounted(() => {
   border-radius: 4px;
 }
 
-.tobacco-icon {
-  transform: rotate(45deg);
-  font-size: 18px;
-}
-
 /* Supermarket popup styles */
 .supermarket-popup h3 {
   color: #f59e0b !important;
@@ -2372,6 +4339,60 @@ onUnmounted(() => {
 .supermarket-popup .popup-category {
   color: #fbbf24;
   font-weight: 600;
+}
+
+/* Restaurant marker styles */
+.custom-restaurant-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.restaurant-marker-container {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+  overflow: hidden;
+}
+
+.restaurant-icon {
+  transform: rotate(45deg);
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Restaurant popup styles */
+.restaurant-popup h3 {
+  color: #ef4444 !important;
+}
+
+.restaurant-popup .popup-distance {
+  color: #818cf8;
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: rgba(129, 140, 248, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px !important;
+}
+
+.restaurant-popup .popup-cuisine {
+  color: #fb923c;
+  font-weight: 600;
+}
+
+.restaurant-popup .popup-price {
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
 /* Popup styles */
@@ -3320,10 +5341,240 @@ onUnmounted(() => {
   padding: 12px 16px;
   z-index: 1000;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 10px;
   border: 1px solid #334155;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.legend-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Bouton flottant restaurants */
+.restaurants-floating-btn {
+  position: absolute;
+  top: 70px;
+  right: 12px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.restaurants-floating-btn .restaurants-btn {
+  background: linear-gradient(135deg, #ef4444, #f97316) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  font-weight: 600;
+}
+
+.restaurants-floating-btn .restaurants-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5);
+}
+
+:deep(.restaurants-floating-btn .p-button-danger) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+}
+
+/* Bouton flottant tabac */
+.tobacco-floating-btn {
+  position: absolute;
+  top: 70px;
+  right: 12px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tobacco-floating-btn .tobacco-btn {
+  background: linear-gradient(135deg, #8B4513, #A0522D) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+  font-weight: 600;
+}
+
+.tobacco-floating-btn .tobacco-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(139, 69, 19, 0.5);
+}
+
+:deep(.tobacco-floating-btn .p-button-danger) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+}
+
+/* Tobacco marker styles */
+.custom-tobacco-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.tobacco-marker-container {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+  overflow: hidden;
+}
+
+.tobacco-marker-container .tobacco-icon {
+  transform: rotate(45deg);
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Tobacco popup styles */
+.tobacco-popup h3 {
+  color: #D2691E !important;
+}
+
+.tobacco-popup .popup-distance {
+  color: #818cf8;
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: rgba(129, 140, 248, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px !important;
+}
+
+.tobacco-popup .popup-category {
+  color: #D2691E;
+  font-weight: 600;
+}
+
+.filter-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #22c55e;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Modale filtres restaurants */
+.restaurant-filter-dialog {
+  z-index: 2000 !important;
+}
+
+:deep(.restaurant-filter-dialog .p-dialog-content) {
+  background: #1e293b !important;
+  padding: 0 !important;
+}
+
+:deep(.restaurant-filter-dialog .p-dialog-header) {
+  background: #0f172a !important;
+  border-bottom: 1px solid #334155 !important;
+  padding: 12px 16px !important;
+}
+
+:deep(.restaurant-filter-dialog .p-dialog-title) {
+  color: #f1f5f9 !important;
+  font-size: 1rem !important;
+}
+
+:deep(.restaurant-filter-dialog .p-dialog-footer) {
+  background: #0f172a !important;
+  border-top: 1px solid #334155 !important;
+  padding: 12px 16px !important;
+}
+
+.restaurant-filters {
+  padding: 16px;
+}
+
+.filter-section {
+  margin-bottom: 16px;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.filter-section h4 {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-section h4 i {
+  font-size: 0.875rem;
+  color: #818cf8;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chips.cuisine-chips {
+  gap: 6px;
+}
+
+.filter-chip {
+  padding: 6px 12px;
+  background: #334155;
+  border-radius: 20px;
+  color: #cbd5e1;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.filter-chip:hover {
+  background: #475569;
+  color: #f1f5f9;
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  border-color: #818cf8;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.cuisine-chips .filter-chip {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.filter-actions .p-button {
+  font-size: 0.8125rem;
 }
 
 .legend-title {
@@ -3778,6 +6029,66 @@ onUnmounted(() => {
   :deep(.casino-map-dialog .p-dialog-title) {
     font-size: 0.9375rem;
   }
+
+  /* Responsive - Bouton Restaurants */
+  .restaurants-floating-btn {
+    top: auto;
+    bottom: 70px;
+    right: 8px;
+    left: auto;
+  }
+
+  .restaurants-floating-btn .restaurants-btn {
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Responsive - Modale filtres */
+  :deep(.restaurant-filter-dialog) {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 0 auto;
+  }
+
+  :deep(.restaurant-filter-dialog .p-dialog-content) {
+    padding: 0 !important;
+  }
+
+  .restaurant-filters {
+    padding: 12px;
+  }
+
+  .filter-section {
+    margin-bottom: 12px;
+  }
+
+  .filter-section h4 {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  .filter-chips {
+    gap: 6px;
+  }
+
+  .filter-chip {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .cuisine-chips .filter-chip {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+
+  .filter-actions {
+    gap: 6px;
+  }
+
+  .filter-actions .p-button {
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -4023,6 +6334,49 @@ onUnmounted(() => {
 
   :deep(.casino-map-dialog .p-dialog-title) {
     font-size: 0.875rem;
+  }
+
+  /* Responsive 480px - Bouton Restaurants */
+  .restaurants-floating-btn {
+    bottom: 60px;
+    right: 6px;
+  }
+
+  .restaurants-floating-btn .restaurants-btn {
+    padding: 6px 10px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .filter-badge {
+    width: 16px;
+    height: 16px;
+    font-size: 0.625rem;
+    top: -4px;
+    right: -4px;
+  }
+
+  /* Responsive 480px - Modale filtres */
+  .restaurant-filters {
+    padding: 10px;
+  }
+
+  .filter-section {
+    margin-bottom: 10px;
+  }
+
+  .filter-section h4 {
+    font-size: 0.65rem;
+    margin-bottom: 6px;
+  }
+
+  .filter-chip {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+
+  .cuisine-chips .filter-chip {
+    padding: 3px 6px;
+    font-size: 0.65rem;
   }
 }
 
