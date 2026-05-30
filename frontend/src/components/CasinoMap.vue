@@ -238,6 +238,7 @@
             size="small"
             :severity="showBusLines ? 'info' : 'secondary'"
             @click="toggleBusLines"
+            class="hide-on-mobile"
           />
           <Button
             :icon="showMonorail ? 'pi pi-eye-slash' : 'pi pi-arrows-h'"
@@ -245,7 +246,7 @@
             size="small"
             :severity="showMonorail ? 'warning' : 'secondary'"
             @click="toggleMonorail"
-            class="monorail-btn"
+            class="monorail-btn hide-on-mobile"
           />
         </div>
       </div>
@@ -1370,7 +1371,7 @@ const drawTransitOnMap = (casino, best) => {
     [casino.lat, casino.lng],
     ...allBusCoords
   ]);
-  map.fitBounds(bounds, { padding: [50, 50] });
+  map.fitBounds(bounds, { padding: [100, 100], maxZoom: 13 });
 
   // Calcul des temps
   const walkTimeToStop = Math.round((best.nearestToHomeDist / 5) * 60);
@@ -1455,7 +1456,7 @@ const showDrivingRoute = (casino, startLat, startLng) => {
     routeWhileDragging: false,
     addWaypoints: false,
     draggableWaypoints: false,
-    fitSelectedRoutes: !showBothRoutes.value, // Ne pas auto-fit si on affiche les deux
+    fitSelectedRoutes: false, // Désactivé pour gérer manuellement le zoom
     showAlternatives: false,
     createMarker: () => null,
     lineOptions: {
@@ -1487,9 +1488,16 @@ const showDrivingRoute = (casino, startLat, startLng) => {
       mode: 'driving'
     };
 
-    // Ajuster la vue pour montrer les deux trajets si nécessaire
+    // Ajuster la vue avec moins de zoom
     if (showBothRoutes.value) {
       fitBoundsForBothRoutes(casino, startLat, startLng);
+    } else {
+      // Mode unique voiture - fit avec padding augmenté
+      const bounds = L.latLngBounds([
+        [startLat, startLng],
+        [casino.lat, casino.lng]
+      ]);
+      map.fitBounds(bounds, { padding: [100, 100], maxZoom: 13 });
     }
   });
 
@@ -1640,7 +1648,7 @@ const fitBoundsForBothRoutes = (casino, startLat, startLng) => {
   ]);
   // Ajouter un petit délai pour laisser les polylines se dessiner
   setTimeout(() => {
-    map.fitBounds(bounds, { padding: [60, 60] });
+    map.fitBounds(bounds, { padding: [100, 100], maxZoom: 13 });
   }, 100);
 };
 
@@ -3438,6 +3446,10 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+
   .map-container {
     height: calc(100vh - 60px);
     max-height: calc(80vh - 60px);
