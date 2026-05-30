@@ -74,9 +74,12 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-// GET tous les tournois d'un utilisateur
+// GET tous les tournois d'un utilisateur avec les autres participants
 app.get('/api/users/:userId/tournaments', async (req, res) => {
   try {
+    const userId = req.params.userId;
+
+    // Récupérer les tournois de l'utilisateur
     const result = await pool.query(
       `SELECT 
         t.id, t.user_id, t.date, t.time, t.casino, t.buyin, t.levels, 
@@ -88,9 +91,28 @@ app.get('/api/users/:userId/tournaments', async (req, res) => {
       LEFT JOIN scraped_tournaments st ON t.scraped_tournament_id = st.id
       WHERE t.user_id = $1 
       ORDER BY t.date, t.time`,
-      [req.params.userId]
+      [userId]
     );
-    res.json(result.rows);
+
+    // Pour chaque tournoi, récupérer les autres participants
+    const tournamentsWithParticipants = await Promise.all(
+      result.rows.map(async (tournament) => {
+        const participantsResult = await pool.query(
+          `SELECT DISTINCT u.id, u.name 
+           FROM tournaments t2
+           JOIN users u ON t2.user_id = u.id
+           WHERE t2.date = $1 AND t2.time = $2 AND t2.casino = $3 AND t2.user_id != $4
+           ORDER BY u.name`,
+          [tournament.date, tournament.time, tournament.casino, userId]
+        );
+        return {
+          ...tournament,
+          participants: participantsResult.rows
+        };
+      })
+    );
+
+    res.json(tournamentsWithParticipants);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

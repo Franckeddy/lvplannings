@@ -127,20 +127,6 @@
               :key="tournament.id"
               class="tournament-row"
             >
-              <!-- Note indicator in top right (desktop only) -->
-              <div
-                v-if="tournament.user_note"
-                class="note-indicator-corner desktop-only"
-                v-tooltip.top="tournament.user_note"
-              >
-                <i class="pi pi-comment"></i>
-              </div>
-
-              <!-- Note visible on mobile -->
-              <div v-if="tournament.user_note" class="mobile-note-display">
-                <i class="pi pi-comment"></i>
-                <span>{{ tournament.user_note }}</span>
-              </div>
 
               <div class="tournament-time-slot">
                 <i class="pi pi-clock"></i>
@@ -204,6 +190,27 @@
                   <div v-else-if="tournament.levels && tournament.levels !== '-'" class="structure-tag levels">
                     <i class="pi pi-clock"></i>
                     {{ tournament.levels }}
+                  </div>
+                </div>
+
+                <!-- Note utilisateur toujours visible -->
+                <div v-if="tournament.user_note" class="tournament-note-display">
+                  <i class="pi pi-comment"></i>
+                  <span>{{ tournament.user_note }}</span>
+                </div>
+
+                <!-- Inscrits au tournoi -->
+                <div v-if="tournament.participants && tournament.participants.length > 0" class="tournament-participants">
+                  <i class="pi pi-users"></i>
+                  <span class="participants-label">Inscrits:</span>
+                  <div class="participants-list">
+                    <span
+                      v-for="participant in tournament.participants"
+                      :key="participant.id"
+                      class="participant-chip"
+                    >
+                      {{ participant.name }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1419,30 +1426,6 @@ onUnmounted(() => {
   transform: scale(1.1);
 }
 
-/* Mobile note display */
-.mobile-note-display {
-  display: none;
-  width: 100%;
-  padding: 10px 12px;
-  margin-top: 8px;
-  background: rgba(99, 102, 241, 0.1);
-  border-radius: 8px;
-  border-left: 3px solid #6366f1;
-  font-size: 0.8125rem;
-  color: var(--text-secondary, #94a3b8);
-}
-
-.mobile-note-display i {
-  color: #6366f1;
-  margin-right: 8px;
-  font-size: 0.75rem;
-}
-
-/* Desktop only elements */
-.desktop-only {
-  display: flex;
-}
-
 .tournament-time-slot {
   display: flex;
   align-items: center;
@@ -1704,6 +1687,75 @@ onUnmounted(() => {
 .structure-tag.levels {
   background: rgba(51, 65, 85, 0.5);
   color: var(--text-secondary, #94a3b8);
+}
+
+/* Note utilisateur toujours visible */
+.tournament-note-display {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 10px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.tournament-note-display i {
+  color: #6366f1;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tournament-note-display span {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Inscrits au tournoi */
+.tournament-participants {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid #22c55e;
+  font-size: 0.8125rem;
+}
+
+.tournament-participants > i {
+  color: #22c55e;
+  font-size: 0.875rem;
+}
+
+.tournament-participants .participants-label {
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 500;
+}
+
+.participants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.participant-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .tournament-buyin {
@@ -2061,15 +2113,6 @@ onUnmounted(() => {
     display: none;
   }
 
-  /* Show mobile notes, hide desktop elements */
-  .mobile-note-display {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .desktop-only {
-    display: none !important;
-  }
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
