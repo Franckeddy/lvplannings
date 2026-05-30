@@ -270,10 +270,18 @@
         <span v-if="activeRestaurantFilters > 0" class="filter-badge">{{ activeRestaurantFilters }}</span>
       </div> -->
 
-      <!-- Bouton Tabac flottant -->
-      <div class="tobacco-floating-btn">
+      <!-- Boutons flottants Supermarché et Tabac -->
+      <div class="floating-buttons-row">
         <Button
-          :icon="showTobaccoShops ? 'pi pi-times' : 'pi pi-box'"
+          :icon="showSupermarkets"
+          :label="showSupermarkets ? 'Fermer' : 'Courses'"
+          size="small"
+          :severity="showSupermarkets ? 'danger' : 'secondary'"
+          @click="toggleSupermarkets"
+          class="supermarket-btn"
+        />
+        <Button
+          :icon="showTobaccoShops"
           :label="showTobaccoShops ? 'Fermer' : 'Tabac'"
           size="small"
           :severity="showTobaccoShops ? 'danger' : 'secondary'"
@@ -494,6 +502,7 @@ const showMonorail = ref(false);
 const showRestaurants = ref(false); // Toggle pour afficher les restaurants
 const showRestaurantModal = ref(false); // Modale de filtres
 const showTobaccoShops = ref(false); // Toggle pour afficher les tabacs
+const showSupermarkets = ref(false); // Toggle pour afficher les supermarchés
 const restaurantFilters = ref({
   proximity: null, // null = tous, 'walk' = 5min à pied, 'drive' = 15min en voiture
   types: [],
@@ -525,6 +534,7 @@ let map = null;
 let markers = [];
 let restaurantMarkers = []; // Marqueurs des restaurants
 let tobaccoMarkers = []; // Marqueurs des tabacs
+let supermarketMarkers = []; // Marqueurs des supermarchés
 let routingControl = null;
 let transitLayers = []; // Layers pour l'itinéraire transit
 let userLocationMarker = null;
@@ -3451,64 +3461,8 @@ const initMap = async () => {
     markers.push(marker);
   });
 
-  // Ajouter les marqueurs pour les supermarchés
-  supermarkets.value.forEach((supermarket, index) => {
-    const marker = L.marker([supermarket.lat, supermarket.lng], {
-      icon: createSupermarketIcon(supermarket)
-    });
-
-    // Ajouter au bounds
-    bounds.extend([supermarket.lat, supermarket.lng]);
-
-    // Fonction pour générer le contenu du popup dynamiquement
-    const getSupermarketPopupContent = () => {
-      return `
-        <div class="casino-popup supermarket-popup">
-          <h3>🛒 ${supermarket.name}</h3>
-          <p class="popup-address"><i class="pi pi-map-marker"></i> ${supermarket.address}</p>
-          <p class="popup-category"><i class="pi pi-tag"></i> ${supermarket.category}</p>
-          <p class="popup-desc">${supermarket.description}</p>
-          <div class="popup-actions popup-mode-actions">
-            <button class="directions-btn directions-driving-btn" data-supermarket-index="${index}">
-              <i class="pi pi-car"></i> Itinéraire voiture
-            </button>
-          </div>
-        </div>
-      `;
-    };
-
-    // Créer le popup
-    const popup = L.popup({
-      maxWidth: 280,
-      className: 'casino-popup-container supermarket-popup-container'
-    });
-
-    marker.bindPopup(popup);
-
-    // Ajouter l'écouteur pour le bouton d'itinéraire
-    marker.on('popupopen', () => {
-      popup.setContent(getSupermarketPopupContent());
-
-      setTimeout(() => {
-        const drivingBtn = document.querySelector(`.directions-driving-btn[data-supermarket-index="${index}"]`);
-        if (drivingBtn) {
-          drivingBtn.addEventListener('click', () => {
-            // Créer un objet compatible avec showRoute
-            const destination = {
-              name: supermarket.name,
-              lat: supermarket.lat,
-              lng: supermarket.lng,
-              address: supermarket.address
-            };
-            showRoute(destination, 'driving');
-            marker.closePopup();
-          });
-        }
-      }, 10);
-    });
-
-    marker.addTo(map);
-  });
+  // Créer les marqueurs pour les supermarchés (non affichés par défaut)
+  createSupermarketMarkers();
 
   // Créer les marqueurs pour les restaurants (non affichés par défaut)
   createRestaurantMarkers();
@@ -3777,6 +3731,129 @@ const clearTobaccoMarkers = () => {
     }
   });
   tobaccoMarkers = [];
+};
+
+// Créer les marqueurs de supermarchés (sans les afficher)
+const createSupermarketMarkers = () => {
+  if (!map) return;
+
+  // Nettoyer les marqueurs existants
+  supermarketMarkers.forEach(marker => {
+    if (map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  supermarketMarkers = [];
+
+  // Créer les marqueurs
+  supermarkets.value.forEach((supermarket, index) => {
+    const marker = L.marker([supermarket.lat, supermarket.lng], {
+      icon: createSupermarketIcon(supermarket)
+    });
+
+    // Fonction pour générer le contenu du popup
+    const getSupermarketPopupContent = () => {
+      // Calculer la distance depuis la maison
+      const distance = getDistanceFromHome(supermarket.lat, supermarket.lng);
+      let distanceLabel;
+      if (distance < 1) {
+        distanceLabel = `${Math.round(distance * 1000)} m`;
+      } else {
+        distanceLabel = `${distance.toFixed(1)} km`;
+      }
+      // Estimer le temps en voiture
+      const driveMinutes = Math.round((distance / 40) * 60);
+
+      return `
+        <div class="casino-popup supermarket-popup">
+          <h3>🛒 ${supermarket.name}</h3>
+          <p class="popup-distance">${distanceLabel} (~${driveMinutes} min)</p>
+          <p class="popup-address"><i class="pi pi-map-marker"></i> ${supermarket.address}</p>
+          <p class="popup-category"><i class="pi pi-tag"></i> ${supermarket.category}</p>
+          <p class="popup-desc">${supermarket.description}</p>
+          <div class="popup-actions popup-mode-actions">
+            <button class="directions-btn directions-driving-btn" data-supermarket-index="${index}">
+              <i class="pi pi-car"></i> Itinéraire
+            </button>
+          </div>
+        </div>
+      `;
+    };
+
+    // Créer le popup
+    const popup = L.popup({
+      maxWidth: 280,
+      className: 'casino-popup-container supermarket-popup-container'
+    });
+
+    marker.bindPopup(popup);
+
+    // Ajouter l'écouteur pour le bouton d'itinéraire
+    marker.on('popupopen', () => {
+      popup.setContent(getSupermarketPopupContent());
+
+      setTimeout(() => {
+        const drivingBtn = document.querySelector(`.directions-driving-btn[data-supermarket-index="${index}"]`);
+        if (drivingBtn) {
+          drivingBtn.addEventListener('click', () => {
+            const destination = {
+              name: supermarket.name,
+              lat: supermarket.lat,
+              lng: supermarket.lng,
+              address: supermarket.address
+            };
+            showRoute(destination, 'driving');
+            marker.closePopup();
+          });
+        }
+      }, 10);
+    });
+
+    // Stocker le marqueur sans l'afficher
+    supermarketMarkers.push(marker);
+  });
+};
+
+// Toggle l'affichage des supermarchés
+const toggleSupermarkets = () => {
+  showSupermarkets.value = !showSupermarkets.value;
+
+  if (!map) return;
+
+  // S'assurer que les marqueurs sont créés
+  if (supermarketMarkers.length === 0) {
+    createSupermarketMarkers();
+  }
+
+  if (showSupermarkets.value) {
+    // Afficher tous les supermarchés
+    supermarketMarkers.forEach(marker => {
+      marker.addTo(map);
+    });
+
+    // Réduire l'opacité des casinos pour mettre en avant les supermarchés
+    setCasinoMarkersOpacity(0.4);
+  } else {
+    // Masquer tous les supermarchés
+    supermarketMarkers.forEach(marker => {
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+    });
+
+    // Restaurer l'opacité des casinos
+    setCasinoMarkersOpacity(1);
+  }
+};
+
+// Nettoyer les marqueurs de supermarchés
+const clearSupermarketMarkers = () => {
+  supermarketMarkers.forEach(marker => {
+    if (map && map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+  });
+  supermarketMarkers = [];
 };
 
 // Ouvrir la modale de filtres restaurants
@@ -4233,11 +4310,13 @@ watch(() => props.modelValue, (newVal) => {
     clearBusLines();
     clearRestaurantMarkers();
     clearTobaccoMarkers();
+    clearSupermarketMarkers();
     showBusLines.value = false;
     showMonorail.value = false;
     showRestaurants.value = false;
     showRestaurantModal.value = false;
     showTobaccoShops.value = false;
+    showSupermarkets.value = false;
   }
 });
 
@@ -4248,11 +4327,13 @@ watch(visible, (newVal) => {
     clearBusLines();
     clearRestaurantMarkers();
     clearTobaccoMarkers();
+    clearSupermarketMarkers();
     showBusLines.value = false;
     showMonorail.value = false;
     showRestaurants.value = false;
     showRestaurantModal.value = false;
     showTobaccoShops.value = false;
+    showSupermarkets.value = false;
   }
 });
 
@@ -4272,6 +4353,7 @@ onUnmounted(() => {
   clearRoute();
   clearRestaurantMarkers();
   clearTobaccoMarkers();
+  clearSupermarketMarkers();
   if (map) {
     map.remove();
     map = null;
@@ -4279,6 +4361,7 @@ onUnmounted(() => {
   markers = [];
   restaurantMarkers = [];
   tobaccoMarkers = [];
+  supermarketMarkers = [];
 });
 </script>
 
@@ -4339,7 +4422,20 @@ onUnmounted(() => {
 
 /* Supermarket popup styles */
 .supermarket-popup h3 {
-  color: #f59e0b !important;
+  color: #0071ce !important;
+}
+
+.supermarket-popup .popup-distance {
+  color: #818cf8;
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: rgba(129, 140, 248, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px !important;
 }
 
 .supermarket-popup .popup-category {
@@ -5386,30 +5482,42 @@ onUnmounted(() => {
   background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
 }
 
-/* Bouton flottant tabac */
-.tobacco-floating-btn {
+/* Boutons flottants en row */
+.floating-buttons-row {
   position: absolute;
   top: 70px;
   right: 12px;
   z-index: 1000;
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: row;
+  gap: 8px;
 }
 
-.tobacco-floating-btn .tobacco-btn {
+.floating-buttons-row .supermarket-btn {
+  background: linear-gradient(135deg, #0071ce, #004c91) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 206, 0.4);
+  font-weight: 600;
+}
+
+.floating-buttons-row .supermarket-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 113, 206, 0.5);
+}
+
+.floating-buttons-row .tobacco-btn {
   background: linear-gradient(135deg, #8B4513, #A0522D) !important;
   border: none !important;
   box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
   font-weight: 600;
 }
 
-.tobacco-floating-btn .tobacco-btn:hover {
+.floating-buttons-row .tobacco-btn:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 16px rgba(139, 69, 19, 0.5);
 }
 
-:deep(.tobacco-floating-btn .p-button-danger) {
+:deep(.floating-buttons-row .p-button-danger) {
   background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
 }
 

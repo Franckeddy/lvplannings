@@ -182,7 +182,7 @@
             class="app-link"
           >
             <div class="app-icon rtc-icon">
-              <i class="pi pi-directions"></i>
+              <img src="https://play-lh.googleusercontent.com/EsZuaErjsR_gSJeKqSDlgqbQPut24DRAEhkXZfpzWeMoHroIqodoVz69nWIPk51CHVOm=w240-h480" alt="rideRTC" class="app-icon-img" />
             </div>
             <div class="app-info">
               <div class="app-name">rideRTC</div>
@@ -201,7 +201,7 @@
             class="app-link"
           >
             <div class="app-icon transit-icon">
-              <i class="pi pi-map"></i>
+              <img src="https://play-lh.googleusercontent.com/rDVnZ9rwreErP5_wwGrSVtx-prgRBTCJwdCP9iQFkt_3EerJzB0rxA15EIAGYXUNZA=s48" alt="Transit" class="app-icon-img" />
             </div>
             <div class="app-info">
               <div class="app-name">Transit</div>
@@ -220,7 +220,7 @@
             class="app-link"
           >
             <div class="app-icon monorail-icon">
-              <i class="pi pi-arrows-h"></i>
+              <img src="/monorail.webp" alt="Las Vegas Monorail" class="app-icon-img" />
             </div>
             <div class="app-info">
               <div class="app-name">Las Vegas Monorail</div>
@@ -242,7 +242,7 @@
             class="app-link"
           >
             <div class="app-icon sheets-icon">
-              <i class="pi pi-file-excel"></i>
+              <img src="https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_spreadsheet_x64.png" alt="Google Sheets" class="app-icon-img" />
             </div>
             <div class="app-info">
               <div class="app-name">Tricount Las Vegas</div>
@@ -842,11 +842,19 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .app-icon i {
   font-size: 1.5rem;
   color: white;
+}
+
+.app-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .rtc-icon {
