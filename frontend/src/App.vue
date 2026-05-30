@@ -79,6 +79,7 @@
           :selected-user="selectedUser"
           @user-selected="handleUserSelected"
           @user-created="handleUserCreated"
+          @user-disconnected="handleUserDisconnected"
         />
 
         <div class="sidebar-external-link">
@@ -257,7 +258,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { userService } from './services/api';
 import UserSelector from './components/UserSelector.vue';
 import TournamentList from './components/TournamentList.vue';
@@ -331,6 +332,7 @@ const loadUserData = async (userId) => {
 
 const handleUserSelected = (user) => {
   selectedUser.value = user;
+  localStorage.setItem('currentUserId', user.id.toString());
   loadUserData(user.id);
   currentView.value = 'planning';
   if (isMobile.value) {
@@ -338,10 +340,19 @@ const handleUserSelected = (user) => {
   }
 };
 
+const handleUserDisconnected = () => {
+  selectedUser.value = null;
+  tournaments.value = [];
+  summary.value = null;
+  localStorage.removeItem('currentUserId');
+  currentView.value = 'timeline';
+};
+
 const handleUserCreated = async (userName) => {
   try {
     const response = await userService.create(userName);
     await loadUsers();
+    // Sélectionner automatiquement le nouvel utilisateur créé
     handleUserSelected(response.data);
   } catch (error) {
     console.error('Erreur lors de la création de l\'utilisateur:', error);
@@ -400,8 +411,18 @@ const toggleSidebar = () => {
   }
 };
 
-onMounted(() => {
-  loadUsers();
+onMounted(async () => {
+  await loadUsers();
+
+  // Restaurer l'utilisateur depuis localStorage
+  const savedUserId = localStorage.getItem('currentUserId');
+  if (savedUserId && users.value.length > 0) {
+    const savedUser = users.value.find(u => u.id === parseInt(savedUserId));
+    if (savedUser) {
+      selectedUser.value = savedUser;
+      loadUserData(savedUser.id);
+    }
+  }
 
   // Ajouter le listener pour le resize
   window.addEventListener('resize', handleResize);
