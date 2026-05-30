@@ -1,6 +1,137 @@
 <template>
   <Toast />
   <div class="program-container">
+
+    <!-- Modale alerte tournoi en cours -->
+    <Dialog
+      v-model:visible="showTournamentAlert"
+      :modal="true"
+      :style="{ width: '450px' }"
+      :showHeader="false"
+      class="tournament-alert-dialog"
+      :closable="true"
+    >
+      <div class="alert-dialog-content">
+        <h3>Tournoi imminent !</h3>
+
+        <div v-if="activeTournament" class="alert-tournament-info">
+          <div class="alert-info-row time">
+            <span>{{ activeTournament.time }}</span>
+          </div>
+          <div class="alert-info-row casino">
+            <span>{{ activeTournament.casino }}</span>
+          </div>
+          <div class="alert-info-row buyin">
+            <span>{{ formatBuyIn(activeTournament.buyin) }}</span>
+          </div>
+          <div v-if="activeTournament.structureChips" class="alert-info-row stack">
+            <span>Stack de départ : {{ activeTournament.structureChips }}</span>
+          </div>
+          <div v-if="activeTournament.structureLevels" class="alert-info-row levels">
+            <span>Niveaux : {{ activeTournament.structureLevels }}</span>
+          </div>
+        </div>
+
+        <div class="alert-actions">
+          <Button
+            label="Plus tard"
+            @click="dismissAlert"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="C'est parti !"
+            @click="confirmTournamentStart"
+            icon="pi pi-check"
+            class="confirm-alert-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
+
+    <!-- Modale récap des tournois non saisis -->
+    <Dialog
+      v-model:visible="showMissedRecapDialog"
+      :modal="true"
+      :style="{ width: '550px', maxWidth: '95vw' }"
+      :showHeader="false"
+      class="missed-recap-dialog"
+      :closable="true"
+    >
+      <div class="missed-recap-content">
+        <div class="missed-recap-header">
+          <div class="missed-recap-icon">
+            <i class="pi pi-history"></i>
+          </div>
+          <h3>Tournois non saisis</h3>
+          <p class="missed-recap-subtitle">
+            {{ missedTournaments.length }} tournoi{{ missedTournaments.length > 1 ? 's' : '' }} passé{{ missedTournaments.length > 1 ? 's' : '' }} sans résultat
+          </p>
+        </div>
+
+        <div class="missed-tournaments-list">
+          <div
+            v-for="tournament in missedTournaments"
+            :key="tournament.id"
+            class="missed-tournament-item"
+          >
+            <div class="missed-tournament-info">
+              <div class="missed-tournament-date">{{ tournament.date }}</div>
+              <div class="missed-tournament-details">
+                <span class="missed-time">{{ tournament.time }}</span>
+                <span class="missed-casino">{{ tournament.casino }}</span>
+                <span class="missed-buyin">{{ formatBuyIn(tournament.buyin) }}</span>
+              </div>
+            </div>
+            <div class="missed-tournament-actions">
+              <button
+                class="missed-btn itm-btn"
+                @click="setMissedResult(tournament, 'itm')"
+                :class="{ active: missedResults[tournament.id]?.type === 'itm' }"
+              >
+                🔥 ITM
+              </button>
+              <button
+                class="missed-btn bust-btn"
+                @click="setMissedResult(tournament, 'bust')"
+                :class="{ active: missedResults[tournament.id]?.type === 'bust' }"
+              >
+                ❌ Éliminé
+              </button>
+            </div>
+            <div v-if="missedResults[tournament.id]?.type === 'itm'" class="missed-winnings-input">
+              <label>Gains ($) :</label>
+              <InputText
+                v-model="missedResults[tournament.id].winnings"
+                type="number"
+                placeholder="Montant gagné"
+                class="winnings-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="missed-recap-actions">
+          <Button
+            label="Plus tard"
+            @click="dismissMissedRecap"
+            severity="secondary"
+            text
+            class="cancel-btn"
+          />
+          <Button
+            label="Enregistrer"
+            @click="saveMissedResults"
+            icon="pi pi-check"
+            :loading="savingMissedResults"
+            :disabled="!hasAnyMissedResult"
+            class="confirm-missed-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
+
     <!-- Header avec stats -->
     <div class="program-header">
       <div class="header-top">
@@ -54,6 +185,16 @@
           <div class="stat-content">
             <span class="stat-value">{{ Object.keys(tournamentsByDay).length }}</span>
             <span class="stat-label">Jours</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card-itm" v-if="summary.totalWinnings > 0">
+          <div class="stat-icon itm">
+            <i class="pi pi-dollar"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value itm-value">${{ summary.totalWinnings?.toLocaleString() || 0 }}</span>
+            <span class="stat-label">Gains ITM ({{ summary.itmCount || 0 }})</span>
           </div>
         </div>
       </div>
@@ -126,11 +267,37 @@
               v-for="tournament in dayData.tournaments"
               :key="tournament.id"
               class="tournament-row"
+              :class="{ 'tournament-in-progress': tournament.liveStatus === 'playing', 'tournament-eliminated': tournament.liveStatus === 'eliminated' && !tournament.liveWinnings, 'tournament-itm': tournament.liveStatus === 'eliminated' && tournament.liveWinnings }"
             >
+              <!-- Bannière EN JEU -->
+              <div v-if="tournament.liveStatus === 'playing'" class="live-banner">
+                <div class="live-dot"></div>
+                <span>En jeu depuis {{ tournament.time }}</span>
+                <span v-if="tournament.liveStack" class="live-banner-stack">
+                  Stack: {{ tournament.liveStack.toLocaleString() }}
+                </span>
+                <span class="live-banner-level">
+                  Niveau {{ tournament.liveLevel || 1 }}
+                </span>
+                <button
+                  class="live-update-btn"
+                  @click="openLiveStatusDialog(tournament)"
+                >
+                  Mettre à jour
+                </button>
+              </div>
 
-              <div class="tournament-time-slot">
+              <div v-if="tournament.liveStatus !== 'playing'" class="tournament-time-slot">
                 <i class="pi pi-clock"></i>
                 <span>{{ tournament.time }}</span>
+                <!-- Bannière éliminé avec gains (ITM) -->
+                <span v-if="tournament.liveStatus === 'eliminated' && tournament.liveWinnings" class="itm-badge">
+                  🔥 ITM ${{ tournament.liveWinnings.toLocaleString() }}
+                </span>
+                <!-- Bannière éliminé sans gains -->
+                <span v-else-if="tournament.liveStatus === 'eliminated'" class="eliminated-badge">
+                  Éliminé
+                </span>
               </div>
 
               <div class="tournament-info">
@@ -216,7 +383,7 @@
               </div>
 
 
-              <div class="tournament-actions">
+              <div v-if="tournament.liveStatus !== 'playing' && tournament.liveStatus !== 'eliminated'" class="tournament-actions">
                 <Button
                   icon="pi pi-pencil"
                   @click="openNoteDialog(tournament)"
@@ -431,6 +598,94 @@
       </div>
     </Dialog>
 
+    <!-- Dialog Statut Live -->
+    <Dialog
+      v-model:visible="showLiveDialog"
+      :modal="true"
+      :style="{ width: '420px' }"
+      :showHeader="false"
+      class="live-dialog"
+    >
+      <div class="live-dialog-content">
+        <h3>Statut du tournoi</h3>
+
+        <div v-if="tournamentForLive" class="live-tournament-info">
+          <span>{{ tournamentForLive.time }} — {{ tournamentForLive.casino }}</span>
+        </div>
+
+        <div class="live-status-selector">
+          <label>Statut :</label>
+          <div class="status-buttons">
+            <button
+              class="status-btn playing"
+              :class="{ active: liveStatusValue === 'playing' }"
+              @click="liveStatusValue = 'playing'"
+            >
+              🟢 En jeu
+            </button>
+            <button
+              class="status-btn eliminated"
+              :class="{ active: liveStatusValue === 'eliminated' }"
+              @click="liveStatusValue = 'eliminated'"
+            >
+              🔴 Éliminé
+            </button>
+          </div>
+        </div>
+
+        <div class="live-inputs-row">
+          <div class="live-input-field">
+            <label>Stack actuel :</label>
+            <InputText
+              v-model="liveStackValue"
+              type="number"
+              placeholder="Chips"
+              class="w-full"
+              :disabled="liveStatusValue === 'eliminated'"
+            />
+          </div>
+
+          <div class="live-input-field">
+            <label>Niveau :</label>
+            <InputText
+              v-model="liveLevelValue"
+              type="number"
+              placeholder=""
+              class="w-full"
+              :disabled="liveStatusValue === 'eliminated'"
+            />
+          </div>
+
+          <div class="live-input-field">
+            <label>Gains ($) :</label>
+            <InputText
+              v-model="liveWinningsValue"
+              type="number"
+              placeholder="ITM"
+              class="w-full"
+              :disabled="liveStatusValue !== 'eliminated'"
+            />
+          </div>
+        </div>
+
+        <div class="live-actions">
+          <Button
+            label="Annuler"
+            @click="showLiveDialog = false"
+            severity="secondary"
+            text
+          />
+          <Button
+            label="Enregistrer"
+            @click="saveLiveStatus"
+            icon="pi pi-check"
+            :loading="savingLive"
+            class="confirm-live-btn"
+          />
+        </div>
+      </div>
+    </Dialog>
+
     <!-- Modale carte itinéraire -->
     <Dialog
       v-model:visible="showRouteMapDialog"
@@ -487,7 +742,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onUnmounted, onMounted } from 'vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
@@ -539,6 +794,254 @@ const { getRouteForCasino, getCasinoCoords, HOME_LOCATION } = useCasinoRoutes();
 const toast = useToast();
 const casinoRouteTimes = ref({});
 
+// Alerte tournoi en cours
+const showTournamentAlert = ref(false);
+const activeTournament = ref(null);
+let alertCheckInterval = null;
+
+// Missed tournaments recap
+const showMissedRecapDialog = ref(false);
+const missedTournaments = ref([]);
+const missedResults = ref({});
+const savingMissedResults = ref(false);
+
+const hasAnyMissedResult = computed(() => {
+  return Object.values(missedResults.value).some(r => r.type);
+});
+
+// Détecte les tournois passés sans statut (non saisis)
+const checkMissedTournaments = () => {
+  if (!props.tournaments || props.tournaments.length === 0) return;
+
+  const now = new Date();
+  const missed = [];
+
+  for (const tournament of props.tournaments) {
+    // Ignorer les tournois déjà saisis
+    if (tournament.liveStatus === 'playing' || tournament.liveStatus === 'eliminated') continue;
+
+    const tournamentDate = parseTournamentDate(tournament.date, tournament.time);
+    if (!tournamentDate) continue;
+
+    // Le tournoi est passé depuis au moins 3h (il est terminé)
+    const diffMs = now.getTime() - tournamentDate.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    if (diffHours >= 3) {
+      missed.push(tournament);
+    }
+  }
+
+  if (missed.length > 0) {
+    // Vérifier si déjà dismiss aujourd'hui
+    const dismissedKey = `dismissed_missed_recap_${props.user?.id}`;
+    const lastDismissed = localStorage.getItem(dismissedKey);
+    const today = now.toISOString().split('T')[0];
+
+    if (lastDismissed === today) return;
+
+    missedTournaments.value = missed;
+    // Initialiser les résultats
+    missed.forEach(t => {
+      if (!missedResults.value[t.id]) {
+        missedResults.value[t.id] = { type: null, winnings: '' };
+      }
+    });
+    showMissedRecapDialog.value = true;
+  }
+};
+
+const setMissedResult = (tournament, type) => {
+  if (missedResults.value[tournament.id]?.type === type) {
+    // Toggle off
+    missedResults.value[tournament.id] = { type: null, winnings: '' };
+  } else {
+    missedResults.value[tournament.id] = { type, winnings: '' };
+  }
+};
+
+const dismissMissedRecap = () => {
+  const dismissedKey = `dismissed_missed_recap_${props.user?.id}`;
+  const today = new Date().toISOString().split('T')[0];
+  localStorage.setItem(dismissedKey, today);
+  showMissedRecapDialog.value = false;
+};
+
+const saveMissedResults = async () => {
+  savingMissedResults.value = true;
+
+  try {
+    for (const tournament of missedTournaments.value) {
+      const result = missedResults.value[tournament.id];
+      if (!result || !result.type) continue;
+
+      const body = {
+        live_status: 'eliminated',
+        live_stack: null,
+        live_level: null,
+        live_winnings: result.type === 'itm' && result.winnings ? parseInt(result.winnings) : null
+      };
+
+      await fetch(`${API_URL}/tournaments/${tournament.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    }
+
+    toast.add({
+      severity: 'success',
+      summary: 'Résultats enregistrés',
+      detail: 'Tous les résultats ont été sauvegardés',
+      life: 3000
+    });
+
+    showMissedRecapDialog.value = false;
+    dismissMissedRecap();
+    emit('refresh');
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Une erreur est survenue lors de la sauvegarde',
+      life: 3000
+    });
+  } finally {
+    savingMissedResults.value = false;
+  }
+};
+
+// Convertir une date de tournoi "04-juin" + "10:00" en objet Date
+const parseTournamentDate = (dateStr, timeStr) => {
+  if (!dateStr || !timeStr) return null;
+  const match = dateStr.match(/^(\d+)-(.+)$/);
+  if (!match) return null;
+
+  const day = parseInt(match[1]);
+  const timeParts = timeStr.match(/^(\d+):(\d+)/);
+  if (!timeParts) return null;
+
+  // Tous les tournois sont en juin 2026
+  return new Date(2026, 5, day, parseInt(timeParts[1]), parseInt(timeParts[2]));
+};
+
+// Vérifier s'il y a un tournoi imminent (dans les 30 minutes avant jusqu'à 15 min après le début)
+const checkForActiveTournament = () => {
+  if (!props.tournaments || props.tournaments.length === 0) return;
+
+  // Ne pas afficher l'alerte si un tournoi est déjà en cours
+  const hasInProgress = props.tournaments.some(t => t.liveStatus === 'playing');
+  if (hasInProgress) return;
+
+  const now = new Date();
+  const dismissedKey = `dismissed_tournament_${props.user?.id}`;
+  const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || '{}');
+
+  for (const tournament of props.tournaments) {
+    const tournamentDate = parseTournamentDate(tournament.date, tournament.time);
+    if (!tournamentDate) continue;
+
+    const diffMs = tournamentDate.getTime() - now.getTime();
+    const diffMin = diffMs / (1000 * 60);
+
+    // Alerte : entre 30 min avant et 15 min après le début
+    if (diffMin >= -15 && diffMin <= 30) {
+      // Ne pas réafficher si déjà dismiss pour ce tournoi aujourd'hui
+      const dismissKey = `${tournament.id}_${tournament.date}`;
+      if (dismissed[dismissKey]) continue;
+
+      activeTournament.value = tournament;
+      showTournamentAlert.value = true;
+      return;
+    }
+  }
+};
+
+const dismissAlert = () => {
+  if (activeTournament.value && props.user) {
+    const dismissedKey = `dismissed_tournament_${props.user.id}`;
+    const dismissed = JSON.parse(localStorage.getItem(dismissedKey) || '{}');
+    const dismissKey = `${activeTournament.value.id}_${activeTournament.value.date}`;
+    dismissed[dismissKey] = true;
+    localStorage.setItem(dismissedKey, JSON.stringify(dismissed));
+  }
+  showTournamentAlert.value = false;
+  activeTournament.value = null;
+};
+
+const confirmTournamentStart = async () => {
+  if (!activeTournament.value) return;
+
+  // Mettre le statut à "playing"
+  try {
+    const response = await fetch(
+      `${API_URL}/tournaments/${activeTournament.value.id}/status`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ live_stack: null, live_status: 'playing' })
+      }
+    );
+    if (response.ok) {
+      activeTournament.value.liveStatus = 'playing';
+    }
+  } catch (error) {
+    console.error('Erreur mise à jour statut:', error);
+  }
+
+  toast.add({
+    severity: 'success',
+    summary: 'Bonne chance ! 🍀',
+    detail: `Go ${activeTournament.value?.casino} !`,
+    life: 5000
+  });
+  dismissAlert();
+  emit('refresh');
+};
+
+// Vérifier s'il y a un tournoi en cours et ouvrir la modale
+const checkForInProgressTournament = () => {
+  if (!props.tournaments || props.tournaments.length === 0) return;
+
+  const inProgress = props.tournaments.find(t => t.liveStatus === 'playing');
+  if (inProgress) {
+    openLiveStatusDialog(inProgress);
+  }
+};
+
+// Lancer la vérification au montage et toutes les minutes
+onMounted(() => {
+  setTimeout(() => {
+    if (props.tournaments && props.tournaments.length > 0) {
+      // Vérifier s'il y a un tournoi en cours → ouvrir la modale de mise à jour
+      const inProgress = props.tournaments.find(t => t.liveStatus === 'playing');
+      if (inProgress) {
+        openLiveStatusDialog(inProgress);
+      } else {
+        // Vérifier les tournois passés non saisis
+        checkMissedTournaments();
+      }
+    }
+  }, 500);
+
+  setTimeout(() => checkForActiveTournament(), 1000);
+  alertCheckInterval = setInterval(checkForActiveTournament, 60000);
+});
+
+// Vérifier aussi quand les tournois changent
+watch(() => props.tournaments, (newTournaments) => {
+  if (newTournaments && newTournaments.length > 0) {
+    // Si un tournoi est en cours et la modale n'est pas déjà ouverte
+    const inProgress = newTournaments.find(t => t.liveStatus === 'playing');
+    if (inProgress && !showLiveDialog.value && !showTournamentAlert.value) {
+      openLiveStatusDialog(inProgress);
+    } else {
+      setTimeout(() => checkForActiveTournament(), 500);
+    }
+  }
+}, { deep: true });
+
 // Route map modal
 const showRouteMapDialog = ref(false);
 const routeMapCasino = ref('');
@@ -546,6 +1049,75 @@ const routeMapContainer = ref(null);
 const routeMapInfo = ref(null);
 let routeMap = null;
 let routeMapControl = null;
+
+// Live status dialog
+const showLiveDialog = ref(false);
+const tournamentForLive = ref(null);
+const liveStatusValue = ref('');
+const liveStackValue = ref('');
+const liveLevelValue = ref('');
+const liveWinningsValue = ref('');
+const savingLive = ref(false);
+
+const openLiveStatusDialog = (tournament) => {
+  tournamentForLive.value = tournament;
+  liveStatusValue.value = tournament.liveStatus || '';
+  liveStackValue.value = tournament.liveStack || '';
+  liveLevelValue.value = tournament.liveLevel || 1;
+  liveWinningsValue.value = tournament.liveWinnings || '';
+  showLiveDialog.value = true;
+};
+
+const saveLiveStatus = async () => {
+  if (!tournamentForLive.value) return;
+  savingLive.value = true;
+
+  try {
+    const response = await fetch(
+      `${API_URL}/tournaments/${tournamentForLive.value.id}/status`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          live_stack: liveStackValue.value ? parseInt(liveStackValue.value) : null,
+          live_status: liveStatusValue.value || null,
+          live_level: liveLevelValue.value ? parseInt(liveLevelValue.value) : null,
+          live_winnings: liveWinningsValue.value ? parseInt(liveWinningsValue.value) : null
+        })
+      }
+    );
+
+    if (response.ok) {
+      tournamentForLive.value.liveStack = liveStackValue.value ? parseInt(liveStackValue.value) : null;
+      tournamentForLive.value.liveStatus = liveStatusValue.value || null;
+      tournamentForLive.value.liveLevel = liveLevelValue.value ? parseInt(liveLevelValue.value) : null;
+      tournamentForLive.value.liveWinnings = liveWinningsValue.value ? parseInt(liveWinningsValue.value) : null;
+      showLiveDialog.value = false;
+      toast.add({
+        severity: 'success',
+        summary: 'Statut mis à jour',
+        detail: liveStatusValue.value === 'eliminated' ? 'Bien joué ! 💪' : 'Go go go ! 🔥',
+        life: 3000
+      });
+      emit('refresh');
+    } else {
+      toast.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de sauvegarder', life: 3000 });
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    toast.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue', life: 3000 });
+  } finally {
+    savingLive.value = false;
+  }
+};
+
+const resetLiveStatus = async () => {
+  liveStatusValue.value = '';
+  liveStackValue.value = '';
+  liveLevelValue.value = '';
+  liveWinningsValue.value = '';
+  await saveLiveStatus();
+};
 
 // Charger les temps de trajet pour les tournois
 const loadRouteTimes = async () => {
@@ -1059,6 +1631,10 @@ onUnmounted(() => {
     routeMap.remove();
     routeMap = null;
   }
+  if (alertCheckInterval) {
+    clearInterval(alertCheckInterval);
+    alertCheckInterval = null;
+  }
 });
 </script>
 
@@ -1117,7 +1693,7 @@ onUnmounted(() => {
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
 }
 
@@ -1397,6 +1973,148 @@ onUnmounted(() => {
 
 .tournament-row:not(:last-child) {
   border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+/* Tournoi en cours */
+.tournament-in-progress {
+  background: rgba(34, 197, 94, 0.05) !important;
+  border: 2px solid #22c55e !important;
+  border-radius: 12px;
+  margin: 6px 12px;
+  padding: 0 !important;
+  flex-direction: column !important;
+  overflow: hidden;
+}
+
+.tournament-in-progress .tournament-time-slot,
+.tournament-in-progress .tournament-info,
+.tournament-in-progress .tournament-actions {
+  padding: 0 18px 18px;
+}
+
+.tournament-in-progress .tournament-actions {
+  padding-bottom: 14px;
+}
+
+/* Bannière EN JEU */
+.live-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-weight: 800;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.live-banner-stack {
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  margin: 0 auto;
+}
+
+.live-banner-level {
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+}
+
+.live-update-btn {
+  margin-left: auto;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.live-update-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: white;
+}
+
+/* Tournoi éliminé sans gains */
+.tournament-eliminated {
+  opacity: 0.5;
+  border-left: 4px solid #ef4444;
+}
+
+/* Tournoi éliminé avec gains (ITM) */
+.tournament-itm {
+  border: 2px solid #22c55e !important;
+  border-radius: 12px;
+  margin: 6px 12px;
+  background:
+    linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(245, 158, 11, 0.08)) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.tournament-itm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.itm-badge {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  margin-left: auto;
+}
+
+.eliminated-badge {
+  padding: 4px 10px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  margin-left: auto;
+}
+
+@keyframes live-pulse {
+  0%, 100% { background: rgba(34, 197, 94, 0.05); }
+  50% { background: rgba(34, 197, 94, 0.1); }
 }
 
 /* Note indicator in corner */
@@ -1722,7 +2440,6 @@ onUnmounted(() => {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  width: 100%;
   margin-top: 8px;
   padding: 8px 12px;
   background: rgba(34, 197, 94, 0.1);
@@ -2076,6 +2793,25 @@ onUnmounted(() => {
     padding: 12px;
   }
 
+  .live-banner {
+    flex-wrap: wrap;
+    padding: 8px 14px;
+    gap: 8px;
+  }
+
+  .live-banner-stack {
+    font-size: 0.75rem;
+  }
+
+  .live-update-btn {
+    padding: 5px 10px;
+    font-size: 0.6875rem;
+  }
+
+  .tournament-in-progress {
+    margin: 4px 8px;
+  }
+
   .route-map-container {
     height: 50vh;
     min-height: 280px;
@@ -2199,73 +2935,6 @@ onUnmounted(() => {
     font-size: 1.125rem;
   }
 
-  .days-list {
-    padding: 12px;
-    gap: 12px;
-  }
-
-  .user-details h1 {
-    font-size: 1.375rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .program-container {
-    padding: 8px;
-  }
-
-  .program-header {
-    margin-bottom: 20px;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .stat-card {
-    padding: 12px;
-    gap: 10px;
-    border-radius: 10px;
-  }
-
-  .stat-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 0.875rem;
-    border-radius: 8px;
-  }
-
-  .stat-value {
-    font-size: 1.125rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-  }
-
-  .user-avatar {
-    width: 48px;
-    height: 48px;
-    font-size: 1.25rem;
-    border-radius: 12px;
-  }
-
-  .user-info {
-    gap: 12px;
-  }
-
-  .user-details h1 {
-    font-size: 1.125rem;
-  }
-
-  .user-subtitle {
-    font-size: 0.875rem;
-  }
-
-  .section-header h2 {
-    font-size: 1rem;
-  }
 
   .tournament-count {
     font-size: 0.75rem;
@@ -2541,5 +3210,412 @@ onUnmounted(() => {
   .route-stat-mini i {
     font-size: 0.6875rem;
   }
+}
+
+/* Alerte tournoi en cours */
+.alert-dialog-content {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.alert-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+}
+
+.alert-icon.pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(245, 158, 11, 0.7), 0 0 60px rgba(239, 68, 68, 0.3); }
+}
+
+.alert-icon i {
+  font-size: 2rem;
+  color: white;
+}
+
+.alert-dialog-content h3 {
+  color: #f1f5f9;
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.alert-tournament-info {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fbbf24;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.alert-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  color: #92400e;
+  font-size: 0.9375rem;
+}
+
+
+.alert-info-row.time {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.alert-info-row.casino {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.alert-info-row.buyin {
+  font-weight: 700;
+  color: #15803d;
+}
+
+
+.alert-info-row.stack {
+  font-weight: 600;
+  color: #4338ca;
+}
+
+
+.alert-info-row.levels {
+  color: #64748b;
+}
+
+.alert-message {
+  color: #64748b;
+  font-size: 1rem;
+  margin: 0 0 24px 0;
+  font-weight: 500;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-alert-btn {
+  min-width: 160px;
+  background: #fef6d2 !important;
+  border: none !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+}
+
+.confirm-alert-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Live Dialog */
+.live-dialog-content {
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.live-dialog-content h3 {
+  color: #f1f5f9;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.live-tournament-info {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: #a5b4fc;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.live-status-selector {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.live-status-selector label {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.status-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #334155;
+  background: transparent;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-btn:hover {
+  border-color: #64748b;
+}
+
+.status-btn.playing.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.status-btn.eliminated.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.live-inputs-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.live-input-field {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+}
+
+.live-input-field label {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.live-input-field :deep(.p-inputtext) {
+  width: 100%;
+}
+
+.live-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-live-btn {
+  min-width: 140px;
+}
+
+/* ITM Stat Card */
+.stat-icon.itm {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.stat-card-itm {
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(245, 158, 11, 0.05)) !important;
+}
+
+.stat-card-itm:hover {
+  border-color: #22c55e !important;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+}
+
+.itm-value {
+  color: #22c55e !important;
+}
+
+/* Missed Recap Dialog */
+.missed-recap-content {
+  padding: 32px 24px;
+}
+
+.missed-recap-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.missed-recap-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.missed-recap-icon i {
+  font-size: 1.75rem;
+  color: #f59e0b;
+}
+
+.missed-recap-content h3 {
+  color: #f1f5f9;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.missed-recap-subtitle {
+  color: #94a3b8;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.missed-tournaments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+}
+
+.missed-tournament-item {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.missed-tournament-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.missed-tournament-date {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.missed-tournament-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.missed-time {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.missed-casino {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.missed-buyin {
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.missed-tournament-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.missed-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px solid #334155;
+  background: transparent;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.missed-btn:hover {
+  border-color: #64748b;
+  color: #f1f5f9;
+}
+
+.missed-btn.itm-btn.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.missed-btn.bust-btn.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.missed-winnings-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #334155;
+}
+
+.missed-winnings-input label {
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.winnings-input {
+  flex: 1;
+  max-width: 150px;
+}
+
+.missed-recap-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-missed-btn {
+  min-width: 160px;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  border: none !important;
+}
+
+.confirm-missed-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
 }
 </style>

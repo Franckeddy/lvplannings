@@ -177,10 +177,11 @@
                   >
                     <div
                       class="user-chip"
+                      :class="{ 'user-chip-itm': user.liveWinnings }"
                       :style="{ backgroundColor: getUserColor(user.name) }"
                       @click="openNoteDialog(user)"
                     >
-                      {{ user.name }}
+                      {{ user.name }}<span v-if="user.liveWinnings" class="chip-flame">🔥</span>
                     </div>
                     <div
                       v-if="user.user_note"
@@ -613,7 +614,8 @@ const teamByDay = computed(() => {
       grouped[date].casinos[casino].times[time].users.push({
         ...user,
         tournamentId: tournament.id,
-        user_note: tournament.user_note
+        user_note: tournament.user_note,
+        liveWinnings: tournament.liveWinnings
       });
       if (!grouped[date].casinos[casino].users.find(u => u.id === user.id)) {
         grouped[date].casinos[casino].users.push(user);
@@ -2240,6 +2242,15 @@ onUnmounted(() => {
 .user-chip:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.user-chip-itm {
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chip-flame {
+  margin-left: 4px;
+  font-size: 0.875rem;
 }
 
 .user-note-icon {

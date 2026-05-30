@@ -149,9 +149,10 @@
                   v-for="enrolled in getEnrolledUsers(tournament)"
                   :key="enrolled.id"
                   class="enrolled-chip"
+                  :class="{ 'enrolled-chip-itm': enrolled.liveWinnings }"
                   :style="{ backgroundColor: getUserColor(enrolled.userName) }"
                 >
-                  {{ enrolled.userName }}
+                  {{ enrolled.userName }}<span v-if="enrolled.liveWinnings" class="chip-flame">🔥</span>
                 </div>
               </div>
               <!-- Notes toujours visibles -->
@@ -2051,6 +2052,7 @@ onUnmounted(() => {
 }
 
 .tournament-structure {
+  width: fit-content;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -2102,6 +2104,7 @@ onUnmounted(() => {
 
 /* Route card styles */
 .route-card {
+  width: fit-content;
   background: #0f172a;
   border-radius: 10px;
   padding: 10px 12px;
@@ -2207,6 +2210,15 @@ onUnmounted(() => {
   color: white;
   font-size: 0.6875rem;
   font-weight: 600;
+}
+
+.enrolled-chip-itm {
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.chip-flame {
+  margin-left: 2px;
+  font-size: 0.75rem;
 }
 
 /* Notes toujours visibles */

@@ -84,6 +84,7 @@ app.get('/api/users/:userId/tournaments', async (req, res) => {
       `SELECT 
         t.id, t.user_id, t.date, t.time, t.casino, t.buyin, t.levels, 
         t.user_note, t.scraped_tournament_id, t.name, t.day, t.is_restart as "isRestart",
+        t.live_stack as "liveStack", t.live_status as "liveStatus", t.live_level as "liveLevel", t.live_winnings as "liveWinnings",
         st.structure_chips as "structureChips",
         st.structure_levels as "structureLevels",
         st.structure_guarantee as "structureGuarantee"
@@ -130,12 +131,16 @@ app.get('/api/users/:userId/summary', async (req, res) => {
     const tournaments = result.rows;
 
     const totalBuyins = tournaments.reduce((sum, t) => sum + (t.buyin || 0), 0);
+    const totalWinnings = tournaments.reduce((sum, t) => sum + (t.live_winnings || 0), 0);
+    const itmCount = tournaments.filter(t => t.live_winnings && t.live_winnings > 0).length;
     const casinos = [...new Set(tournaments.map(t => t.casino))];
     const dates = [...new Set(tournaments.map(t => t.date))];
 
     res.json({
       totalTournaments: tournaments.length,
       totalBuyins,
+      totalWinnings,
+      itmCount,
       casinos,
       numberOfDays: dates.length,
       startDate: dates[0],
@@ -252,6 +257,34 @@ app.delete('/api/tournaments/:id', async (req, res) => {
     }
     res.status(204).send();
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PATCH mettre à jour le statut live d'un tournoi (stack, éliminé, niveau, gains)
+app.patch('/api/tournaments/:id/status', async (req, res) => {
+  try {
+    const { live_stack, live_status, live_level, live_winnings } = req.body;
+    const tournamentId = req.params.id;
+
+    // Ajouter les colonnes si elles n'existent pas
+    await pool.query('ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS live_stack INTEGER');
+    await pool.query('ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS live_status TEXT');
+    await pool.query('ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS live_level INTEGER');
+    await pool.query('ALTER TABLE tournaments ADD COLUMN IF NOT EXISTS live_winnings INTEGER');
+
+    const result = await pool.query(
+      'UPDATE tournaments SET live_stack = $1, live_status = $2, live_level = $3, live_winnings = $4 WHERE id = $5 RETURNING *',
+      [live_stack || null, live_status || null, live_level || null, live_winnings || null, tournamentId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tournoi non trouvé' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Erreur PATCH /status:', error.message);
     res.status(500).json({ error: error.message });
   }
 });

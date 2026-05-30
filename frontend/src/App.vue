@@ -420,6 +420,7 @@ onMounted(async () => {
     const savedUser = users.value.find(u => u.id === parseInt(savedUserId));
     if (savedUser) {
       selectedUser.value = savedUser;
+      currentView.value = 'planning';
       loadUserData(savedUser.id);
     }
   }
