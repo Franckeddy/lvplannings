@@ -73,14 +73,26 @@
 
         <div class="divider"></div>
 
-        <UserSelector
-          :key="usersKey"
-          :users="users"
-          :selected-user="selectedUser"
-          @user-selected="handleUserSelected"
-          @user-created="handleUserCreated"
-          @user-disconnected="handleUserDisconnected"
-        />
+        <!-- Utilisateur connecté -->
+        <div class="connected-user-section" v-if="selectedUser">
+          <label>Connecté :</label>
+          <div class="connected-user-badge">
+            <div class="connected-user-avatar">
+              {{ selectedUser.name.charAt(0).toUpperCase() }}
+            </div>
+            <span class="connected-user-name">{{ selectedUser.name }}</span>
+            <i class="pi pi-check-circle connected-user-check"></i>
+          </div>
+          <Button
+            icon="pi pi-sign-out"
+            label="Déconnexion"
+            @click="handleUserDisconnected"
+            severity="danger"
+            text
+            size="small"
+            class="disconnect-btn"
+          />
+        </div>
 
         <div class="sidebar-external-link">
           <a
@@ -143,6 +155,174 @@
     >
       <i class="pi pi-mobile"></i>
     </button>
+
+    <!-- Modale de confirmation de connexion -->
+    <Dialog
+      v-model:visible="showLoginConfirmModal"
+      :modal="true"
+      :closable="false"
+      :showHeader="false"
+      :style="{ width: '420px', maxWidth: '95vw' }"
+      class="login-confirm-dialog"
+    >
+      <!-- Bouton retour -->
+      <button
+        v-if="canGoBack"
+        class="login-back-btn"
+        @click="goBackLoginStep"
+        type="button"
+      >
+        <i class="pi pi-arrow-left"></i>
+      </button>
+
+      <!-- Étape 1: Confirmation utilisateur précédent -->
+      <div v-if="loginStep === 'confirm' && pendingUser" class="login-confirm-content">
+        <p class="login-confirm-message">
+          Êtes-vous
+        </p>
+        <div class="login-confirm-user">
+          <div class="login-confirm-avatar">
+            {{ pendingUser.name.charAt(0).toUpperCase() }}
+          </div>
+          <span class="login-confirm-name">{{ pendingUser.name }}</span>
+          <span class="login-confirm-question">?</span>
+        </div>
+        <div class="login-confirm-actions-vertical">
+          <Button
+            label="Oui, c'est moi"
+            icon="pi pi-check"
+            @click="confirmLogin"
+            severity="success"
+            class="login-btn-full"
+          />
+          <Button
+            label="Non, choisir un autre profil"
+            icon="pi pi-users"
+            @click="loginStep = 'select'"
+            severity="secondary"
+            outlined
+            class="login-btn-full"
+          />
+        </div>
+      </div>
+
+      <!-- Étape 2: Sélection d'un utilisateur ou création -->
+      <div v-else-if="loginStep === 'select'" class="login-select-content">
+        <p class="login-select-message">
+          Choisissez votre profil
+        </p>
+
+        <div class="login-users-list">
+          <button
+            v-for="user in users"
+            :key="user.id"
+            class="login-user-option"
+            :class="{ 'selected': selectedLoginUser?.id === user.id }"
+            @click="selectedLoginUser = user"
+          >
+            <div class="login-user-avatar">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </div>
+            <span class="login-user-name">{{ user.name }}</span>
+            <i v-if="selectedLoginUser?.id === user.id" class="pi pi-check login-user-check"></i>
+          </button>
+        </div>
+
+        <div class="login-select-actions">
+          <Button
+            label="Se connecter"
+            icon="pi pi-sign-in"
+            @click="confirmSelectedUser"
+            :disabled="!selectedLoginUser"
+            severity="success"
+            class="login-btn-full"
+          />
+          <div class="login-divider">
+            <span>ou</span>
+          </div>
+          <Button
+            label="Créer un nouveau profil"
+            icon="pi pi-plus"
+            @click="loginStep = 'create'"
+            severity="info"
+            outlined
+            class="login-btn-full"
+          />
+        </div>
+      </div>
+
+      <!-- Étape 3: Création d'un nouveau profil -->
+      <div v-else-if="loginStep === 'create'" class="login-create-content">
+        <div class="login-create-icon">
+          <i class="pi pi-user-plus"></i>
+        </div>
+        <p class="login-create-message">
+          Créer votre profil
+        </p>
+
+        <div class="login-create-form">
+          <label for="new-login-name">Votre pseudo</label>
+          <InputText
+            id="new-login-name"
+            v-model="newLoginUserName"
+            placeholder="Entrez votre pseudo"
+            class="login-input-full"
+            @keyup.enter="createAndLogin"
+          />
+        </div>
+
+        <div class="login-create-actions">
+          <Button
+            label="Créer et me connecter"
+            icon="pi pi-check"
+            @click="createAndLogin"
+            :disabled="!newLoginUserName.trim()"
+            severity="success"
+            class="login-btn-full"
+          />
+          <Button
+            label="Retour"
+            icon="pi pi-arrow-left"
+            @click="loginStep = 'select'"
+            severity="secondary"
+            text
+            class="login-btn-full"
+          />
+        </div>
+      </div>
+
+      <!-- Première visite: pas d'utilisateur précédent -->
+      <div v-else-if="loginStep === 'first'" class="login-first-content">
+        <div class="login-first-icon">
+          <i class="pi pi-star"></i>
+        </div>
+        <p class="login-first-message">
+          Bienvenue sur Las Vegas Poker 2026 !
+        </p>
+        <p class="login-first-submessage">
+          Pour commencer, identifiez-vous
+        </p>
+
+        <div class="login-first-actions">
+          <Button
+            v-if="users.length > 0"
+            label="Choisir mon profil"
+            icon="pi pi-users"
+            @click="loginStep = 'select'"
+            severity="primary"
+            class="login-btn-full"
+          />
+          <Button
+            label="Créer mon profil"
+            icon="pi pi-plus"
+            @click="loginStep = 'create'"
+            :severity="users.length > 0 ? 'secondary' : 'primary'"
+            :outlined="users.length > 0"
+            class="login-btn-full"
+          />
+        </div>
+      </div>
+    </Dialog>
 
     <!-- Modale Apps -->
     <Dialog
@@ -260,18 +440,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { userService } from './services/api';
-import UserSelector from './components/UserSelector.vue';
 import TournamentList from './components/TournamentList.vue';
 import TournamentTimeline from './components/TournamentTimeline.vue';
 import TeamRecap from './components/TeamRecap.vue';
 import CasinoMap from './components/CasinoMap.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
 
 const users = ref([]);
-const usersKey = ref(0);
 const sidebarCollapsed = ref(false);
 const selectedUser = ref(null);
 const tournaments = ref([]);
@@ -282,9 +461,32 @@ const windowWidth = ref(window.innerWidth);
 const showCasinoMap = ref(false);
 const showAppsModal = ref(false);
 const selectedStore = ref('google');
+const showLoginConfirmModal = ref(false);
+const pendingUser = ref(null);
+const loginStep = ref('confirm'); // 'confirm', 'select', 'create', 'first'
+const selectedLoginUser = ref(null);
+const newLoginUserName = ref('');
 
 // Computed pour détecter si on est sur mobile
 const isMobile = computed(() => windowWidth.value <= 768);
+
+// Computed pour savoir si on peut revenir en arrière dans la modale de connexion
+const canGoBack = computed(() => {
+  // Retour possible depuis 'select' vers 'confirm' si on a un pendingUser
+  if (loginStep.value === 'select' && pendingUser.value) return true;
+  // Retour possible depuis 'create' vers 'select'
+  if (loginStep.value === 'create') return true;
+  return false;
+});
+
+// Fonction pour revenir à l'étape précédente dans la modale de connexion
+const goBackLoginStep = () => {
+  if (loginStep.value === 'select' && pendingUser.value) {
+    loginStep.value = 'confirm';
+  } else if (loginStep.value === 'create') {
+    loginStep.value = users.value.length > 0 ? 'select' : 'first';
+  }
+};
 
 // Fonction pour gérer le resize
 const handleResize = () => {
@@ -332,33 +534,15 @@ const loadUserData = async (userId) => {
   }
 };
 
-const handleUserSelected = (user) => {
-  selectedUser.value = user;
-  localStorage.setItem('currentUserId', user.id.toString());
-  loadUserData(user.id);
-  currentView.value = 'planning';
-  if (isMobile.value) {
-    sidebarCollapsed.value = true;
-  }
-};
-
 const handleUserDisconnected = () => {
   selectedUser.value = null;
   tournaments.value = [];
   summary.value = null;
   localStorage.removeItem('currentUserId');
   currentView.value = 'timeline';
-};
-
-const handleUserCreated = async (userName) => {
-  try {
-    const response = await userService.create(userName);
-    await loadUsers();
-    // Sélectionner automatiquement le nouvel utilisateur créé
-    handleUserSelected(response.data);
-  } catch (error) {
-    console.error('Erreur lors de la création de l\'utilisateur:', error);
-  }
+  // Réafficher la modale de connexion
+  loginStep.value = users.value.length > 0 ? 'select' : 'first';
+  showLoginConfirmModal.value = true;
 };
 
 const handleTournamentAddedFromTimeline = async () => {
@@ -416,16 +600,23 @@ const toggleSidebar = () => {
 onMounted(async () => {
   await loadUsers();
 
-  // Restaurer l'utilisateur depuis localStorage
+  // Toujours afficher la modale de connexion
   const savedUserId = localStorage.getItem('currentUserId');
   if (savedUserId && users.value.length > 0) {
     const savedUser = users.value.find(u => u.id === parseInt(savedUserId));
     if (savedUser) {
-      selectedUser.value = savedUser;
-      currentView.value = 'planning';
-      loadUserData(savedUser.id);
+      // Utilisateur précédent trouvé - demander confirmation
+      pendingUser.value = savedUser;
+      loginStep.value = 'confirm';
+    } else {
+      // Utilisateur non trouvé - afficher sélection
+      loginStep.value = users.value.length > 0 ? 'select' : 'first';
     }
+  } else {
+    // Première visite ou pas d'utilisateur sauvegardé
+    loginStep.value = users.value.length > 0 ? 'select' : 'first';
   }
+  showLoginConfirmModal.value = true;
 
   // Ajouter le listener pour le resize
   window.addEventListener('resize', handleResize);
@@ -441,6 +632,51 @@ onMounted(async () => {
     sidebarCollapsed.value = true;
   }
 });
+
+// Fonctions pour la confirmation de connexion
+const confirmLogin = () => {
+  if (pendingUser.value) {
+    selectedUser.value = pendingUser.value;
+    localStorage.setItem('currentUserId', pendingUser.value.id.toString());
+    currentView.value = 'planning';
+    loadUserData(pendingUser.value.id);
+  }
+  closeLoginModal();
+};
+
+const confirmSelectedUser = () => {
+  if (selectedLoginUser.value) {
+    selectedUser.value = selectedLoginUser.value;
+    localStorage.setItem('currentUserId', selectedLoginUser.value.id.toString());
+    currentView.value = 'planning';
+    loadUserData(selectedLoginUser.value.id);
+  }
+  closeLoginModal();
+};
+
+const createAndLogin = async () => {
+  if (newLoginUserName.value.trim()) {
+    try {
+      const response = await userService.create(newLoginUserName.value.trim());
+      await loadUsers();
+      selectedUser.value = response.data;
+      localStorage.setItem('currentUserId', response.data.id.toString());
+      currentView.value = 'planning';
+      loadUserData(response.data.id);
+      closeLoginModal();
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'utilisateur:', error);
+    }
+  }
+};
+
+const closeLoginModal = () => {
+  showLoginConfirmModal.value = false;
+  pendingUser.value = null;
+  selectedLoginUser.value = null;
+  newLoginUserName.value = '';
+  loginStep.value = 'confirm';
+};
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
@@ -659,6 +895,66 @@ body {
   opacity: 0.9;
 }
 
+/* Section utilisateur connecté */
+.connected-user-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.connected-user-section > label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.connected-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 10px;
+}
+
+.connected-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.connected-user-name {
+  flex: 1;
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.connected-user-check {
+  color: #22c55e;
+  font-size: 1.125rem;
+}
+
+.disconnect-btn {
+  align-self: flex-start;
+  font-size: 0.8125rem !important;
+  opacity: 0.7;
+}
+
+.disconnect-btn:hover {
+  opacity: 1;
+}
+
 /* External Link Button */
 .sidebar-external-link {
   margin-top: auto;
@@ -769,6 +1065,426 @@ body {
 
 .floating-apps-btn:active {
   transform: scale(1.05);
+}
+
+/* Modale confirmation de connexion */
+:deep(.login-confirm-dialog .p-dialog-content) {
+  background: #0f172a;
+  padding: 32px 24px;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* Bouton retour modale connexion */
+.login-back-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.login-back-btn:hover {
+  background: #334155;
+  color: #f1f5f9;
+  border-color: #6366f1;
+}
+
+.login-back-btn i {
+  font-size: 1rem;
+}
+
+/* Étape Confirm */
+.login-confirm-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.login-confirm-icon,
+.login-select-icon,
+.login-create-icon,
+.login-first-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-confirm-icon i,
+.login-select-icon i,
+.login-create-icon i,
+.login-first-icon i {
+  font-size: 2rem;
+  color: white;
+}
+
+.login-first-icon {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.login-create-icon {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+}
+
+.login-confirm-message {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.login-confirm-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  border-radius: 12px;
+}
+
+.login-confirm-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.login-confirm-name {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.login-confirm-question {
+  color: #94a3b8;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.login-confirm-actions-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.login-btn-full {
+  width: 100%;
+  justify-content: center !important;
+}
+
+/* Étape Select */
+.login-select-content,
+.login-create-content,
+.login-first-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.login-select-message,
+.login-create-message,
+.login-first-message {
+  color: #f1f5f9;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.login-first-submessage {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin: -8px 0 0 0;
+}
+
+.login-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.login-user-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.login-user-option:hover {
+  background: #334155;
+  border-color: #6366f1;
+}
+
+.login-user-option.selected {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+.login-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.login-user-name {
+  flex: 1;
+  color: #f1f5f9;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.login-user-check {
+  color: #22c55e;
+  font-size: 1.25rem;
+}
+
+.login-select-actions,
+.login-create-actions,
+.login-first-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #334155;
+}
+
+.login-divider span {
+  color: #64748b;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Étape Create */
+.login-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+}
+
+.login-create-form label {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.login-input-full {
+  width: 100%;
+}
+
+:deep(.login-input-full.p-inputtext) {
+  background: #1e293b;
+  border: 2px solid #334155;
+  color: #f1f5f9;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
+:deep(.login-input-full.p-inputtext:focus) {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Responsive modale connexion */
+@media (max-width: 480px) {
+  :deep(.login-confirm-dialog) {
+    width: calc(100vw - 1rem) !important;
+    max-width: none !important;
+    margin: 0.5rem !important;
+  }
+
+  :deep(.login-confirm-dialog .p-dialog-content) {
+    padding: 24px 16px;
+  }
+
+  .login-back-btn {
+    top: 12px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .login-back-btn i {
+    font-size: 0.875rem;
+  }
+
+  .login-confirm-icon,
+  .login-select-icon,
+  .login-create-icon,
+  .login-first-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .login-confirm-icon i,
+  .login-select-icon i,
+  .login-create-icon i,
+  .login-first-icon i {
+    font-size: 1.75rem;
+  }
+
+  .login-confirm-message,
+  .login-select-message,
+  .login-create-message,
+  .login-first-message {
+    font-size: 1rem;
+  }
+
+  .login-first-submessage {
+    font-size: 0.875rem;
+  }
+
+  .login-confirm-user {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .login-confirm-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .login-confirm-name {
+    font-size: 1.2rem;
+  }
+
+  .login-confirm-question {
+    font-size: 1.2rem;
+  }
+
+  .login-users-list {
+    max-height: 180px;
+  }
+
+  .login-user-option {
+    padding: 10px 12px;
+  }
+
+  .login-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .login-user-name {
+    font-size: 0.9375rem;
+  }
+
+  .login-btn-full {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .login-create-form label {
+    font-size: 0.8125rem;
+  }
+
+  :deep(.login-input-full.p-inputtext) {
+    padding: 10px 14px;
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 360px) {
+  :deep(.login-confirm-dialog .p-dialog-content) {
+    padding: 20px 12px;
+  }
+
+  .login-confirm-content,
+  .login-select-content,
+  .login-create-content,
+  .login-first-content {
+    gap: 12px;
+  }
+
+  .login-confirm-icon,
+  .login-select-icon,
+  .login-create-icon,
+  .login-first-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .login-confirm-icon i,
+  .login-select-icon i,
+  .login-create-icon i,
+  .login-first-icon i {
+    font-size: 1.5rem;
+  }
+
+  .login-users-list {
+    max-height: 150px;
+  }
+
+  .login-select-actions,
+  .login-create-actions,
+  .login-first-actions,
+  .login-confirm-actions-vertical {
+    gap: 10px;
+  }
 }
 
 /* Modale Apps */
