@@ -574,6 +574,7 @@ const startSharingLocation = () => {
   if (!selectedUser.value || !navigator.geolocation) return;
 
   shareMyLocation.value = true;
+  localStorage.setItem('shareLocation', 'true');
 
   // Envoyer la position immédiatement puis à chaque changement
   locationWatchId = navigator.geolocation.watchPosition(
@@ -605,6 +606,7 @@ const startSharingLocation = () => {
 // Arrêter le partage de position
 const stopSharingLocation = async () => {
   shareMyLocation.value = false;
+  localStorage.setItem('shareLocation', 'false');
 
   if (locationWatchId !== null) {
     navigator.geolocation.clearWatch(locationWatchId);
@@ -685,23 +687,31 @@ const toggleSidebar = () => {
 onMounted(async () => {
   await loadUsers();
 
-  // Toujours afficher la modale de connexion
+  // Vérifier si un utilisateur est déjà sauvegardé
   const savedUserId = localStorage.getItem('currentUserId');
   if (savedUserId && users.value.length > 0) {
     const savedUser = users.value.find(u => u.id === parseInt(savedUserId));
     if (savedUser) {
-      // Utilisateur précédent trouvé - demander confirmation
-      pendingUser.value = savedUser;
-      loginStep.value = 'confirm';
+      // Utilisateur précédent trouvé - le connecter directement sans modale
+      selectedUser.value = savedUser;
+      currentView.value = 'planning';
+      loadUserData(savedUser.id);
+      // Restaurer le partage de position si précédemment activé
+      const savedShareLocation = localStorage.getItem('shareLocation');
+      if (savedShareLocation === 'true') {
+        setTimeout(() => startSharingLocation(), 500);
+      }
+      showLoginConfirmModal.value = false;
     } else {
-      // Utilisateur non trouvé - afficher sélection
+      // Utilisateur non trouvé dans la base - afficher modale de sélection
       loginStep.value = users.value.length > 0 ? 'select' : 'first';
+      showLoginConfirmModal.value = true;
     }
   } else {
-    // Première visite ou pas d'utilisateur sauvegardé
+    // Première visite ou pas d'utilisateur sauvegardé - afficher modale
     loginStep.value = users.value.length > 0 ? 'select' : 'first';
+    showLoginConfirmModal.value = true;
   }
-  showLoginConfirmModal.value = true;
 
   // Ajouter le listener pour le resize
   window.addEventListener('resize', handleResize);
@@ -725,8 +735,11 @@ const confirmLogin = () => {
     localStorage.setItem('currentUserId', pendingUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(pendingUser.value.id);
-    // Activer le partage de position par défaut
-    setTimeout(() => startSharingLocation(), 500);
+    // Restaurer le partage de position si précédemment activé
+    const savedShareLocation = localStorage.getItem('shareLocation');
+    if (savedShareLocation === 'true') {
+      setTimeout(() => startSharingLocation(), 500);
+    }
   }
   closeLoginModal();
 };
@@ -737,8 +750,11 @@ const confirmSelectedUser = () => {
     localStorage.setItem('currentUserId', selectedLoginUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(selectedLoginUser.value.id);
-    // Activer le partage de position par défaut
-    setTimeout(() => startSharingLocation(), 500);
+    // Restaurer le partage de position si précédemment activé
+    const savedShareLocation = localStorage.getItem('shareLocation');
+    if (savedShareLocation === 'true') {
+      setTimeout(() => startSharingLocation(), 500);
+    }
   }
   closeLoginModal();
 };
@@ -752,7 +768,7 @@ const createAndLogin = async () => {
       localStorage.setItem('currentUserId', response.data.id.toString());
       currentView.value = 'planning';
       loadUserData(response.data.id);
-      // Activer le partage de position par défaut
+      // Pour un nouvel utilisateur, activer le partage par défaut
       setTimeout(() => startSharingLocation(), 500);
       closeLoginModal();
     } catch (error) {
