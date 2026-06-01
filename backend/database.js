@@ -8,7 +8,7 @@ const { Pool } = pg;
 // Configuration de la connexion PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: { rejectUnauthorized: false }
 });
 
 // Fonction pour initialiser les tables
@@ -137,10 +137,13 @@ async function initializeHugoData(client) {
   }
 }
 
-// Initialiser les tables au démarrage
-initializeTables().catch(err => {
-  console.error('Erreur fatale lors de l\'initialisation:', err);
-  process.exit(1);
-});
+// ⚠️ PROD: ne jamais exécuter d'init/migration automatique sur la DB Render.
+// Pour relancer l'init manuellement: lancer avec INIT_DB=true npm run dev
+if (process.env.INIT_DB === 'true') {
+  initializeTables().catch(err => {
+    console.error('Erreur fatale lors de l\'initialisation:', err);
+    process.exit(1);
+  });
+}
 
 export default pool;

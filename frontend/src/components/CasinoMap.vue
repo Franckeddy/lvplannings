@@ -232,7 +232,7 @@
         <div class="legend-actions">
           <Button
             icon="pi pi-refresh"
-            :label="isMobile ? '' : 'Recentrer'"
+            :label="isMobile ? 'Recentrer' : 'Recentrer'"
             size="small"
             severity="secondary"
             @click="resetMapView"
@@ -240,7 +240,7 @@
           />
           <Button
             :icon="geolocating ? 'pi pi-spin pi-spinner' : 'pi pi-compass'"
-            :label="isMobile ? '' : (userLocation ? 'Ma position' : 'Me localiser')"
+            :label="isMobile ? 'Ma position' : (userLocation ? 'Ma position' : 'Me localiser')"
             size="small"
             :severity="userLocation ? 'success' : 'secondary'"
             @click="geolocateUser"
@@ -6664,16 +6664,12 @@ onUnmounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - 50px);
     max-height: none;
     min-height: 100%;
     border-radius: 0;
   }
 
-  .leaflet-map {
-    height: 100% !important;
-    min-height: calc(100vh - 50px);
-  }
+  .leaflet-map {}
 
   .route-info-panel {
     top: auto;
@@ -6921,15 +6917,11 @@ onUnmounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - 50px);
     max-height: none;
     min-height: 100%;
   }
 
-  .leaflet-map {
-    height: 100% !important;
-    min-height: calc(100vh - 50px);
-  }
+  .leaflet-map {}
 
   .route-info-panel {
     top: auto;
@@ -7335,7 +7327,6 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .team-panel {
     top: auto;
-    bottom: 180px;
     right: 8px;
     left: auto;
     min-width: 140px;
@@ -7392,7 +7383,7 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .team-panel {
-    bottom: 140px;
+    top: 5em;
     min-width: 120px;
     max-width: 140px;
   }

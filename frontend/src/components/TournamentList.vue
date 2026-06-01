@@ -332,24 +332,27 @@
                 <!-- Carte trajet voiture -->
                 <div
                   v-if="getRouteTime(tournament.casino)"
-                  class="route-card driving-card clickable"
+                  class="route-card-row"
                   @click.stop="openRouteMap(tournament.casino)"
                   title="Voir l'itinéraire"
                 >
-                  <div class="route-card-header">
-                    <i class="pi pi-car"></i>
-                    <span>Voiture</span>
-                  </div>
-                  <div class="route-card-stats">
-                    <div class="route-stat-mini">
-                      <i class="pi pi-map"></i>
-                      <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+                  <div class="route-card driving-card clickable">
+                    <div class="route-card-header">
+                      <i class="pi pi-car"></i>
+                      <span>Voiture</span>
                     </div>
-                    <div class="route-stat-mini">
-                      <i class="pi pi-clock"></i>
-                      <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                    <div class="route-card-stats">
+                      <div class="route-stat-mini">
+                        <i class="pi pi-map"></i>
+                        <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+                      </div>
+                      <div class="route-stat-mini">
+                        <i class="pi pi-clock"></i>
+                        <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                      </div>
                     </div>
                   </div>
+                  <i class="pi pi-directions route-itinerary-icon"></i>
                 </div>
 
                 <!-- Structure info: chips et niveaux -->
@@ -2971,14 +2974,7 @@ onUnmounted(() => {
   }
 
   .day-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 16px;
-  }
-
-  .day-total {
-    align-self: flex-end;
+    align-items: baseline;
   }
 
   .tournament-row {
@@ -3230,6 +3226,32 @@ onUnmounted(() => {
 
 .route-card-header i {
   font-size: 0.875rem;
+}
+
+.route-card-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.route-card-row .route-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.route-card-row .route-itinerary-icon {
+  flex-shrink: 0;
+  font-size: 2.5rem;
+  color: #818cf8;
+  opacity: 0.85;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  padding: 0 8px;
+}
+
+.route-card-row:hover .route-itinerary-icon {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 .route-card-stats {

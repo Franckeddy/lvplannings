@@ -102,24 +102,27 @@
             <!-- Carte trajet voiture -->
             <div
               v-if="getRouteTime(tournament.casino)"
-              class="route-card driving-card clickable"
+              class="route-card-row"
               @click.stop="openRouteMap(tournament.casino)"
               title="Voir l'itinéraire"
             >
-              <div class="route-card-header">
-                <i class="pi pi-car"></i>
-                <span>Voiture</span>
-              </div>
-              <div class="route-card-stats">
-                <div class="route-stat-mini">
-                  <i class="pi pi-map"></i>
-                  <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+              <div class="route-card driving-card clickable">
+                <div class="route-card-header">
+                  <i class="pi pi-car"></i>
+                  <span>Voiture</span>
                 </div>
-                <div class="route-stat-mini">
-                  <i class="pi pi-clock"></i>
-                  <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                <div class="route-card-stats">
+                  <div class="route-stat-mini">
+                    <i class="pi pi-map"></i>
+                    <span>{{ getRouteTime(tournament.casino).distanceMiles }} mi</span>
+                  </div>
+                  <div class="route-stat-mini">
+                    <i class="pi pi-clock"></i>
+                    <span>~{{ getRouteTime(tournament.casino).durationMin }} min</span>
+                  </div>
                 </div>
               </div>
+              <i class="pi pi-directions route-itinerary-icon"></i>
             </div>
 
             <!-- Structure info -->
@@ -2163,6 +2166,32 @@ onUnmounted(() => {
   font-size: 0.875rem;
 }
 
+.route-card-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.route-card-row .route-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.route-card-row .route-itinerary-icon {
+  flex-shrink: 0;
+  font-size: 2.5rem;
+  color: #818cf8;
+  opacity: 0.85;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  padding: 0 8px;
+}
+
+.route-card-row:hover .route-itinerary-icon {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
 .route-card-stats {
   display: flex;
   flex-direction: row;
@@ -2391,6 +2420,42 @@ onUnmounted(() => {
 /* Bouton d'ajout manuel */
 .add-manual-button {
   margin-left: auto;
+  padding: 14px 24px !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35), 0 0 0 2px rgba(16, 185, 129, 0.15) !important;
+  color: white !important;
+  letter-spacing: 0.3px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  animation: addBtnPulse 2.4s ease-in-out infinite;
+}
+
+.add-manual-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.5), 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+  filter: brightness(1.05);
+  animation: none;
+}
+
+.add-manual-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+.add-manual-button .p-button-icon {
+  font-size: 1.125rem !important;
+}
+
+@keyframes addBtnPulse {
+  0%, 100% {
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35), 0 0 0 2px rgba(16, 185, 129, 0.15);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.55), 0 0 0 6px rgba(16, 185, 129, 0.1);
+  }
 }
 
 /* Styles pour la modale d'ajout manuel */

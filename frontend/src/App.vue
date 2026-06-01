@@ -162,7 +162,7 @@
       title="Carte des casinos"
       @click="showCasinoMap = true"
     >
-      <i class="pi pi-map"></i>
+      <i class="pi pi-map"></i>Maps
     </button>
 
     <!-- Bouton flottant Apps -->
@@ -522,6 +522,13 @@ const selectView = (view) => {
   currentView.value = view;
   if (isMobile.value) {
     sidebarCollapsed.value = true;
+  }
+
+  // Refresh des données à chaque chargement de vue
+  if (view === 'planning' && selectedUser.value) {
+    loadUserData(selectedUser.value.id);
+  } else if (view === 'timeline' || view === 'team') {
+    loadUsers();
   }
 };
 
@@ -1125,7 +1132,7 @@ body {
 
 .map-link-button {
   position: fixed;
-  bottom: 1.5rem;
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
