@@ -257,6 +257,27 @@
         </div>
       </div>
 
+      <!-- Panneau équipe en temps réel -->
+      <div v-if="otherTeamMembers.length > 0" class="team-panel">
+        <div class="team-panel-header" @click="fitTeamBounds">
+          <i class="pi pi-users"></i>
+          <span>Équipe ({{ otherTeamMembers.length }})</span>
+        </div>
+        <div class="team-panel-list">
+          <div
+            v-for="user in otherTeamMembers"
+            :key="user.id"
+            class="team-member-item"
+            @click="focusTeamMember(user)"
+          >
+            <div class="team-member-avatar" :style="{ background: getUserColor(user) }">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </div>
+            <span class="team-member-name">{{ user.name }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Bouton Restaurants flottant (DÉSACTIVÉ) -->
       <!-- <div class="restaurants-floating-btn">
         <Button
@@ -273,7 +294,7 @@
       <!-- Boutons flottants Supermarché et Tabac -->
       <div class="floating-buttons-row">
         <Button
-          :icon="showSupermarkets"
+          :icon="showSupermarkets ? 'pi pi-times' : 'pi pi-shopping-cart'"
           :label="showSupermarkets ? 'Fermer' : 'Courses'"
           size="small"
           :severity="showSupermarkets ? 'danger' : 'secondary'"
@@ -281,7 +302,7 @@
           class="supermarket-btn"
         />
         <Button
-          :icon="showTobaccoShops"
+          :icon="showTobaccoShops ? 'pi pi-times' : 'pi pi-stop'"
           :label="showTobaccoShops ? 'Fermer' : 'Tabac'"
           size="small"
           :severity="showTobaccoShops ? 'danger' : 'secondary'"
@@ -481,11 +502,20 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import { userService } from '../services/api';
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
+  },
+  currentUser: {
+    type: Object,
+    default: null
+  },
+  userTournaments: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -540,6 +570,14 @@ let transitLayers = []; // Layers pour l'itinéraire transit
 let userLocationMarker = null;
 let busLinesLayers = [];
 let busStopMarkers = [];
+let teamUserMarkers = {}; // Marqueurs des utilisateurs de l'équipe
+let locationUpdateInterval = null; // Intervalle de mise à jour des positions
+let myLocationWatchId = null; // ID du watchPosition pour ma position
+
+// État pour les utilisateurs de l'équipe
+const teamUserLocations = ref([]);
+const otherTeamMembers = computed(() => teamUserLocations.value.filter(u => u.id !== props.currentUser?.id));
+const shareMyLocation = ref(false); // Toggle pour partager ma position
 
 // Coordonnées du centre de Las Vegas (vue globale)
 const LAS_VEGAS_CENTER = [36.10, -115.18];
@@ -4031,26 +4069,38 @@ const geolocateUser = () => {
         map.removeLayer(userLocationMarker);
       }
 
-      // Créer le marqueur de position
-      const locationIcon = L.divIcon({
-        className: 'user-location-marker',
-        html: `
-          <div class="user-location-dot">
-            <div class="user-location-pulse"></div>
-            <div class="user-location-center"></div>
-          </div>
-        `,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      });
+      // Créer le marqueur de position avec le nom si connecté
+      let locationIcon;
+      let popupContent;
 
-      userLocationMarker = L.marker([lat, lng], { icon: locationIcon })
-        .bindPopup(`
+      if (props.currentUser) {
+        // Utilisateur connecté - utiliser le style équipe
+        locationIcon = createUserMarkerIcon(props.currentUser, true);
+        const currentTournament = getCurrentTournament();
+        popupContent = createUserPopupContent(props.currentUser, true, currentTournament);
+      } else {
+        // Non connecté - style simple
+        locationIcon = L.divIcon({
+          className: 'user-location-marker',
+          html: `
+            <div class="user-location-simple">
+              <div class="user-location-pulse-simple"></div>
+              <div class="user-location-center-simple"></div>
+            </div>
+          `,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12]
+        });
+        popupContent = `
           <div class="casino-popup">
             <h3>📍 Ma position</h3>
             <p class="popup-address">Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}</p>
           </div>
-        `)
+        `;
+      }
+
+      userLocationMarker = L.marker([lat, lng], { icon: locationIcon })
+        .bindPopup(popupContent)
         .addTo(map);
 
       // Centrer la carte sur la position
@@ -4078,6 +4128,334 @@ const geolocateUser = () => {
       maximumAge: 60000
     }
   );
+};
+
+// ========== GÉOLOCALISATION ÉQUIPE EN TEMPS RÉEL ==========
+
+// Couleurs pour les membres de l'équipe (rotation)
+const teamColors = [
+  '#e91e63', // Rose
+  '#9c27b0', // Violet
+  '#3f51b5', // Indigo
+  '#00bcd4', // Cyan
+  '#4caf50', // Vert
+  '#ff9800', // Orange
+  '#795548', // Marron
+  '#607d8b'  // Gris bleu
+];
+
+// Obtenir une couleur pour un utilisateur (basé sur son nom/id)
+const getUserColor = (user) => {
+  const hash = user.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return teamColors[hash % teamColors.length];
+};
+
+// Créer l'icône de marqueur utilisateur (style simple avec pulse)
+const createUserMarkerIcon = (user, isCurrentUser = false) => {
+  const color = getUserColor(user);
+  const initial = user.name.charAt(0).toUpperCase();
+
+  return L.divIcon({
+    className: 'team-user-marker',
+    html: `
+      <div class="team-user-marker-container ${isCurrentUser ? 'current-user' : ''}">
+        <div class="team-user-pulse" style="background: ${color}"></div>
+        <div class="team-user-dot" style="background: ${color}">
+          <span class="team-user-initial">${initial}</span>
+        </div>
+      </div>
+    `,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+  });
+};
+
+// Trouver le tournoi en cours de l'utilisateur (basé sur la date/heure actuelle)
+const getCurrentTournament = () => {
+  if (!props.userTournaments || props.userTournaments.length === 0) return null;
+
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+
+  // Trouver un tournoi aujourd'hui avec un statut "playing" ou récemment commencé
+  return props.userTournaments.find(t => {
+    if (t.date !== today) return false;
+    // Si le tournoi a un liveStatus défini et n'est pas "eliminated"/"itm"
+    if (t.liveStatus === 'playing') return true;
+    // Ou si le tournoi a un stack actif
+    if (t.liveStack && t.liveStack > 0 && t.liveStatus !== 'eliminated' && t.liveStatus !== 'itm') return true;
+    return false;
+  });
+};
+
+// Générer le contenu du popup pour l'utilisateur
+const createUserPopupContent = (user, isCurrentUser = false, tournament = null) => {
+  const color = getUserColor(user);
+  let content = `
+    <div class="casino-popup team-user-popup">
+      <h3 style="color: ${color}">
+        ${isCurrentUser ? '📍' : '👤'} ${user.name}
+        ${isCurrentUser ? '<span style="color: #4ade80; font-size: 0.75rem;"> (moi)</span>' : ''}
+      </h3>
+      <div class="user-status">
+        <i class="pi pi-circle-fill" style="color: ${color}; font-size: 8px;"></i>
+        Position en temps réel
+      </div>
+  `;
+
+  if (tournament) {
+    content += `
+      <div class="tournament-info">
+        <h4><i class="pi pi-trophy"></i> En tournoi</h4>
+        <p style="color: #94a3b8; font-size: 0.75rem; margin: 0 0 8px 0;">${tournament.casino} - ${tournament.time?.substring(0,5) || ''}</p>
+        <div class="tournament-stats">
+    `;
+
+    if (tournament.liveStack) {
+      content += `
+          <div class="stat-item">
+            <span class="stat-label">Stack</span>
+            <span class="stat-value stack">${tournament.liveStack.toLocaleString()}</span>
+          </div>
+      `;
+    }
+
+    if (tournament.liveLevel) {
+      content += `
+          <div class="stat-item">
+            <span class="stat-label">Niveau</span>
+            <span class="stat-value">${tournament.liveLevel}</span>
+          </div>
+      `;
+    }
+
+    if (tournament.buyin) {
+      content += `
+          <div class="stat-item">
+            <span class="stat-label">Buy-in</span>
+            <span class="stat-value">$${tournament.buyin}</span>
+          </div>
+      `;
+    }
+
+    if (tournament.liveStatus === 'eliminated') {
+      content += `
+          <div class="stat-item">
+            <span class="stat-label">Statut</span>
+            <span class="stat-value eliminated">Éliminé</span>
+          </div>
+      `;
+    } else if (tournament.liveStatus === 'itm') {
+      content += `
+          <div class="stat-item">
+            <span class="stat-label">Statut</span>
+            <span class="stat-value" style="color: #fbbf24;">ITM 🏆</span>
+          </div>
+      `;
+      if (tournament.liveWinnings) {
+        content += `
+          <div class="stat-item">
+            <span class="stat-label">Gains</span>
+            <span class="stat-value stack">$${tournament.liveWinnings.toLocaleString()}</span>
+          </div>
+        `;
+      }
+    }
+
+    content += `
+        </div>
+      </div>
+    `;
+  }
+
+  content += `</div>`;
+  return content;
+};
+
+// Mettre à jour ma position sur le serveur
+const updateMyLocation = async (lat, lng) => {
+  if (!props.currentUser) return;
+
+  try {
+    await userService.updateLocation(props.currentUser.id, lat, lng);
+  } catch (error) {
+    console.error('Erreur mise à jour position:', error);
+  }
+};
+
+// Démarrer le partage de ma position
+const startSharingLocation = () => {
+  if (!props.currentUser || !navigator.geolocation) return;
+
+  shareMyLocation.value = true;
+
+  // Utiliser watchPosition pour les mises à jour en temps réel
+  myLocationWatchId = navigator.geolocation.watchPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      userLocation.value = { lat, lng };
+
+      // Mettre à jour sur le serveur
+      await updateMyLocation(lat, lng);
+
+      // Mettre à jour le marqueur local
+      if (userLocationMarker) {
+        userLocationMarker.setLatLng([lat, lng]);
+      } else {
+        // Créer le marqueur si pas encore fait
+        const locationIcon = createUserMarkerIcon(props.currentUser, true);
+        userLocationMarker = L.marker([lat, lng], { icon: locationIcon })
+          .bindPopup(`
+            <div class="casino-popup">
+              <h3>📍 ${props.currentUser.name} (moi)</h3>
+              <p class="popup-desc">Position en temps réel</p>
+            </div>
+          `)
+          .addTo(map);
+      }
+    },
+    (error) => {
+      console.error('Erreur watchPosition:', error);
+      shareMyLocation.value = false;
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 5000
+    }
+  );
+};
+
+// Arrêter le partage de ma position
+const stopSharingLocation = async () => {
+  shareMyLocation.value = false;
+
+  if (myLocationWatchId !== null) {
+    navigator.geolocation.clearWatch(myLocationWatchId);
+    myLocationWatchId = null;
+  }
+
+  // Supprimer ma position du serveur
+  if (props.currentUser) {
+    try {
+      await userService.clearLocation(props.currentUser.id);
+    } catch (error) {
+      console.error('Erreur suppression position:', error);
+    }
+  }
+
+  // Supprimer le marqueur de ma position
+  if (userLocationMarker && map) {
+    map.removeLayer(userLocationMarker);
+    userLocationMarker = null;
+  }
+};
+
+// Toggle le partage de position
+const toggleShareLocation = () => {
+  if (shareMyLocation.value) {
+    stopSharingLocation();
+  } else {
+    startSharingLocation();
+  }
+};
+
+// Récupérer les positions de tous les utilisateurs
+const fetchTeamLocations = async () => {
+  try {
+    const response = await userService.getAllLocations();
+    teamUserLocations.value = response.data;
+    updateTeamMarkers();
+  } catch (error) {
+    console.error('Erreur chargement positions équipe:', error);
+  }
+};
+
+// Mettre à jour les marqueurs de l'équipe sur la carte
+const updateTeamMarkers = () => {
+  if (!map) return;
+
+  const currentUserId = props.currentUser?.id;
+
+  // Supprimer les marqueurs des utilisateurs qui ne sont plus actifs
+  Object.keys(teamUserMarkers).forEach(id => {
+    const numId = parseInt(id);
+    const stillActive = teamUserLocations.value.some(u => u.id === numId);
+    if (!stillActive || numId === currentUserId) {
+      map.removeLayer(teamUserMarkers[id]);
+      delete teamUserMarkers[id];
+    }
+  });
+
+  // Ajouter/mettre à jour les marqueurs des autres utilisateurs
+  teamUserLocations.value.forEach(user => {
+    // Ne pas afficher mon propre marqueur ici (géré par userLocationMarker)
+    if (user.id === currentUserId) return;
+
+    const markerId = user.id.toString();
+
+    if (teamUserMarkers[markerId]) {
+      // Mettre à jour la position
+      teamUserMarkers[markerId].setLatLng([user.lat, user.lng]);
+    } else {
+      // Créer un nouveau marqueur
+      const icon = createUserMarkerIcon(user, false);
+      const popupContent = createUserPopupContent(user, false, null);
+      const marker = L.marker([user.lat, user.lng], { icon: icon, zIndexOffset: 1000 })
+        .bindPopup(popupContent)
+        .addTo(map);
+
+      teamUserMarkers[markerId] = marker;
+    }
+  });
+};
+
+// Démarrer le polling des positions
+const startLocationPolling = () => {
+  // Récupérer immédiatement
+  fetchTeamLocations();
+
+  // Puis toutes les 10 secondes
+  locationUpdateInterval = setInterval(fetchTeamLocations, 10000);
+};
+
+// Arrêter le polling
+const stopLocationPolling = () => {
+  if (locationUpdateInterval) {
+    clearInterval(locationUpdateInterval);
+    locationUpdateInterval = null;
+  }
+};
+
+// Centrer la carte sur tous les membres de l'équipe
+const fitTeamBounds = () => {
+  if (!map || teamUserLocations.value.length === 0) return;
+
+  const bounds = L.latLngBounds();
+
+  teamUserLocations.value.forEach(user => {
+    bounds.extend([user.lat, user.lng]);
+  });
+
+  // Ajouter ma position si disponible
+  if (userLocation.value) {
+    bounds.extend([userLocation.value.lat, userLocation.value.lng]);
+  }
+
+  map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+};
+
+// Focus sur un membre de l'équipe spécifique
+const focusTeamMember = (user) => {
+  if (!map) return;
+
+  map.setView([user.lat, user.lng], 16);
+
+  // Ouvrir le popup si c'est un autre membre
+  if (user.id !== props.currentUser?.id && teamUserMarkers[user.id.toString()]) {
+    teamUserMarkers[user.id.toString()].openPopup();
+  }
 };
 
 // Focus sur un casino spécifique
@@ -4303,6 +4681,8 @@ watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     setTimeout(() => {
       initMap();
+      // Démarrer le polling des positions de l'équipe
+      startLocationPolling();
     }, 100);
   } else {
     // Nettoyer l'itinéraire et les lignes de bus quand on ferme
@@ -4317,6 +4697,8 @@ watch(() => props.modelValue, (newVal) => {
     showRestaurantModal.value = false;
     showTobaccoShops.value = false;
     showSupermarkets.value = false;
+    // Arrêter le polling (mais garder le partage de position actif)
+    stopLocationPolling();
   }
 });
 
@@ -4334,12 +4716,17 @@ watch(visible, (newVal) => {
     showRestaurantModal.value = false;
     showTobaccoShops.value = false;
     showSupermarkets.value = false;
+    stopLocationPolling();
+  } else {
+    startLocationPolling();
   }
 });
 
 onMounted(() => {
   if (visible.value) {
     initMap();
+    // Démarrer le polling des positions de l'équipe
+    startLocationPolling();
   }
   window.addEventListener('resize', handleResize);
 });
@@ -4350,6 +4737,14 @@ const handleResize = () => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  // Arrêter le partage de position et le polling
+  stopSharingLocation();
+  stopLocationPolling();
+  // Nettoyer les marqueurs d'équipe
+  Object.values(teamUserMarkers).forEach(marker => {
+    if (map) map.removeLayer(marker);
+  });
+  teamUserMarkers = {};
   clearRoute();
   clearRestaurantMarkers();
   clearTobaccoMarkers();
@@ -4834,13 +5229,13 @@ onUnmounted(() => {
   border: 2px solid white;
 }
 
-/* Marqueur de géolocalisation */
+/* Marqueur de géolocalisation (simple - non connecté) */
 .user-location-marker {
   background: transparent !important;
   border: none !important;
 }
 
-.user-location-dot {
+.user-location-simple {
   position: relative;
   width: 24px;
   height: 24px;
@@ -4849,7 +5244,7 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-.user-location-center {
+.user-location-center-simple {
   width: 14px;
   height: 14px;
   background: #3b82f6;
@@ -4860,7 +5255,7 @@ onUnmounted(() => {
   position: absolute;
 }
 
-.user-location-pulse {
+.user-location-pulse-simple {
   position: absolute;
   width: 24px;
   height: 24px;
@@ -4879,6 +5274,143 @@ onUnmounted(() => {
     transform: scale(2.2);
     opacity: 0;
   }
+}
+
+/* ========== STYLES MARQUEURS UTILISATEURS ÉQUIPE (GLOBAL) ========== */
+
+/* Conteneur du marqueur utilisateur */
+.team-user-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.team-user-marker-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+/* Effet de pulse autour du point */
+.team-user-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: team-pulse 2s ease-out infinite;
+}
+
+@keyframes team-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Point principal du marqueur */
+.team-user-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+.team-user-marker-container.current-user .team-user-dot {
+  border-width: 4px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3), 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Initiale de l'utilisateur */
+.team-user-initial {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Popup utilisateur équipe */
+.team-user-popup {
+  min-width: 180px;
+}
+
+.team-user-popup h3 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #f1f5f9;
+}
+
+.team-user-popup .user-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4ade80;
+  font-size: 0.8125rem;
+  margin-bottom: 8px;
+}
+
+.team-user-popup .tournament-info {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.team-user-popup .tournament-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.8125rem;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.team-user-popup .tournament-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.team-user-popup .stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.team-user-popup .stat-label {
+  font-size: 0.6875rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.team-user-popup .stat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.team-user-popup .stat-value.stack {
+  color: #4ade80;
+}
+
+.team-user-popup .stat-value.eliminated {
+  color: #ef4444;
 }
 </style>
 
@@ -6585,6 +7117,195 @@ onUnmounted(() => {
   }
 
   .legend-title {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ========== PANNEAU ÉQUIPE ========== */
+
+.team-panel {
+  position: absolute;
+  top: 100px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 160px;
+  max-width: 200px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.team-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #273142;
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.team-panel-header:hover {
+  opacity: 0.9;
+}
+
+.team-panel-header .pi-external-link {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.team-panel-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.team-member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.team-member-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+
+.team-member-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.team-member-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Bouton partage actif */
+.share-active {
+  animation: share-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes share-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+  }
+}
+
+/* ========== RESPONSIVE PANNEAU ÉQUIPE ========== */
+
+@media (max-width: 768px) {
+  .team-panel {
+    top: auto;
+    bottom: 180px;
+    right: 8px;
+    left: auto;
+    min-width: 140px;
+    max-width: 160px;
+  }
+
+  .team-panel-header {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+
+  .team-panel-list {
+    max-height: 150px;
+    padding: 6px;
+  }
+
+  .team-member-item {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .team-member-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .team-member-name {
+    font-size: 0.75rem;
+  }
+
+  .team-user-dot {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+
+  .team-user-initial {
+    font-size: 12px;
+  }
+
+  .team-user-label {
+    padding: 3px 8px;
+  }
+
+  .team-user-name {
+    font-size: 10px;
+  }
+
+  .team-user-me {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-panel {
+    bottom: 140px;
+    min-width: 120px;
+    max-width: 140px;
+  }
+
+  .team-panel-header {
+    padding: 6px 8px;
+    font-size: 0.6875rem;
+  }
+
+  .team-panel-list {
+    max-height: 120px;
+  }
+
+  .team-member-item {
+    padding: 5px 6px;
+  }
+
+  .team-member-avatar {
+    width: 22px;
+    height: 22px;
+    font-size: 9px;
+  }
+
+  .team-member-name {
     font-size: 0.6875rem;
   }
 }

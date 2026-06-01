@@ -83,6 +83,23 @@
             <span class="connected-user-name">{{ selectedUser.name }}</span>
             <i class="pi pi-check-circle connected-user-check"></i>
           </div>
+
+          <!-- Bouton partage position équipe -->
+          <div class="location-share-toggle">
+            <Button
+              :icon="shareMyLocation ? 'pi pi-wifi' : 'pi pi-map-marker'"
+              :label="shareMyLocation ? 'Position partagée' : 'Partager ma position'"
+              @click="toggleShareLocation"
+              :severity="shareMyLocation ? 'success' : 'secondary'"
+              size="small"
+              class="share-location-btn"
+              :class="{ 'sharing': shareMyLocation }"
+            />
+            <span v-if="shareMyLocation" class="share-status">
+              <i class="pi pi-circle-fill pulse-dot"></i> Équipe peut me voir
+            </span>
+          </div>
+
           <Button
             icon="pi pi-sign-out"
             label="Déconnexion"
@@ -109,7 +126,7 @@
     </aside>
 
     <!-- Carte des Casinos -->
-    <CasinoMap v-model="showCasinoMap" />
+    <CasinoMap v-model="showCasinoMap" :current-user="selectedUser" :user-tournaments="tournaments" />
 
     <!-- Main Content -->
     <main class="main-content">
@@ -177,9 +194,6 @@
 
       <!-- Étape 1: Confirmation utilisateur précédent -->
       <div v-if="loginStep === 'confirm' && pendingUser" class="login-confirm-content">
-        <p class="login-confirm-message">
-          Êtes-vous
-        </p>
         <div class="login-confirm-user">
           <div class="login-confirm-avatar">
             {{ pendingUser.name.charAt(0).toUpperCase() }}
@@ -451,6 +465,7 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 
 const users = ref([]);
+const usersKey = ref(0);
 const sidebarCollapsed = ref(false);
 const selectedUser = ref(null);
 const tournaments = ref([]);
@@ -466,6 +481,10 @@ const pendingUser = ref(null);
 const loginStep = ref('confirm'); // 'confirm', 'select', 'create', 'first'
 const selectedLoginUser = ref(null);
 const newLoginUserName = ref('');
+
+// Géolocalisation équipe
+const shareMyLocation = ref(false);
+let locationWatchId = null;
 
 // Computed pour détecter si on est sur mobile
 const isMobile = computed(() => windowWidth.value <= 768);
@@ -535,6 +554,9 @@ const loadUserData = async (userId) => {
 };
 
 const handleUserDisconnected = () => {
+  // Arrêter le partage de position
+  stopSharingLocation();
+
   selectedUser.value = null;
   tournaments.value = [];
   summary.value = null;
@@ -543,6 +565,69 @@ const handleUserDisconnected = () => {
   // Réafficher la modale de connexion
   loginStep.value = users.value.length > 0 ? 'select' : 'first';
   showLoginConfirmModal.value = true;
+};
+
+// ========== GÉOLOCALISATION ÉQUIPE ==========
+
+// Démarrer le partage de position
+const startSharingLocation = () => {
+  if (!selectedUser.value || !navigator.geolocation) return;
+
+  shareMyLocation.value = true;
+
+  // Envoyer la position immédiatement puis à chaque changement
+  locationWatchId = navigator.geolocation.watchPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      try {
+        await userService.updateLocation(selectedUser.value.id, lat, lng);
+      } catch (error) {
+        console.error('Erreur mise à jour position:', error);
+      }
+    },
+    (error) => {
+      console.error('Erreur géolocalisation:', error);
+      if (error.code === error.PERMISSION_DENIED) {
+        shareMyLocation.value = false;
+        alert('Pour partager votre position, autorisez l\'accès à la géolocalisation.');
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 5000
+    }
+  );
+};
+
+// Arrêter le partage de position
+const stopSharingLocation = async () => {
+  shareMyLocation.value = false;
+
+  if (locationWatchId !== null) {
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = null;
+  }
+
+  // Supprimer ma position du serveur
+  if (selectedUser.value) {
+    try {
+      await userService.clearLocation(selectedUser.value.id);
+    } catch (error) {
+      console.error('Erreur suppression position:', error);
+    }
+  }
+};
+
+// Toggle le partage de position
+const toggleShareLocation = () => {
+  if (shareMyLocation.value) {
+    stopSharingLocation();
+  } else {
+    startSharingLocation();
+  }
 };
 
 const handleTournamentAddedFromTimeline = async () => {
@@ -640,6 +725,8 @@ const confirmLogin = () => {
     localStorage.setItem('currentUserId', pendingUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(pendingUser.value.id);
+    // Activer le partage de position par défaut
+    setTimeout(() => startSharingLocation(), 500);
   }
   closeLoginModal();
 };
@@ -650,6 +737,8 @@ const confirmSelectedUser = () => {
     localStorage.setItem('currentUserId', selectedLoginUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(selectedLoginUser.value.id);
+    // Activer le partage de position par défaut
+    setTimeout(() => startSharingLocation(), 500);
   }
   closeLoginModal();
 };
@@ -663,6 +752,8 @@ const createAndLogin = async () => {
       localStorage.setItem('currentUserId', response.data.id.toString());
       currentView.value = 'planning';
       loadUserData(response.data.id);
+      // Activer le partage de position par défaut
+      setTimeout(() => startSharingLocation(), 500);
       closeLoginModal();
     } catch (error) {
       console.error('Erreur lors de la création de l\'utilisateur:', error);
@@ -680,6 +771,8 @@ const closeLoginModal = () => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  // Arrêter le partage à la destruction du composant
+  stopSharingLocation();
 });
 </script>
 
@@ -955,6 +1048,55 @@ body {
   opacity: 1;
 }
 
+/* Bouton partage position */
+.location-share-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.share-location-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.share-location-btn.sharing {
+  animation: pulse-share 2s infinite;
+}
+
+@keyframes pulse-share {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+.share-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #4ade80;
+  padding-left: 4px;
+}
+
+.pulse-dot {
+  font-size: 8px;
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 /* External Link Button */
 .sidebar-external-link {
   margin-top: auto;
@@ -1075,6 +1217,20 @@ body {
   position: relative;
 }
 
+/* Modale confirmation de connexion */
+.p-dialog-content {
+  background: #0f172a;
+  padding: 32px 24px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.login-confirm-dialog {
+  background: #0f172a;
+  border-radius: 12px;
+  position: relative;
+}
+
 /* Bouton retour modale connexion */
 .login-back-btn {
   position: absolute;
@@ -1149,6 +1305,7 @@ body {
 }
 
 .login-confirm-user {
+  margin-top: 1em;
   display: flex;
   align-items: center;
   gap: 12px;

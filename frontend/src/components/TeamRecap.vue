@@ -122,20 +122,21 @@
                   <span class="drive-distance">({{ getRouteTime(casino).distanceMiles }} mi)</span>
                 </span>
               </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;flex-direction: column">
+              <div
+                  v-if="getCasinoNotes(casinoData).length > 0"
+                  class="casino-notes-indicator desktop-only"
+                  v-tooltip.top="formatCasinoNotes(casinoData)"
+              >
+                <i class="pi pi-comment"></i>
+                <span class="notes-count">{{ getCasinoNotes(casinoData).length }}</span>
+              </div>
               <button v-if="getRouteTime(casino)" class="map-link-btn" @click.stop="openRouteMap(casino)">
                 <i class="pi pi-directions"></i>
                 <span class="map-link-text">Trajet</span>
               </button>
-            </div>
-
-            <!-- Notes du casino (desktop: tooltip) -->
-            <div
-              v-if="getCasinoNotes(casinoData).length > 0"
-              class="casino-notes-indicator desktop-only"
-              v-tooltip.top="formatCasinoNotes(casinoData)"
-            >
-              <i class="pi pi-comment"></i>
-              <span class="notes-count">{{ getCasinoNotes(casinoData).length }}</span>
             </div>
           </div>
 

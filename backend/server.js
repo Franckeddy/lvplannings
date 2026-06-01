@@ -21,6 +21,30 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// GET toutes les positions des utilisateurs actifs (DOIT être AVANT /api/users/:id)
+app.get('/api/users/locations', async (req, res) => {
+  try {
+    // Ajouter les colonnes si elles n'existent pas
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS location_updated_at TIMESTAMP');
+
+    const result = await pool.query(`
+      SELECT id, name, lat, lng, location_updated_at
+      FROM users
+      WHERE lat IS NOT NULL 
+        AND lng IS NOT NULL 
+        AND location_updated_at > NOW() - INTERVAL '5 minutes'
+      ORDER BY name
+    `);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erreur récupération positions:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET un utilisateur par ID
 app.get('/api/users/:id', async (req, res) => {
   try {
@@ -69,6 +93,59 @@ app.delete('/api/users/:id', async (req, res) => {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
     res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ========== GEOLOCALISATION EN TEMPS RÉEL ==========
+
+// PUT mettre à jour la position d'un utilisateur
+app.put('/api/users/:id/location', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { lat, lng } = req.body;
+
+    if (lat === undefined || lng === undefined) {
+      return res.status(400).json({ error: 'lat et lng sont requis' });
+    }
+
+    // Ajouter les colonnes si elles n'existent pas
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS location_updated_at TIMESTAMP');
+
+    const result = await pool.query(
+      'UPDATE users SET lat = $1, lng = $2, location_updated_at = NOW() WHERE id = $3 RETURNING id, name, lat, lng, location_updated_at',
+      [lat, lng, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Erreur mise à jour position:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE supprimer la position d'un utilisateur (déconnexion de la géoloc)
+app.delete('/api/users/:id/location', async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const result = await pool.query(
+      'UPDATE users SET lat = NULL, lng = NULL, location_updated_at = NULL WHERE id = $1 RETURNING id, name',
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    res.json({ message: 'Position supprimée', user: result.rows[0] });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

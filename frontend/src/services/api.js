@@ -29,6 +29,19 @@ export const userService = {
 
   addTournament(userId, tournament) {
     return api.post(`/users/${userId}/tournaments`, tournament);
+  },
+
+  // Géolocalisation en temps réel
+  updateLocation(userId, lat, lng) {
+    return api.put(`/users/${userId}/location`, { lat, lng });
+  },
+
+  clearLocation(userId) {
+    return api.delete(`/users/${userId}/location`);
+  },
+
+  getAllLocations() {
+    return api.get('/users/locations');
   }
 };
 
