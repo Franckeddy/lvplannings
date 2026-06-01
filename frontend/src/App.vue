@@ -163,7 +163,6 @@
       @click="showCasinoMap = true"
     >
       <i class="pi pi-map"></i>
-      CARTE DES CASINOS
     </button>
 
     <!-- Bouton flottant Apps -->
