@@ -14,6 +14,14 @@
     }"
   >
     <div class="map-container">
+      <!-- Skeleton de chargement -->
+      <div v-if="mapLoading" class="map-skeleton">
+        <div class="map-skeleton-pulse"></div>
+        <div class="map-skeleton-content">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>Chargement de la carte...</span>
+        </div>
+      </div>
       <div ref="mapContainer" class="leaflet-map"></div>
 
       <!-- Infos de l'itinéraire actif -->
@@ -523,6 +531,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const visible = ref(props.modelValue);
 const mapContainer = ref(null);
+const mapLoading = ref(false);
 const showCasinoList = ref(false);
 const activeRoute = ref(null);
 const routeInfo = ref(null);
@@ -577,7 +586,7 @@ let myLocationWatchId = null; // ID du watchPosition pour ma position
 // État pour les utilisateurs de l'équipe
 const teamUserLocations = ref([]);
 const otherTeamMembers = computed(() => teamUserLocations.value.filter(u => u.id !== props.currentUser?.id));
-const shareMyLocation = ref(false); // Toggle pour partager ma position
+const shareMyLocation = ref(true); // Partager ma position par défaut
 
 // Coordonnées du centre de Las Vegas (vue globale)
 const LAS_VEGAS_CENTER = [36.10, -115.18];
@@ -3346,7 +3355,22 @@ const clearRoute = () => {
 const initMap = async () => {
   await nextTick();
 
-  if (!mapContainer.value || map) return;
+  if (!mapContainer.value) return;
+
+  // Toujours détruire l'ancienne carte si elle existe (le DOM a été recréé par le Dialog)
+  if (map) {
+    try { map.remove(); } catch (e) { /* ignore */ }
+    map = null;
+    markers = [];
+    restaurantMarkers = [];
+    tobaccoMarkers = [];
+    supermarketMarkers = [];
+    busLinesLayers = [];
+    busStopMarkers = [];
+  }
+
+  // Afficher le skeleton
+  mapLoading.value = true;
 
   // Créer la carte
   map = L.map(mapContainer.value, {
@@ -3357,10 +3381,19 @@ const initMap = async () => {
   });
 
   // Ajouter le layer de tuiles (OpenStreetMap)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
     maxZoom: 19
   }).addTo(map);
+
+  // Masquer le skeleton quand les tuiles sont chargées
+  tileLayer.on('load', () => {
+    mapLoading.value = false;
+  });
+  // Fallback : masquer le skeleton après un délai max
+  setTimeout(() => {
+    mapLoading.value = false;
+  }, 3000);
 
   // Créer un groupe pour les bounds
   const bounds = L.latLngBounds();
@@ -3509,13 +3542,18 @@ const initMap = async () => {
   createTobaccoMarkers();
 
   // Ajuster la vue pour montrer tous les casinos
-  setTimeout(() => {
-    if (map) {
-      map.invalidateSize();
-      // Fit bounds avec un peu de padding pour bien voir tous les marqueurs
-      map.fitBounds(bounds, { padding: [30, 30] });
-    }
-  }, 300);
+  // Multiple invalidateSize pour s'assurer que les tuiles se chargent après l'animation du Dialog
+  const forceMapRender = (delay) => {
+    setTimeout(() => {
+      if (map) {
+        map.invalidateSize();
+        map.fitBounds(bounds, { padding: [30, 30] });
+      }
+    }, delay);
+  };
+  forceMapRender(100);
+  forceMapRender(300);
+  forceMapRender(600);
 };
 
 // Recentrer la carte pour voir tous les casinos
@@ -4679,18 +4717,28 @@ const clearBusLineSelection = () => {
 watch(() => props.modelValue, (newVal) => {
   visible.value = newVal;
   if (newVal) {
+    mapLoading.value = true;
     setTimeout(() => {
       initMap();
       // Démarrer le polling des positions de l'équipe
       startLocationPolling();
-    }, 100);
+    }, 200);
   } else {
+    // Détruire la carte à la fermeture pour éviter le fond bleu à la réouverture
+    if (map) {
+      try { map.remove(); } catch (e) { /* ignore */ }
+      map = null;
+      markers = [];
+      restaurantMarkers = [];
+      tobaccoMarkers = [];
+      supermarketMarkers = [];
+      busLinesLayers = [];
+      busStopMarkers = [];
+    }
     // Nettoyer l'itinéraire et les lignes de bus quand on ferme
-    clearRoute();
-    clearBusLines();
-    clearRestaurantMarkers();
-    clearTobaccoMarkers();
-    clearSupermarketMarkers();
+    activeRoute.value = null;
+    routeInfo.value = null;
+    routeInfoTransit.value = null;
     showBusLines.value = false;
     showMonorail.value = false;
     showRestaurants.value = false;
@@ -4705,11 +4753,20 @@ watch(() => props.modelValue, (newVal) => {
 watch(visible, (newVal) => {
   emit('update:modelValue', newVal);
   if (!newVal) {
-    clearRoute();
-    clearBusLines();
-    clearRestaurantMarkers();
-    clearTobaccoMarkers();
-    clearSupermarketMarkers();
+    // Détruire la carte
+    if (map) {
+      try { map.remove(); } catch (e) { /* ignore */ }
+      map = null;
+      markers = [];
+      restaurantMarkers = [];
+      tobaccoMarkers = [];
+      supermarketMarkers = [];
+      busLinesLayers = [];
+      busStopMarkers = [];
+    }
+    activeRoute.value = null;
+    routeInfo.value = null;
+    routeInfoTransit.value = null;
     showBusLines.value = false;
     showMonorail.value = false;
     showRestaurants.value = false;
@@ -4718,7 +4775,11 @@ watch(visible, (newVal) => {
     showSupermarkets.value = false;
     stopLocationPolling();
   } else {
-    startLocationPolling();
+    mapLoading.value = true;
+    setTimeout(() => {
+      initMap();
+      startLocationPolling();
+    }, 200);
   }
 });
 
@@ -5430,6 +5491,56 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+/* Skeleton de chargement de la carte */
+.map-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  border-radius: 12px;
+}
+
+.map-skeleton-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    #0f172a 0%,
+    #1e293b 40%,
+    #334155 50%,
+    #1e293b 60%,
+    #0f172a 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+.map-skeleton-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: #94a3b8;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.map-skeleton-content i {
+  font-size: 2rem;
+  color: #6366f1;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Panneau d'info de l'itinéraire */

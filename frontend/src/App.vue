@@ -39,14 +39,6 @@
           </div>
         </div>
 
-        <button
-            class="map-link-button"
-            @click="showCasinoMap = true"
-        >
-          <i class="pi pi-map"></i>
-          CARTE DES CASINOS
-        </button>
-
         <div class="divider"></div>
 
         <nav class="sidebar-nav">
@@ -163,6 +155,16 @@
         <p>Sélectionnez un utilisateur pour voir son programme</p>
       </div>
     </main>
+
+    <!-- Bouton flottant Carte des Casinos -->
+    <button
+      class="map-link-button"
+      title="Carte des casinos"
+      @click="showCasinoMap = true"
+    >
+      <i class="pi pi-map"></i>
+      CARTE DES CASINOS
+    </button>
 
     <!-- Bouton flottant Apps -->
     <button
@@ -483,7 +485,7 @@ const selectedLoginUser = ref(null);
 const newLoginUserName = ref('');
 
 // Géolocalisation équipe
-const shareMyLocation = ref(false);
+const shareMyLocation = ref(true);
 let locationWatchId = null;
 
 // Computed pour détecter si on est sur mobile
@@ -696,9 +698,9 @@ onMounted(async () => {
       selectedUser.value = savedUser;
       currentView.value = 'planning';
       loadUserData(savedUser.id);
-      // Restaurer le partage de position si précédemment activé
+      // Restaurer le partage de position (activé par défaut sauf si désactivé manuellement)
       const savedShareLocation = localStorage.getItem('shareLocation');
-      if (savedShareLocation === 'true') {
+      if (savedShareLocation !== 'false') {
         setTimeout(() => startSharingLocation(), 500);
       }
       showLoginConfirmModal.value = false;
@@ -735,9 +737,9 @@ const confirmLogin = () => {
     localStorage.setItem('currentUserId', pendingUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(pendingUser.value.id);
-    // Restaurer le partage de position si précédemment activé
+    // Activer le partage de position par défaut sauf si désactivé manuellement
     const savedShareLocation = localStorage.getItem('shareLocation');
-    if (savedShareLocation === 'true') {
+    if (savedShareLocation !== 'false') {
       setTimeout(() => startSharingLocation(), 500);
     }
   }
@@ -750,9 +752,9 @@ const confirmSelectedUser = () => {
     localStorage.setItem('currentUserId', selectedLoginUser.value.id.toString());
     currentView.value = 'planning';
     loadUserData(selectedLoginUser.value.id);
-    // Restaurer le partage de position si précédemment activé
+    // Activer le partage de position par défaut sauf si désactivé manuellement
     const savedShareLocation = localStorage.getItem('shareLocation');
-    if (savedShareLocation === 'true') {
+    if (savedShareLocation !== 'false') {
       setTimeout(() => startSharingLocation(), 500);
     }
   }
@@ -1123,25 +1125,35 @@ body {
 }
 
 .map-link-button {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 1.5rem;
   background: #6366f1;
   color: white;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-weight: 600;
   font-size: 0.9375rem;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  z-index: 1001;
 }
 
 .map-link-button:hover {
-  transform: translateY(-2px);
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+
+.map-link-button:active {
+  transform: translateX(-50%) scale(0.95);
 }
 
 .map-link-button i {
