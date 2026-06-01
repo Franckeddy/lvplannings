@@ -16,24 +16,19 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vue-vendor': ['vue'],
-          'primevue-vendor': ['primevue/config', '@primeuix/themes/aura'],
-          'primevue-components': [
-            'primevue/button',
-            'primevue/select',
-            'primevue/inputtext',
-            'primevue/textarea',
-            'primevue/dialog',
-            'primevue/datatable',
-            'primevue/column',
-            'primevue/fileupload',
-            'primevue/card',
-            'primevue/tag',
-            'primevue/tabview',
-            'primevue/tabpanel'
-          ],
-          'axios': ['axios']
+        manualChunks(id) {
+          if (id.includes('node_modules/@vue/') || id.includes('node_modules/vue/')) {
+            return 'vue-vendor';
+          }
+          if (id.includes('node_modules/@primeuix/themes') || id.includes('node_modules/primevue/config')) {
+            return 'primevue-vendor';
+          }
+          if (id.includes('node_modules/primevue/')) {
+            return 'primevue-components';
+          }
+          if (id.includes('node_modules/axios/')) {
+            return 'axios';
+          }
         }
       }
     },
