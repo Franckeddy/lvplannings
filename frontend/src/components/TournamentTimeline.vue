@@ -96,6 +96,10 @@
               </div>
               <div class="casino-name-wrapper">
                 <div class="casino-name">{{ tournament.casino }}</div>
+                <div v-if="tournament.address" class="casino-address">
+                  <i class="pi pi-map-marker"></i>
+                  <span>{{ tournament.address }}</span>
+                </div>
               </div>
             </div>
 
@@ -270,11 +274,32 @@
 
         <div class="form-group">
           <label>Nom du Casino <span class="required">*</span></label>
-          <InputText
+          <AutoComplete
             v-model="manualTournament.casino"
+            :suggestions="casinoSuggestions"
+            @complete="searchCasinos"
+            @item-select="onCasinoSelect"
+            :loading="searchingCasino"
+            optionLabel="label"
             placeholder="Ex: Bellagio, Wynn..."
             class="input-full"
-          />
+            :delay="350"
+            :minLength="2"
+          >
+            <template #option="slotProps">
+              <div class="casino-option">
+                <div class="casino-option-name">{{ slotProps.option.name }}</div>
+                <div v-if="slotProps.option.address" class="casino-option-address">
+                  <i class="pi pi-map-marker"></i>
+                  <span>{{ slotProps.option.address }}</span>
+                </div>
+              </div>
+            </template>
+          </AutoComplete>
+          <div v-if="manualTournament.address" class="deduced-address">
+            <i class="pi pi-map-marker"></i>
+            <span>{{ manualTournament.address }}</span>
+          </div>
         </div>
 
         <div class="form-row">
@@ -415,6 +440,7 @@ import Textarea from 'primevue/textarea';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import DatePicker from 'primevue/datepicker';
+import AutoComplete from 'primevue/autocomplete';
 import ProgressSpinner from 'primevue/progressspinner';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -438,7 +464,7 @@ const props = defineProps({
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 // Casino routes
-const { getRouteForCasino, getCasinoCoords, HOME_LOCATION } = useCasinoRoutes();
+const { getRouteForCasino, getCasinoCoords, HOME_LOCATION, CASINOS_COORDS } = useCasinoRoutes();
 const casinoRouteTimes = ref({}); // cache: { casinoName: { durationMin, distanceMiles } }
 
 // Route map modal
@@ -908,9 +934,128 @@ const openManualTournamentDialog = () => {
     timeDate: null,
     levelMinutes: null,
     startingStack: null,
+    address: '',
     note: ''
   };
+  casinoSuggestions.value = [];
   showManualDialog.value = true;
+};
+
+// Autocomplétion sur le nom du casino : suggestions locales (CASINOS_COORDS)
+// + Nominatim restreint à la zone de Las Vegas. L'adresse est ensuite déduite
+// automatiquement de la sélection.
+const casinoSuggestions = ref([]);
+const searchingCasino = ref(false);
+
+const formatNominatimAddress = (result) => {
+  // display_name commence souvent par le nom du lieu — on retire ce préfixe
+  // pour ne garder que l'adresse postale.
+  if (!result || !result.display_name) return '';
+  const parts = result.display_name.split(',').map(p => p.trim());
+  const placeName = (result.name || parts[0] || '').trim();
+  if (placeName && parts[0] === placeName) {
+    return parts.slice(1).join(', ');
+  }
+  return result.display_name;
+};
+
+const searchCasinos = async (event) => {
+  const query = (event.query || '').trim();
+  if (query.length < 2) {
+    casinoSuggestions.value = [];
+    return;
+  }
+
+  const lowerQuery = query.toLowerCase();
+
+  // 1. Suggestions locales rapides depuis la liste connue
+  const localMatches = CASINOS_COORDS
+    .filter(c =>
+      c.name.toLowerCase().includes(lowerQuery) ||
+      c.aliases.some(a => a.includes(lowerQuery))
+    )
+    .map(c => ({
+      label: c.name,
+      name: c.name,
+      address: '',
+      lat: c.lat,
+      lng: c.lng,
+      source: 'local'
+    }));
+
+  casinoSuggestions.value = localMatches;
+  searchingCasino.value = true;
+
+  try {
+    // 2. Compléter avec Nominatim, restreint à la zone Las Vegas
+    const viewbox = '-115.5,36.4,-114.8,35.8';
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ' casino')}&format=json&limit=8&viewbox=${viewbox}&bounded=1&addressdetails=1`;
+    const response = await fetch(url, {
+      headers: { 'Accept-Language': 'fr,en' }
+    });
+
+    if (response.ok) {
+      const results = await response.json();
+      const remoteMatches = results.map(r => {
+        const placeName = (r.name || r.display_name.split(',')[0] || '').trim();
+        return {
+          label: placeName,
+          name: placeName,
+          address: formatNominatimAddress(r),
+          lat: parseFloat(r.lat),
+          lng: parseFloat(r.lon),
+          source: 'nominatim'
+        };
+      });
+
+      // Fusion en dédupliquant par nom (priorité aux matches locaux)
+      const seen = new Set(localMatches.map(m => m.name.toLowerCase()));
+      const merged = [...localMatches];
+      for (const m of remoteMatches) {
+        const key = m.name.toLowerCase();
+        if (!seen.has(key)) {
+          merged.push(m);
+          seen.add(key);
+        }
+      }
+      casinoSuggestions.value = merged;
+    }
+  } catch (e) {
+    console.warn('Erreur autocomplete casino:', e);
+  } finally {
+    searchingCasino.value = false;
+  }
+};
+
+// Quand on choisit une suggestion, on stocke le nom et on déduit l'adresse
+const onCasinoSelect = async (event) => {
+  const selected = event.value;
+  if (!selected || typeof selected !== 'object') return;
+
+  manualTournament.value.casino = selected.name;
+
+  // Si l'adresse est déjà connue (Nominatim), on l'utilise directement
+  if (selected.address) {
+    manualTournament.value.address = selected.address;
+    return;
+  }
+
+  // Sinon (suggestion locale), on géocode pour récupérer l'adresse
+  try {
+    const viewbox = '-115.5,36.4,-114.8,35.8';
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(selected.name + ' Las Vegas')}&format=json&limit=1&viewbox=${viewbox}&bounded=1&addressdetails=1`;
+    const response = await fetch(url, {
+      headers: { 'Accept-Language': 'fr,en' }
+    });
+    if (response.ok) {
+      const results = await response.json();
+      if (results.length > 0) {
+        manualTournament.value.address = formatNominatimAddress(results[0]);
+      }
+    }
+  } catch (e) {
+    console.warn('Erreur déduction adresse:', e);
+  }
 };
 
 // Ajouter un tournoi manuel
@@ -935,6 +1080,7 @@ const addManualTournament = async () => {
     levels: `niveau de ${manualTournament.value.levelMinutes} min`,
     structure_levels: `niveau de ${manualTournament.value.levelMinutes} min`,
     structure_chips: structureChips,
+    address: manualTournament.value.address || null,
     is_manual: true
   };
 
@@ -1915,6 +2061,89 @@ onUnmounted(() => {
   font-weight: 600;
   font-size: 1.0625rem;
   line-height: 1.3;
+}
+
+.casino-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.casino-address i {
+  font-size: 0.75rem;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.casino-address span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* AutoComplete casino - rendu des options */
+.casino-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0;
+}
+
+.casino-option-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.9375rem;
+}
+
+.casino-option-address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #64748b;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+.casino-option-address i {
+  font-size: 0.7rem;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.casino-option-address span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Adresse déduite affichée sous le champ casino dans la modale */
+.deduced-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 3px solid #6366f1;
+  border-radius: 4px;
+  color: #475569;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.deduced-address i {
+  color: #6366f1;
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+}
+
+.deduced-address span {
+  flex: 1;
+  word-break: break-word;
 }
 
 /* Tournament structure */
@@ -2993,7 +3222,7 @@ onUnmounted(() => {
   }
 
   :deep(.p-dialog-footer) {
-    padding: 0.875rem 1rem;
+    padding: 1rem;
     flex-wrap: wrap;
     gap: 8px;
   }

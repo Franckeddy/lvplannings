@@ -158,16 +158,17 @@ app.get('/api/users/:userId/tournaments', async (req, res) => {
 
     // Récupérer les tournois de l'utilisateur
     const result = await pool.query(
-      `SELECT 
-        t.id, t.user_id, t.date, t.time, t.casino, t.buyin, t.levels, 
+      `SELECT
+        t.id, t.user_id, t.date, t.time, t.casino, t.buyin, t.levels,
         t.user_note, t.scraped_tournament_id, t.name, t.day, t.is_restart as "isRestart",
         t.live_stack as "liveStack", t.live_status as "liveStatus", t.live_level as "liveLevel", t.live_winnings as "liveWinnings",
         st.structure_chips as "structureChips",
         st.structure_levels as "structureLevels",
-        st.structure_guarantee as "structureGuarantee"
+        st.structure_guarantee as "structureGuarantee",
+        st.address as "address"
       FROM tournaments t
       LEFT JOIN scraped_tournaments st ON t.scraped_tournament_id = st.id
-      WHERE t.user_id = $1 
+      WHERE t.user_id = $1
       ORDER BY t.date, t.time`,
       [userId]
     );
@@ -481,6 +482,8 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
+    await pool.query('ALTER TABLE scraped_tournaments ADD COLUMN IF NOT EXISTS address TEXT');
+
     let query = `
       SELECT
         id,
@@ -496,7 +499,8 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
         name,
         day,
         is_restart as "isRestart",
-        is_manual as "isManual"
+        is_manual as "isManual",
+        address
       FROM scraped_tournaments
       WHERE 1=1
     `;
@@ -545,7 +549,7 @@ app.get('/api/scraped-tournaments/timeline', async (req, res) => {
 // POST créer un tournoi manuel dans scraped_tournaments
 app.post('/api/scraped-tournaments/manual', async (req, res) => {
   try {
-    const { date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual } = req.body;
+    const { date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual, address } = req.body;
 
     if (!date || !time || !casino) {
       return res.status(400).json({
@@ -553,19 +557,22 @@ app.post('/api/scraped-tournaments/manual', async (req, res) => {
       });
     }
 
+    await pool.query('ALTER TABLE scraped_tournaments ADD COLUMN IF NOT EXISTS address TEXT');
+
     const result = await pool.query(
-      `INSERT INTO scraped_tournaments 
-        (date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-       RETURNING 
-        id, casino, date, time, 
-        buyin as "buyIn", 
-        levels, 
+      `INSERT INTO scraped_tournaments
+        (date, time, casino, buyin, levels, structure_levels, structure_chips, is_manual, address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING
+        id, casino, date, time,
+        buyin as "buyIn",
+        levels,
         SUBSTRING(time FROM 1 FOR 5) as "displayTime",
         structure_levels as "structureLevels",
         structure_chips as "structureChips",
-        is_manual as "isManual"`,
-      [date, time, casino, buyin || null, levels || '-', structure_levels || null, structure_chips || null, is_manual || true]
+        is_manual as "isManual",
+        address`,
+      [date, time, casino, buyin || null, levels || '-', structure_levels || null, structure_chips || null, is_manual || true, address || null]
     );
 
     res.status(201).json(result.rows[0]);
