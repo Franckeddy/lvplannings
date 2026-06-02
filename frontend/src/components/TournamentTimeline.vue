@@ -949,6 +949,30 @@ const addManualTournament = async () => {
     if (scrapedResponse.ok) {
       const newScrapedTournament = await scrapedResponse.json();
 
+      // Auto-inscrire l'utilisateur connecté au tournoi qu'il vient de créer,
+      // avec sa note. Le tournoi apparaît ainsi dans son planning perso et la
+      // note s'affiche dans la liste des inscrits visible par les autres.
+      if (props.connectedUser) {
+        try {
+          await fetch(`${API_URL}/users/${props.connectedUser.id}/tournaments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              date: formatDateForDb(selectedDay.value.date),
+              time: timeString,
+              casino: manualTournament.value.casino,
+              buyin: manualTournament.value.buyin,
+              levels: `niveau de ${manualTournament.value.levelMinutes} min`,
+              user_note: manualTournament.value.note || null,
+              scraped_tournament_id: newScrapedTournament.id
+            })
+          });
+          emit('tournament-added');
+        } catch (enrollError) {
+          console.error('Erreur lors de l\'auto-inscription au tournoi manuel:', enrollError);
+        }
+      }
+
       // Ajouter le tournoi à la timeline locale
       const newTournament = {
         ...newScrapedTournament,
@@ -975,8 +999,8 @@ const addManualTournament = async () => {
         life: 3000
       });
 
-      // Recharger la timeline pour avoir les données à jour
-      await loadTimeline();
+      // Recharger la timeline et les inscriptions pour afficher l'utilisateur inscrit + sa note
+      await Promise.all([loadTimeline(), loadAllUserTournaments()]);
       // Reprendre le jour sélectionné
       const updatedDay = timeline.value.find(d => d.date === selectedDay.value.date);
       if (updatedDay) {
