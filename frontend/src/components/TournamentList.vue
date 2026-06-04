@@ -397,6 +397,9 @@
                 </div>
               </div>
 
+              <div class="tournament-buyin">
+                {{ formatBuyIn(tournament.buyin) }}
+              </div>
 
               <div v-if="tournament.liveStatus !== 'playing' && tournament.liveStatus !== 'eliminated'" class="tournament-actions">
                 <Button
