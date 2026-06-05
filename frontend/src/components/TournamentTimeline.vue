@@ -82,42 +82,40 @@
           :key="tournament.id"
           class="tournament-card"
         >
-          <!-- Top section: Buy-in + Badges (l'heure est portée par le bloc parent) -->
+          <!-- Top section: Casino (gauche) + Buy-in (droite) ; l'heure est portée par le bloc parent -->
           <div class="tournament-card-top">
             <div class="card-top-left">
-              <div class="tournament-badges">
+              <div class="tournament-badges" v-if="tournament.isManual || tournament.day || tournament.isRestart">
                 <div v-if="tournament.isManual" class="manual-badge-tag">Manuel</div>
                 <div v-if="tournament.day" class="day-badge-tag">Day {{ tournament.day }}</div>
                 <div v-else-if="tournament.isRestart" class="restart-badge-tag">Restart</div>
+              </div>
+              <div class="casino-section">
+                <div class="casino-logo-wrapper">
+                  <img
+                    v-if="getCasinoLogo(tournament.casino)"
+                    :src="getCasinoLogo(tournament.casino)"
+                    :alt="tournament.casino"
+                    class="casino-logo"
+                    @error="handleImageError"
+                  />
+                  <div v-else class="casino-initials">
+                    {{ getCasinoInitials(tournament.casino) }}
+                  </div>
+                </div>
+                <div class="casino-name-wrapper">
+                  <div class="casino-name">{{ tournament.casino }}</div>
+                  <div v-if="tournament.address" class="casino-address">
+                    <i class="pi pi-map-marker"></i>
+                    <span>{{ tournament.address }}</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="tournament-buyin">{{ formatBuyIn(tournament.buyIn) }}</div>
           </div>
 
-          <!-- Casino section -->
           <div class="tournament-card-body">
-            <div class="casino-section">
-              <div class="casino-logo-wrapper">
-                <img
-                  v-if="getCasinoLogo(tournament.casino)"
-                  :src="getCasinoLogo(tournament.casino)"
-                  :alt="tournament.casino"
-                  class="casino-logo"
-                  @error="handleImageError"
-                />
-                <div v-else class="casino-initials">
-                  {{ getCasinoInitials(tournament.casino) }}
-                </div>
-              </div>
-              <div class="casino-name-wrapper">
-                <div class="casino-name">{{ tournament.casino }}</div>
-                <div v-if="tournament.address" class="casino-address">
-                  <i class="pi pi-map-marker"></i>
-                  <span>{{ tournament.address }}</span>
-                </div>
-              </div>
-            </div>
-
             <!-- Carte trajet voiture -->
             <div
               v-if="getRouteTime(tournament.casino)"
@@ -2029,6 +2027,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 18px 20px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(99, 102, 241, 0.08));
   border-bottom: 1px solid var(--border-color, #334155);
@@ -2036,8 +2035,11 @@ onUnmounted(() => {
 
 .card-top-left {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 .tournament-time {
