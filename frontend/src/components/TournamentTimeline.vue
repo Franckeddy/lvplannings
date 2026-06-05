@@ -60,16 +60,31 @@
         />
       </div>
 
-      <div class="tournaments-grid">
+      <div class="time-blocks-list">
         <div
-          v-for="tournament in selectedDay.tournaments"
+          v-for="block in selectedDayByTime"
+          :key="block.time"
+          class="time-block"
+        >
+          <div class="time-block-header">
+            <div class="time-block-hour">
+              <i class="pi pi-clock"></i>
+              <span>{{ block.time }}</span>
+            </div>
+            <span class="time-block-count">
+              {{ block.tournaments.length }} tournoi{{ block.tournaments.length > 1 ? 's' : '' }}
+            </span>
+          </div>
+
+          <div class="time-block-entries">
+        <div
+          v-for="tournament in block.tournaments"
           :key="tournament.id"
           class="tournament-card"
         >
-          <!-- Top section: Time + Buy-in + Badges -->
+          <!-- Top section: Buy-in + Badges (l'heure est portée par le bloc parent) -->
           <div class="tournament-card-top">
             <div class="card-top-left">
-              <div class="tournament-time">{{ tournament.displayTime }}</div>
               <div class="tournament-badges">
                 <div v-if="tournament.isManual" class="manual-badge-tag">Manuel</div>
                 <div v-if="tournament.day" class="day-badge-tag">Day {{ tournament.day }}</div>
@@ -197,6 +212,8 @@
               text
               v-tooltip.top="'Supprimer ce tournoi'"
             />
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -734,6 +751,30 @@ const normalizeDate = (dateStr) => {
 
   return dateStr.toLowerCase().trim();
 };
+
+// Vue regroupée par heure pour le détail d'une journée :
+// plusieurs tournois ayant le même `displayTime` sont rassemblés sous le même
+// bloc horaire pour éviter d'avoir à scanner la grille.
+const selectedDayByTime = computed(() => {
+  if (!selectedDay.value || !selectedDay.value.tournaments) return [];
+
+  const byTime = {};
+  for (const tournament of selectedDay.value.tournaments) {
+    const time = tournament.displayTime || 'Heure non précisée';
+    if (!byTime[time]) byTime[time] = { time, tournaments: [] };
+    byTime[time].tournaments.push(tournament);
+  }
+
+  // Tri des heures ASC ; à l'intérieur, tri des tournois par nom de casino
+  return Object.keys(byTime)
+    .sort()
+    .map(time => {
+      byTime[time].tournaments.sort((a, b) =>
+        (a.casino || '').localeCompare(b.casino || '')
+      );
+      return byTime[time];
+    });
+});
 
 // Trouver les utilisateurs inscrits à un tournoi scrapé
 const getEnrolledUsers = (scrapedTournament) => {
@@ -1873,12 +1914,70 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-/* Grille des tournois */
+/* Grille des tournois (legacy — conservé pour compat large) */
 .tournaments-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
 }
+
+/* === Disposition focus-heure du détail jour === */
+.time-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.time-block {
+  background: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.time-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(59, 130, 246, 0.10));
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.time-block-hour {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary, #f1f5f9);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+}
+
+.time-block-hour i {
+  font-size: 1.1rem;
+  color: var(--accent-color, #818cf8);
+}
+
+.time-block-count {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: rgba(99, 102, 241, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.time-block-entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+/* Masquer l'ancien encart heure dans la carte (porté par le bloc parent) */
+.time-block-entries .tournament-time { display: none; }
 
 .tournament-card {
   background: var(--bg-secondary, #1e293b);
@@ -2788,6 +2887,10 @@ onUnmounted(() => {
   .tournaments-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
+
+  .time-block-entries {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -2823,6 +2926,20 @@ onUnmounted(() => {
   .tournaments-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .time-block-entries {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .time-block-header {
+    padding: 12px 16px;
+  }
+
+  .time-block-hour {
+    font-size: 1.25rem;
   }
 
   .day-detail-header {
