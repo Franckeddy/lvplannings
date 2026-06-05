@@ -159,7 +159,8 @@
                   :class="{ 'enrolled-chip-itm': enrolled.liveWinnings }"
                   :style="{ backgroundColor: getUserColor(enrolled.userName) }"
                 >
-                  {{ enrolled.userName }}<span v-if="enrolled.liveWinnings" class="chip-flame">🔥</span>
+                  {{ enrolled.userName }}
+                  <span v-if="enrolled.liveWinnings" class="flame-pastille">🔥</span>
                 </div>
               </div>
               <!-- Notes toujours visibles -->
@@ -1191,6 +1192,7 @@ const deleteManualTournament = async (tournament) => {
         detail: `Le tournoi a été supprimé`,
         life: 3000
       });
+      emit('tournament-added');
     } else {
       throw new Error('Erreur lors de la suppression');
     }
@@ -2499,6 +2501,7 @@ onUnmounted(() => {
 }
 
 .enrolled-chip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -2513,9 +2516,32 @@ onUnmounted(() => {
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
-.chip-flame {
-  margin-left: 2px;
-  font-size: 0.75rem;
+.flame-pastille {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: linear-gradient(135deg, #fb923c, #dc2626);
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  line-height: 1;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.5);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.flame-pastille .flame-count {
+  font-size: 0.6rem;
+  letter-spacing: -0.02em;
 }
 
 /* Notes toujours visibles */

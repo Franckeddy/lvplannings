@@ -54,9 +54,11 @@
             :class="{ 'member-tag-itm': isMemberItmOnDay(memberId, dayData) }"
             :style="{ backgroundColor: isMemberItmOnDay(memberId, dayData) ? undefined : getUserColorById(memberId) }"
           >
-            <span v-if="isMemberItmOnDay(memberId, dayData)">🔥</span>
             {{ getUserNameById(memberId) }}
             <span v-if="getMemberWinningsOnDay(memberId, dayData)" class="member-winnings">${{ getMemberWinningsOnDay(memberId, dayData).toLocaleString() }}</span>
+            <span v-if="isMemberItmOnDay(memberId, dayData)" class="flame-pastille">
+              🔥<span v-if="getMemberItmCountOnDay(memberId, dayData) > 1" class="flame-count">×{{ getMemberItmCountOnDay(memberId, dayData) }}</span>
+            </span>
           </div>
         </div>
 
@@ -92,90 +94,87 @@
         </div>
       </div>
 
-      <!-- Casinos du jour -->
-      <div class="casinos-list">
+      <!-- Blocs horaires du jour (regroupés par heure) -->
+      <div class="time-blocks-list">
         <div
-          v-for="(casinoData, casino) in teamByDay[selectedDate].casinos"
-          :key="casino"
-          class="casino-card"
+          v-for="block in selectedDayByTime"
+          :key="block.time"
+          class="time-block"
         >
-          <div class="casino-header">
-            <div class="casino-info">
-              <div class="casino-logo-wrapper">
-                <img
-                  v-if="getCasinoLogo(casino)"
-                  :src="getCasinoLogo(casino)"
-                  :alt="casino"
-                  class="casino-logo"
-                  @error="handleImageError"
-                />
-                <div v-else class="casino-initials">
-                  {{ getCasinoInitials(casino) }}
-                </div>
-              </div>
-              <div class="casino-details">
-                <span class="casino-name">{{ casino }}</span>
-                <span class="casino-count">{{ casinoData.users.length }} personne{{ casinoData.users.length > 1 ? 's' : '' }}</span>
-                <span v-if="getRouteTime(casino)" class="casino-drive-time">
-                  <i class="pi pi-car"></i>
-                  {{ getRouteTime(casino).durationMin }} min
-                  <span class="drive-distance">({{ getRouteTime(casino).distanceMiles }} mi)</span>
-                </span>
-              </div>
+          <div class="time-block-header">
+            <div class="time-block-hour">
+              <i class="pi pi-clock"></i>
+              <span>{{ block.time }}</span>
             </div>
-
-            <div style="display: flex; gap: 10px; align-items: center;flex-direction: column">
-              <div
-                  v-if="getCasinoNotes(casinoData).length > 0"
-                  class="casino-notes-indicator desktop-only"
-                  v-tooltip.top="formatCasinoNotes(casinoData)"
-              >
-                <i class="pi pi-comment"></i>
-                <span class="notes-count">{{ getCasinoNotes(casinoData).length }}</span>
-              </div>
-              <button v-if="getRouteTime(casino)" class="map-link-btn" @click.stop="openRouteMap(casino)">
-                <i class="pi pi-directions"></i>
-                <span class="map-link-text">Trajet</span>
-              </button>
-            </div>
+            <span class="time-block-count">
+              {{ block.entries.length }} tournoi{{ block.entries.length > 1 ? 's' : '' }}
+            </span>
           </div>
 
-          <!-- Horaires du casino -->
-          <div class="time-slots">
+          <div class="time-block-entries">
             <div
-              v-for="(timeData, time) in casinoData.times"
-              :key="time"
-              class="time-slot"
+              v-for="entry in block.entries"
+              :key="entry.casino"
+              class="casino-entry"
             >
-              <!-- Ligne 1: Heure + Buy-in + Badges -->
-              <div class="time-slot-top">
-                <div class="time-badge">
-                  <i class="pi pi-clock"></i>
-                  {{ time }}
+              <div class="casino-entry-header">
+                <div class="casino-info">
+                  <div class="casino-logo-wrapper">
+                    <img
+                      v-if="getCasinoLogo(entry.casino)"
+                      :src="getCasinoLogo(entry.casino)"
+                      :alt="entry.casino"
+                      class="casino-logo"
+                      @error="handleImageError"
+                    />
+                    <div v-else class="casino-initials">
+                      {{ getCasinoInitials(entry.casino) }}
+                    </div>
+                  </div>
+                  <div class="casino-details">
+                    <span class="casino-name">{{ entry.casino }}</span>
+                    <span v-if="getRouteTime(entry.casino)" class="casino-drive-time">
+                      <i class="pi pi-car"></i>
+                      {{ getRouteTime(entry.casino).durationMin }} min
+                      <span class="drive-distance">({{ getRouteTime(entry.casino).distanceMiles }} mi)</span>
+                    </span>
+                  </div>
                 </div>
-                <span v-if="timeData.buyin" class="time-buyin">{{ formatBuyIn(timeData.buyin) }}</span>
-                <span v-if="timeData.day" class="day-badge-small">Day {{ timeData.day }}</span>
-                <span v-else-if="timeData.isRestart" class="restart-badge-small">Restart</span>
+
+                <div class="casino-entry-meta">
+                  <span v-if="entry.timeData.buyin" class="time-buyin">{{ formatBuyIn(entry.timeData.buyin) }}</span>
+                  <span v-if="entry.timeData.day" class="day-badge-small">Day {{ entry.timeData.day }}</span>
+                  <span v-else-if="entry.timeData.isRestart" class="restart-badge-small">Restart</span>
+                  <button
+                    v-if="getRouteTime(entry.casino)"
+                    class="map-link-btn"
+                    @click.stop="openRouteMap(entry.casino)"
+                    v-tooltip.top="'Trajet'"
+                  >
+                    <i class="pi pi-directions"></i>
+                  </button>
+                </div>
               </div>
 
-              <!-- Ligne 2: Structure -->
-              <div v-if="timeData.structureChips || timeData.structureLevels || (timeData.levels && timeData.levels !== '-')" class="time-slot-structure">
-                <span v-if="timeData.structureChips" class="structure-tag chips">
-                  <i class="pi pi-circle-fill"></i> {{ timeData.structureChips }}
+              <div
+                v-if="entry.timeData.structureChips || entry.timeData.structureLevels || (entry.timeData.levels && entry.timeData.levels !== '-')"
+                class="time-slot-structure"
+              >
+                <span v-if="entry.timeData.structureChips" class="structure-tag chips">
+                  <i class="pi pi-circle-fill"></i> {{ entry.timeData.structureChips }}
                 </span>
-                <span v-if="timeData.structureLevels" class="structure-tag levels">
-                  <i class="pi pi-clock"></i> {{ timeData.structureLevels }}
+                <span v-if="entry.timeData.structureLevels" class="structure-tag levels">
+                  <i class="pi pi-clock"></i> {{ entry.timeData.structureLevels }}
                 </span>
-                <span v-else-if="timeData.levels && timeData.levels !== '-'" class="structure-tag levels">
-                  <i class="pi pi-clock"></i> {{ timeData.levels }}
+                <span v-else-if="entry.timeData.levels && entry.timeData.levels !== '-'" class="structure-tag levels">
+                  <i class="pi pi-clock"></i> {{ entry.timeData.levels }}
                 </span>
               </div>
 
-              <!-- Ligne 3: Utilisateurs + Rejoindre -->
               <div class="time-slot-bottom">
                 <div class="time-users">
                   <div
-                    v-for="user in timeData.users"
+                    v-for="user in entry.timeData.users"
                     :key="`${user.id}-${user.tournamentId}`"
                     class="user-chip-wrapper"
                   >
@@ -185,7 +184,8 @@
                       :style="{ backgroundColor: getUserColor(user.name) }"
                       @click="openNoteDialog(user)"
                     >
-                      {{ user.name }}<span v-if="user.liveWinnings" class="chip-flame">🔥</span>
+                      {{ user.name }}
+                      <span v-if="user.liveWinnings" class="flame-pastille">🔥</span>
                     </div>
                     <div
                       v-if="user.user_note"
@@ -199,17 +199,16 @@
                 <Button
                   label="Rejoindre"
                   icon="pi pi-user-plus"
-                  @click="openJoinDialog(selectedDate, casino, time, timeData)"
+                  @click="openJoinDialog(selectedDate, entry.casino, block.time, entry.timeData)"
                   text
                   size="small"
                   class="join-btn"
                 />
               </div>
 
-              <!-- Notes visibles sur mobile -->
-              <div class="mobile-user-notes" v-if="timeData.users.some(u => u.user_note)">
+              <div class="mobile-user-notes" v-if="entry.timeData.users.some(u => u.user_note)">
                 <div
-                  v-for="user in timeData.users.filter(u => u.user_note)"
+                  v-for="user in entry.timeData.users.filter(u => u.user_note)"
                   :key="'note-' + user.tournamentId"
                   class="mobile-user-note-item"
                 >
@@ -474,7 +473,7 @@ let transitLayers = [];
 const { getCasinoLogo, getCasinoInitials } = useCasinoLogos();
 const toast = useToast();
 
-const emit = defineEmits(['user-created']);
+const emit = defineEmits(['user-created', 'refresh']);
 
 const props = defineProps({
   connectedUser: {
@@ -580,11 +579,55 @@ const getMemberWinningsOnDay = (memberId, dayData) => {
   return total;
 };
 
+// Compter les ITM d'un membre sur un jour (un par tournoi ITM)
+const getMemberItmCountOnDay = (memberId, dayData) => {
+  let count = 0;
+  for (const casino of Object.values(dayData.casinos)) {
+    for (const timeSlot of Object.values(casino.times)) {
+      const userEntry = timeSlot.users.find(u => u.id === memberId);
+      if (userEntry && userEntry.liveStatus === 'eliminated' && userEntry.liveWinnings) {
+        count++;
+      }
+    }
+  }
+  return count;
+};
+
 const selectDate = (date) => {
   selectedDate.value = date;
   // Charger les temps de trajet pour les casinos de ce jour
   loadRouteTimes(date);
 };
+
+// Vue regroupée par heure (au lieu de par casino) pour le détail d'un jour.
+// Plusieurs casinos peuvent tomber sur la même heure : ils sont listés sous le même
+// bloc horaire.
+const selectedDayByTime = computed(() => {
+  const date = selectedDate.value;
+  if (!date) return {};
+  const dayData = teamByDay.value[date];
+  if (!dayData) return {};
+
+  const byTime = {};
+  for (const [casinoName, casinoData] of Object.entries(dayData.casinos)) {
+    for (const [time, timeData] of Object.entries(casinoData.times)) {
+      if (!byTime[time]) byTime[time] = { time, entries: [] };
+      byTime[time].entries.push({
+        casino: casinoName,
+        timeData
+      });
+    }
+  }
+
+  // Tri des heures et, à l'intérieur, tri des casinos par nom
+  const sortedTimes = Object.keys(byTime).sort();
+  const sorted = {};
+  sortedTimes.forEach(t => {
+    byTime[t].entries.sort((a, b) => a.casino.localeCompare(b.casino));
+    sorted[t] = byTime[t];
+  });
+  return sorted;
+});
 
 // Charger les temps de trajet pour les casinos d'un jour
 const loadRouteTimes = async (date) => {
@@ -746,6 +789,7 @@ const joinTournament = async () => {
       selectedUserToJoin.value = null;
       tournamentToJoin.value = null;
       await loadAllData();
+      emit('refresh');
     } else {
       toast.add({
         severity: 'error',
@@ -822,6 +866,7 @@ const createUserAndJoin = async () => {
       newUserName.value = '';
       tournamentToJoin.value = null;
       emit('user-created');
+      emit('refresh');
       await loadAllData();
     } else {
       toast.add({
@@ -981,6 +1026,7 @@ const saveNote = async () => {
         life: 3000
       });
       await loadAllData();
+      emit('refresh');
     } else {
       toast.add({
         severity: 'error',
@@ -1456,6 +1502,7 @@ onUnmounted(() => {
 }
 
 .member-tag {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1605,11 +1652,104 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-/* Casinos List */
+/* Casinos List (legacy — conservé pour compat large) */
 .casinos-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+}
+
+/* === Disposition focus-heure du détail jour === */
+.time-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.time-block {
+  background: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.time-block:hover {
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+.time-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(59, 130, 246, 0.10));
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.time-block-hour {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary, #f1f5f9);
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: 0.01em;
+}
+
+.time-block-hour i {
+  font-size: 1rem;
+  color: var(--accent-color, #818cf8);
+}
+
+.time-block-count {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: rgba(99, 102, 241, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.time-block-entries {
+  display: flex;
+  flex-direction: column;
+}
+
+.casino-entry {
+  padding: 16px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background 0.15s ease;
+}
+
+.casino-entry:not(:last-child) {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.casino-entry:hover {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.casino-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.casino-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.casino-entry-meta .map-link-btn {
+  padding: 6px 10px;
 }
 
 .casino-card {
@@ -2282,6 +2422,7 @@ onUnmounted(() => {
 }
 
 .user-chip {
+  position: relative;
   padding: 6px 14px;
   border-radius: 20px;
   color: white;
@@ -2296,6 +2437,42 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+.flame-pastille {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: linear-gradient(135deg, #fb923c, #dc2626);
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.5);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.flame-pastille .flame-count {
+  font-size: 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+.member-tag .flame-pastille {
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
+}
+
 .user-chip:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
@@ -2303,11 +2480,6 @@ onUnmounted(() => {
 
 .user-chip-itm {
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.5), 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.chip-flame {
-  margin-left: 4px;
-  font-size: 0.875rem;
 }
 
 .user-note-icon {

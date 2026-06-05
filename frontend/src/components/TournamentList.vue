@@ -73,6 +73,15 @@
             :key="tournament.id"
             class="missed-tournament-item"
           >
+            <button
+              class="missed-delete-btn"
+              @click="deleteMissedTournament(tournament)"
+              :disabled="deletingMissedId === tournament.id"
+              v-tooltip.left="'Supprimer (je n’y suis pas allé)'"
+              aria-label="Supprimer ce tournoi"
+            >
+              <i :class="deletingMissedId === tournament.id ? 'pi pi-spin pi-spinner' : 'pi pi-trash'"></i>
+            </button>
             <div class="missed-tournament-info">
               <div class="missed-tournament-date">{{ tournament.date }}</div>
               <div class="missed-tournament-details">
@@ -388,10 +397,10 @@
                       class="participant-chip"
                       :class="{ 'participant-itm': participant.liveStatus === 'eliminated' && participant.liveWinnings, 'participant-playing': participant.liveStatus === 'playing' }"
                     >
-                      <span v-if="participant.liveStatus === 'eliminated' && participant.liveWinnings">🔥</span>
-                      <span v-else-if="participant.liveStatus === 'playing'">🟢</span>
+                      <span v-if="participant.liveStatus === 'playing'">🟢</span>
                       {{ participant.name }}
                       <span v-if="participant.liveWinnings" class="participant-winnings">${{ participant.liveWinnings.toLocaleString() }}</span>
+                      <span v-if="participant.liveStatus === 'eliminated' && participant.liveWinnings" class="flame-pastille">🔥</span>
                     </span>
                   </div>
                 </div>
@@ -823,6 +832,7 @@ const showMissedRecapDialog = ref(false);
 const missedTournaments = ref([]);
 const missedResults = ref({});
 const savingMissedResults = ref(false);
+const deletingMissedId = ref(null);
 
 const hasAnyMissedResult = computed(() => {
   return Object.values(missedResults.value).some(r => r.type);
@@ -866,6 +876,42 @@ const setMissedResult = (tournament, type) => {
     missedResults.value[tournament.id] = { type: null, winnings: '' };
   } else {
     missedResults.value[tournament.id] = { type, winnings: '' };
+  }
+};
+
+const deleteMissedTournament = async (tournament) => {
+  if (deletingMissedId.value) return;
+  if (!confirm(`Supprimer ce tournoi ?\n\n${tournament.date} • ${tournament.time} • ${tournament.casino}`)) return;
+
+  deletingMissedId.value = tournament.id;
+  try {
+    const response = await fetch(`${API_URL}/tournaments/${tournament.id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error('delete failed');
+
+    missedTournaments.value = missedTournaments.value.filter(t => t.id !== tournament.id);
+    delete missedResults.value[tournament.id];
+    emit('delete-tournament', tournament.id);
+
+    toast.add({
+      severity: 'success',
+      summary: 'Tournoi supprimé',
+      detail: 'Le tournoi a été retiré de votre planning',
+      life: 2500
+    });
+
+    if (missedTournaments.value.length === 0) {
+      showMissedRecapDialog.value = false;
+    }
+  } catch (error) {
+    console.error('Erreur suppression tournoi non saisi:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: 'Suppression impossible',
+      life: 3000
+    });
+  } finally {
+    deletingMissedId.value = null;
   }
 };
 
@@ -1223,6 +1269,7 @@ const joinTournament = async () => {
       });
       selectedUserToJoin.value = null;
       tournamentToJoin.value = null;
+      emit('refresh');
     } else {
       toast.add({
         severity: 'error',
@@ -1298,6 +1345,7 @@ const createUserAndJoin = async () => {
       newUserName.value = '';
       tournamentToJoin.value = null;
       emit('user-created');
+      emit('refresh');
       await loadUsers();
     } else {
       toast.add({
@@ -2537,6 +2585,7 @@ onUnmounted(() => {
 }
 
 .participant-chip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -2551,6 +2600,33 @@ onUnmounted(() => {
 .participant-chip.participant-itm {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.flame-pastille {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: linear-gradient(135deg, #fb923c, #dc2626);
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  line-height: 1;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.5);
+  z-index: 2;
+}
+
+.flame-pastille .flame-count {
+  font-size: 0.6rem;
+  letter-spacing: -0.02em;
 }
 
 .participant-chip.participant-playing {
@@ -3644,6 +3720,7 @@ onUnmounted(() => {
 }
 
 .missed-tournament-item {
+  position: relative;
   background: rgba(30, 41, 59, 0.8);
   border: 1px solid #334155;
   border-radius: 12px;
@@ -3651,11 +3728,42 @@ onUnmounted(() => {
   transition: all 0.2s ease;
 }
 
+.missed-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.8125rem;
+  padding: 0;
+}
+
+.missed-delete-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.missed-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .missed-tournament-info {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  padding-right: 36px;
 }
 
 .missed-tournament-date {

@@ -147,6 +147,7 @@
         v-else-if="currentView === 'team'"
         :connected-user="selectedUser"
         @user-created="loadUsers"
+        @refresh="handleGlobalRefresh"
       />
 
       <!-- Welcome Message -->
@@ -682,6 +683,16 @@ const handleDeleteTournament = async () => {
 
   // Recharger les données pour mettre à jour l'affichage
   await loadUserData(selectedUser.value.id);
+};
+
+// Rafraîchissement global : utilisateurs + tournois de l'utilisateur courant
+// Déclenché par les vues secondaires (TeamRecap) après écriture, pour propager
+// aux autres vues partagées (CasinoMap, planning).
+const handleGlobalRefresh = async () => {
+  await loadUsers();
+  if (selectedUser.value) {
+    await loadUserData(selectedUser.value.id);
+  }
 };
 
 const toggleSidebar = () => {
