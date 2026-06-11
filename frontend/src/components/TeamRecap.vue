@@ -12,6 +12,21 @@
           <p class="header-subtitle">Planning consolidé de l'équipe</p>
         </div>
       </div>
+
+      <div v-if="!loading && allTournaments.length > 0" class="team-stats">
+        <div class="team-stat">
+          <span class="team-stat-label">Total inscriptions</span>
+          <span class="team-stat-value">{{ formatBuyIn(globalStats.totalInscriptions) }}</span>
+        </div>
+        <div class="team-stat team-stat-itm">
+          <span class="team-stat-label">Total ITM</span>
+          <span class="team-stat-value">{{ formatBuyIn(globalStats.totalItm) }}</span>
+        </div>
+        <div class="team-stat team-stat-rate">
+          <span class="team-stat-label">Taux ITM</span>
+          <span class="team-stat-value">{{ globalStats.itmPercentage }}%</span>
+        </div>
+      </div>
     </div>
 
 
@@ -655,6 +670,25 @@ const availableUsersToJoin = computed(() => {
   return users.value.filter(u => !enrolledIds.includes(u.id));
 });
 
+
+const globalStats = computed(() => {
+  let totalInscriptions = 0;
+  let totalItm = 0;
+  let itmCount = 0;
+  const total = allTournaments.value.length;
+
+  allTournaments.value.forEach(t => {
+    totalInscriptions += t.buyin || 0;
+    if (t.liveStatus === 'eliminated' && t.liveWinnings) {
+      totalItm += t.liveWinnings;
+      itmCount++;
+    }
+  });
+
+  const itmPercentage = total > 0 ? Math.round((itmCount / total) * 100) : 0;
+
+  return { totalInscriptions, totalItm, itmPercentage };
+});
 
 const teamByDay = computed(() => {
   const grouped = {};
@@ -1407,6 +1441,63 @@ onUnmounted(() => {
   color: var(--text-secondary, #94a3b8);
   font-size: 1rem;
   margin: 0;
+}
+
+/* Global team stats */
+.team-stats {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.team-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 140px;
+  padding: 12px 18px;
+  background: var(--bg-secondary, #1e293b);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.team-stat:hover {
+  border-color: rgba(129, 140, 248, 0.5);
+  transform: translateY(-2px);
+}
+
+.team-stat-label {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.team-stat-value {
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.team-stat-itm .team-stat-value {
+  color: #22c55e;
+}
+
+.team-stat-rate {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(249, 115, 22, 0.12));
+  border-color: rgba(236, 72, 153, 0.35);
+}
+
+.team-stat-rate .team-stat-value {
+  background: linear-gradient(135deg, #ec4899, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Loading & Empty States */
@@ -2689,6 +2780,10 @@ onUnmounted(() => {
   .dates-grid { grid-template-columns: 1fr; gap: 16px; }
   .casinos-list { grid-template-columns: 1fr; }
   .team-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .team-stats { width: 100%; gap: 8px; }
+  .team-stat { flex: 1; min-width: 0; padding: 10px 12px; }
+  .team-stat-value { font-size: 1.125rem; }
+  .team-stat-label { font-size: 0.6875rem; }
   .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px; }
   .detail-stats { flex-wrap: wrap; gap: 12px; }
 
