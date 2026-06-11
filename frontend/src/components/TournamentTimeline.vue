@@ -27,6 +27,20 @@
             <span class="day-number">{{ getDayNumber(day.date) }}</span>
             <span class="month-name">{{ getMonthName(day.date) }}</span>
           </div>
+
+          <div
+            v-if="getItmPlayersForDay(day.date).length > 0"
+            class="date-card-itm-tags"
+          >
+            <ItmTag
+              v-for="p in getItmPlayersForDay(day.date)"
+              :key="p.name"
+              :name="p.name"
+              :winnings="p.totalWinnings"
+              :count="p.count"
+            />
+          </div>
+
           <div class="date-card-footer">
             <div class="tournament-count">
               <i class="pi pi-trophy"></i>
@@ -462,6 +476,7 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import ItmTag from './ItmTag.vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
@@ -1280,6 +1295,24 @@ const formatBuyIn = (amount) => {
   return '$' + amount.toLocaleString('en-US');
 };
 
+const getItmPlayersForDay = (timelineDate) => {
+  const dbDate = formatDateForDb(timelineDate);
+  const itmMap = new Map();
+  for (const t of allUserTournaments.value) {
+    if (t.date !== dbDate) continue;
+    if (t.liveStatus !== 'eliminated' || !t.liveWinnings) continue;
+    const key = t.userName;
+    if (!itmMap.has(key)) {
+      itmMap.set(key, { name: key, totalWinnings: t.liveWinnings, count: 1 });
+    } else {
+      const entry = itmMap.get(key);
+      entry.totalWinnings += t.liveWinnings;
+      entry.count += 1;
+    }
+  }
+  return Array.from(itmMap.values()).sort((a, b) => b.totalWinnings - a.totalWinnings);
+};
+
 const hasStructureInfo = (tournament) => {
   return tournament.structureChips || tournament.structureLevels || tournament.structureGuarantee;
 };
@@ -1846,6 +1879,15 @@ onUnmounted(() => {
   font-size: 1rem;
   font-weight: 500;
   text-transform: capitalize;
+}
+
+/* Tags ITM sur la date-card */
+.date-card-itm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: -8px;
 }
 
 .date-card-footer {

@@ -62,19 +62,21 @@
         </div>
 
         <div class="date-card-members">
-          <div
-            v-for="memberId in Array.from(dayData.members)"
-            :key="memberId"
-            class="member-tag"
-            :class="{ 'member-tag-itm': isMemberItmOnDay(memberId, dayData) }"
-            :style="{ backgroundColor: isMemberItmOnDay(memberId, dayData) ? undefined : getUserColorById(memberId) }"
-          >
-            {{ getUserNameById(memberId) }}
-            <span v-if="getMemberWinningsOnDay(memberId, dayData)" class="member-winnings">${{ getMemberWinningsOnDay(memberId, dayData).toLocaleString() }}</span>
-            <span v-if="isMemberItmOnDay(memberId, dayData)" class="flame-pastille">
-              🔥<span v-if="getMemberItmCountOnDay(memberId, dayData) > 1" class="flame-count">×{{ getMemberItmCountOnDay(memberId, dayData) }}</span>
-            </span>
-          </div>
+          <template v-for="memberId in Array.from(dayData.members)" :key="memberId">
+            <ItmTag
+              v-if="isMemberItmOnDay(memberId, dayData)"
+              :name="getUserNameById(memberId)"
+              :winnings="getMemberWinningsOnDay(memberId, dayData)"
+              :count="getMemberItmCountOnDay(memberId, dayData)"
+            />
+            <div
+              v-else
+              class="member-tag"
+              :style="{ backgroundColor: getUserColorById(memberId) }"
+            >
+              {{ getUserNameById(memberId) }}
+            </div>
+          </template>
         </div>
 
         <div class="date-card-footer">
@@ -446,6 +448,7 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import ItmTag from './ItmTag.vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
@@ -1605,16 +1608,6 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-.member-tag-itm {
-  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
-}
-
-.member-winnings {
-  color: #ecfdf5;
-  font-weight: 700;
-  font-size: 0.7rem;
-}
 
 .date-card-footer {
   display: flex;

@@ -268,13 +268,12 @@
 
             <!-- Tags ITM des participants ce jour -->
             <div v-if="getDayItmParticipants(dayData.tournaments).length > 0" class="day-itm-tags">
-              <span
+              <ItmTag
                 v-for="p in getDayItmParticipants(dayData.tournaments)"
                 :key="p.id"
-                class="day-itm-chip"
-              >
-                🔥 {{ p.name }} <span class="day-itm-amount">${{ p.liveWinnings.toLocaleString() }}</span>
-              </span>
+                :name="p.name"
+                :winnings="p.liveWinnings"
+              />
             </div>
           </div>
 
@@ -781,6 +780,7 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useCasinoLogos } from '../composables/useCasinoLogos';
 import { useCasinoRoutes } from '../composables/useCasinoRoutes';
+import ItmTag from './ItmTag.vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
@@ -1959,24 +1959,6 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
-}
-
-.day-itm-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.1));
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
-  border-radius: 12px;
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-
-.day-itm-amount {
-  color: #22c55e;
-  font-weight: 700;
 }
 
 .day-date-info {
